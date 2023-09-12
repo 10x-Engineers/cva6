@@ -26,4 +26,5 @@ Editor: **Jean Roch Coulon**
    cv32a6_intro
    cv32a6_subsystem
    cv32a6_frontend
+   cv32a6_execute
    cv32a6_glossary
