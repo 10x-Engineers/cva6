@@ -176,7 +176,7 @@ module scoreboard #(
         // save the target address of a branch (needed for debug in commit stage)
         mem_n[trans_id_i[i]].sbe.bp.predict_address = resolved_branch_i.target_address;
         if (mem_n[trans_id_i[i]].sbe.fu == ariane_pkg::CVXIF && ~x_we_i) begin
-          mem_n[trans_id_i[i]].sbe.rd = 5'b0;
+          mem_n[trans_id_i[i]].sbe.rd = '0;
         end
         // write the exception back if it is valid
         if (ex_i[i].valid)
@@ -192,7 +192,7 @@ module scoreboard #(
     // Commit Port
     // ------------
     // we've got an acknowledge from commit
-    for (logic [CVA6Cfg.NrCommitPorts-1:0] i = 0; i < CVA6Cfg.NrCommitPorts; i++) begin
+    for (logic [CVA6Cfg.NrCommitPorts-1:0] i = 0; i < CVA6Cfg.NrCommitPorts[CVA6Cfg.NrCommitPorts-1:0]; i++) begin
       if (commit_ack_i[i]) begin
         // this instruction is no longer in issue e.g.: it is considered finished
         mem_n[commit_pointer_q[i]].issued     = 1'b0;
@@ -216,7 +216,7 @@ module scoreboard #(
   // FIFO counter updates
   assign num_commit = (CVA6Cfg.NrCommitPorts == 2) ? commit_ack_i[1] + commit_ack_i[0] : commit_ack_i[0];
 
-  assign issue_cnt_n         = (flush_i) ? '0 : issue_cnt_q         - num_commit + issue_en;
+  assign issue_cnt_n         = (flush_i) ? '0 : issue_cnt_q - {{(BITS_ENTRIES-$clog2(CVA6Cfg.NrCommitPorts)){1'b0}},num_commit} + {{(BITS_ENTRIES){1'b0}},issue_en};
   assign commit_pointer_n[0] = (flush_i) ? '0 : commit_pointer_q[0] + num_commit;
   assign issue_pointer_n     = (flush_i) ? '0 : issue_pointer_q     + issue_en;
 

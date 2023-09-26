@@ -275,7 +275,7 @@ module alu import ariane_pkg::*; #(
                 BSET, BSETI: result_o = fu_data_i.operand_a | bit_indx;
 
                 // Count Leading/Trailing Zeros
-                CLZ, CTZ  :  result_o = (lz_tz_empty) ? (lz_tz_count + 1) : lz_tz_count;
+                CLZ, CTZ  :  result_o = (lz_tz_empty) ? ({{(riscv::XLEN-$clog2(riscv::XLEN)){1'b0}},lz_tz_count} + 1) : ({{(riscv::XLEN-$clog2(riscv::XLEN)){1'b0}},lz_tz_count});
                 CLZW, CTZW:  result_o = (lz_tz_wempty) ? 32 : {{riscv::XLEN-5{1'b0}}, lz_tz_wcount};
 
                 // Count population
@@ -291,8 +291,8 @@ module alu import ariane_pkg::*; #(
                 ROLW:         result_o = {{riscv::XLEN-32{rolw[31]}}, rolw};
                 ROR, RORI:    result_o = (riscv::XLEN == 64) ? ((fu_data_i.operand_a >> fu_data_i.operand_b[5:0]) | (fu_data_i.operand_a << (riscv::XLEN-fu_data_i.operand_b[5:0]))) : ((fu_data_i.operand_a >> fu_data_i.operand_b[4:0]) | (fu_data_i.operand_a << (riscv::XLEN-fu_data_i.operand_b[4:0])));
                 RORW, RORIW:  result_o = {{riscv::XLEN-32{rorw[31]}}, rorw};
-                ORCB:         result_o = (riscv::XLEN == 64) ? ({{8{|fu_data_i.operand_a[63:56]}}, {8{|fu_data_i.operand_a[55:48]}}, {8{|fu_data_i.operand_a[47:40]}}, {8{|fu_data_i.operand_a[39:32]}}, orcbw}) : orcbw;
-                REV8:         result_o = (riscv::XLEN == 64) ? ({rev8w , {fu_data_i.operand_a[39:32]}, {fu_data_i.operand_a[47:40]}, {fu_data_i.operand_a[55:48]}, {fu_data_i.operand_a[63:56]}}) : rev8w;
+                ORCB:         result_o = (riscv::XLEN == 64) ? ({{8{|fu_data_i.operand_a[63:56]}}, {8{|fu_data_i.operand_a[55:48]}}, {8{|fu_data_i.operand_a[47:40]}}, {8{|fu_data_i.operand_a[39:32]}}, {riscv::XLEN-32{orcbw}}}) : orcbw;
+                REV8:         result_o = (riscv::XLEN == 64) ? ({{riscv::XLEN-32{rev8w}} , {fu_data_i.operand_a[39:32]}, {fu_data_i.operand_a[47:40]}, {fu_data_i.operand_a[55:48]}, {fu_data_i.operand_a[63:56]}}) : rev8w;
 
                 default: ; // default case to suppress unique warning
             endcase

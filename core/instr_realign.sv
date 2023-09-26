@@ -97,7 +97,7 @@ module instr_realign import ariane_pkg::*; #(
                     unaligned_instr_d = data_i[15:0];
                 // the instruction isn't compressed but only the lower is ready
                 end else begin
-                    valid_o = 1'b1;
+                    valid_o = {{(INSTR_PER_FETCH-1){1'b0}},1'b1};
                 end
             end
         end

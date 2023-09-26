@@ -466,7 +466,7 @@ module csr_regfile import ariane_pkg::*; #(
                 riscv::CSR_PMPADDR14,
                 riscv::CSR_PMPADDR15: begin
                     // index is specified by the last byte in the address
-                    index = csr_addr.csr_decode.address[3:0];
+                    index = {{28{1'b0}},csr_addr.csr_decode.address[3:0]};
                     // Important: we only support granularity 8 bytes (G=1)
                     // -> last bit of pmpaddr must be set 0/1 based on the mode:
                     // NA4, NAPOT: 1
@@ -691,7 +691,7 @@ module csr_regfile import ariane_pkg::*; #(
                     if (!CVA6Cfg.RVV) begin
                         mstatus_d.vs = riscv::Off;
                     end
-                    mstatus_d.wpri3 = 8'b0;
+                    mstatus_d.wpri3 = 9'b0;
                     mstatus_d.wpri1 = 1'b0;
                     mstatus_d.wpri2 = 1'b0;
                     mstatus_d.wpri0  = 1'b0;
@@ -883,7 +883,7 @@ module csr_regfile import ariane_pkg::*; #(
                 riscv::CSR_PMPADDR14,
                 riscv::CSR_PMPADDR15:  begin
                     // index is specified by the last byte in the address
-                    automatic int index = csr_addr.csr_decode.address[3:0];
+                    automatic int index = {{28{1'b0}},csr_addr.csr_decode.address[3:0]};
                     // check if the entry or the entry above is locked
                     if (!pmpcfg_q[index].locked && !(pmpcfg_q[index+1].locked && pmpcfg_q[index].addr_mode == riscv::TOR)) begin
                         pmpaddr_d[index] = csr_wdata[riscv::PLEN-3:0];
@@ -1220,9 +1220,9 @@ module csr_regfile import ariane_pkg::*; #(
     // CSR Exception Control
     // ----------------------
     always_comb begin : exception_ctrl
-        csr_exception_o = {
-            '0, '0, 1'b0
-        };
+        csr_exception_o.cause = '0;   // Initialize cause to all zeros
+        csr_exception_o.tval = '0;    // Initialize tval to all zeros
+        csr_exception_o.valid = 1'b0; // Initialize valid to logic zero
         // ----------------------------------
         // Illegal Access (decode exception)
         // ----------------------------------
@@ -1303,11 +1303,11 @@ module csr_regfile import ariane_pkg::*; #(
         csr_rdata_o = csr_rdata;
 
         unique case (csr_addr.address)
-            riscv::CSR_MIP: csr_rdata_o = csr_rdata | (irq_i[1] << riscv::IRQ_S_EXT);
+            riscv::CSR_MIP: csr_rdata_o = csr_rdata | ({{riscv::XLEN-1{1'b0}},irq_i[1]} << riscv::IRQ_S_EXT);
             // in supervisor mode we also need to check whether we delegated this bit
             riscv::CSR_SIP: begin
                 csr_rdata_o = csr_rdata
-                            | ((irq_i[1] & mideleg_q[riscv::IRQ_S_EXT]) << riscv::IRQ_S_EXT);
+                            | (({{riscv::XLEN-1{1'b0}}, (irq_i[1] & mideleg_q[riscv::IRQ_S_EXT])}) << riscv::IRQ_S_EXT);
             end
             default:;
         endcase
@@ -1388,8 +1388,8 @@ module csr_regfile import ariane_pkg::*; #(
             stval_q                <= {riscv::XLEN{1'b0}};
             satp_q                 <= {riscv::XLEN{1'b0}};
             // timer and counters
-            cycle_q                <= {riscv::XLEN{1'b0}};
-            instret_q              <= {riscv::XLEN{1'b0}};
+            cycle_q                <= 64'b0;
+            instret_q              <= {{64-riscv::XLEN{1'b0}},{riscv::XLEN{1'b0}}};
             // aux registers
             en_ld_st_translation_q <= 1'b0;
             // wait for interrupt
