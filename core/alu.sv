@@ -279,7 +279,7 @@ module alu import ariane_pkg::*; #(
                 CLZW, CTZW:  result_o = (lz_tz_wempty) ? 32 : {{riscv::XLEN-5{1'b0}}, lz_tz_wcount};
 
                 // Count population
-                CPOP, CPOPW: result_o = {{(riscv::XLEN-($clog2(riscv::XLEN))){1'b0}}, cpop};
+                CPOP, CPOPW: result_o = {{(riscv::XLEN-($clog2(riscv::XLEN))-1){1'b0}}, cpop};
 
                 // Sign and Zero Extend
                 SEXTB: result_o = {{riscv::XLEN-8{fu_data_i.operand_a[7]}}, fu_data_i.operand_a[7:0]};

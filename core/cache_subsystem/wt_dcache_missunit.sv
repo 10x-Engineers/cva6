@@ -131,7 +131,7 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   logic amo_req_d, amo_req_q;
   logic [63:0] amo_rtrn_mux;
   riscv::xlen_t amo_data;
-  logic [63:0] amo_user; //DCACHE USER ? DATA_USER_WIDTH
+  logic [riscv::XLEN-1:0] amo_user; //DCACHE USER ? DATA_USER_WIDTH
   logic [riscv::PLEN-1:0] tmp_paddr;
   logic [$clog2(NumPorts)-1:0] miss_port_idx;
   logic [DCACHE_CL_IDX_WIDTH-1:0] cnt_d, cnt_q;
@@ -239,9 +239,9 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   always_comb begin
     if (riscv::IS_XLEN64) begin
       if (amo_req_i.size==2'b10) begin
-        amo_data = {amo_req_i.operand_b[0 +: 32], amo_req_i.operand_b[0 +: 32]};
+        amo_data = {amo_req_i.operand_b[0 +: (riscv::XLEN/2)], amo_req_i.operand_b[0 +: (riscv::XLEN/2)]};
       end else begin
-        amo_data = amo_req_i.operand_b;
+        amo_data = amo_req_i.operand_b[riscv::XLEN-1:0];
       end
     end else begin
       amo_data = amo_req_i.operand_b[0 +: 32];

@@ -115,7 +115,7 @@ package wt_cache_pkg;
     logic                                            vld;         // invalidate only affected way
     logic                                            all;         // invalidate all ways
     logic [ariane_pkg::ICACHE_INDEX_WIDTH-1:0]       idx;         // physical address to invalidate
-    logic [L15_WAY_WIDTH-1:0]                        way;         // way to invalidate
+    logic [$clog2(ariane_pkg::ICACHE_SET_ASSOC)-1:0] way;         // way to invalidate
   } icache_inval_t;
 
   typedef struct packed {
@@ -267,11 +267,11 @@ package wt_cache_pkg;
     return cnt;
   endfunction : popcnt64
 
-  function automatic logic [7:0] to_byte_enable8(
-    input logic [2:0] offset,
+  function automatic logic [(riscv::XLEN/8)-1:0] to_byte_enable8(
+    input logic [$clog2(riscv::XLEN/8)-1:0] offset,
     input logic [1:0] size
   );
-    logic [7:0] be;
+    logic [(riscv::XLEN/8)-1:0] be;
     be = '0;
     unique case(size)
       2'b00:   be[offset]       = '1; // byte
@@ -297,12 +297,12 @@ package wt_cache_pkg;
   endfunction : to_byte_enable4
 
   // openpiton requires the data to be replicated in case of smaller sizes than dwords
-  function automatic logic [63:0] repData64(
-    input logic [63:0] data,
-    input logic [2:0]  offset,
+  function automatic logic [riscv::XLEN-1:0] repData64(
+    input logic [riscv::XLEN-1:0] data,
+    input logic [$clog2(riscv::XLEN/8)-1:0]  offset,
     input logic [1:0]  size
   );
-    logic [63:0] out;
+    logic [riscv::XLEN-1:0] out;
     unique case(size)
       2'b00:   for(int k=0; k<8; k++) out[k*8  +: 8]    = data[offset*8 +: 8];  // byte
       2'b01:   for(int k=0; k<4; k++) out[k*16 +: 16]   = data[offset*8 +: 16]; // hword
