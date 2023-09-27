@@ -291,8 +291,8 @@ module alu import ariane_pkg::*; #(
                 ROLW:         result_o = {{riscv::XLEN-32{rolw[31]}}, rolw};
                 ROR, RORI:    result_o = (riscv::XLEN == 64) ? ((fu_data_i.operand_a >> fu_data_i.operand_b[5:0]) | (fu_data_i.operand_a << (riscv::XLEN-fu_data_i.operand_b[5:0]))) : ((fu_data_i.operand_a >> fu_data_i.operand_b[4:0]) | (fu_data_i.operand_a << (riscv::XLEN-fu_data_i.operand_b[4:0])));
                 RORW, RORIW:  result_o = {{riscv::XLEN-32{rorw[31]}}, rorw};
-                ORCB:         result_o = (riscv::XLEN == 64) ? ({{8{|fu_data_i.operand_a[63:56]}}, {8{|fu_data_i.operand_a[55:48]}}, {8{|fu_data_i.operand_a[47:40]}}, {8{|fu_data_i.operand_a[39:32]}}, {riscv::XLEN-32{orcbw}}}) : orcbw;
-                REV8:         result_o = (riscv::XLEN == 64) ? ({{riscv::XLEN-32{rev8w}} , {fu_data_i.operand_a[39:32]}, {fu_data_i.operand_a[47:40]}, {fu_data_i.operand_a[55:48]}, {fu_data_i.operand_a[63:56]}}) : rev8w;
+                ORCB:         result_o = (riscv::XLEN == 64) ? ({{8{|fu_data_i.operand_a[riscv::XLEN-1:riscv::XLEN-8]}}, {8{|fu_data_i.operand_a[riscv::XLEN-9:riscv::XLEN-16]}}, {8{|fu_data_i.operand_a[riscv::XLEN-17:riscv::XLEN-24]}}, {8{|fu_data_i.operand_a[riscv::XLEN-25:riscv::XLEN-32]}}, {riscv::XLEN-32{orcbw}}}) : orcbw;
+                REV8:         result_o = (riscv::XLEN == 64) ? ({{riscv::XLEN-32{rev8w}} , {fu_data_i.operand_a[riscv::XLEN-25:riscv::XLEN-32]}, {fu_data_i.operand_a[riscv::XLEN-17:riscv::XLEN-24]}, {fu_data_i.operand_a[riscv::XLEN-9:riscv::XLEN-16]}, {fu_data_i.operand_a[riscv::XLEN-1:riscv::XLEN-8]}}) : rev8w;
 
                 default: ; // default case to suppress unique warning
             endcase

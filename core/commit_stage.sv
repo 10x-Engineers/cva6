@@ -211,16 +211,16 @@ module commit_stage import ariane_pkg::*; #(
 
         if (CVA6Cfg.NrCommitPorts > 1) begin
 
-            commit_ack_o[1]    = 1'b0;
-            we_gpr_o[1]        = 1'b0;
-            wdata_o[1]      = commit_instr_i[1].result;
+            commit_ack_o[CVA6Cfg.NrCommitPorts-1]    = 1'b0;
+            we_gpr_o[CVA6Cfg.NrCommitPorts-1]        = 1'b0;
+            wdata_o[CVA6Cfg.NrCommitPorts-1]      = commit_instr_i[CVA6Cfg.NrCommitPorts-1].result;
 
             // -----------------
             // Commit Port 2
             // -----------------
             // check if the second instruction can be committed as well and the first wasn't a CSR instruction
             // also if we are in single step mode don't retire the second instruction
-            if (commit_ack_o[0] && commit_instr_i[1].valid
+            if (commit_ack_o[0] && commit_instr_i[CVA6Cfg.NrCommitPorts-1].valid
                                 && !halt_i
                                 && !(commit_instr_i[0].fu inside {CSR})
                                 && !flush_dcache_i
@@ -228,23 +228,23 @@ module commit_stage import ariane_pkg::*; #(
                                 && !single_step_i) begin
                 // only if the first instruction didn't throw an exception and this instruction won't throw an exception
                 // and the functional unit is of type ALU, LOAD, CTRL_FLOW, MULT, FPU or FPU_VEC
-                if (!exception_o.valid && !commit_instr_i[1].ex.valid
-                                       && (commit_instr_i[1].fu inside {ALU, LOAD, CTRL_FLOW, MULT, FPU, FPU_VEC})) begin
+                if (!exception_o.valid && !commit_instr_i[CVA6Cfg.NrCommitPorts-1].ex.valid
+                                       && (commit_instr_i[CVA6Cfg.NrCommitPorts-1].fu inside {ALU, LOAD, CTRL_FLOW, MULT, FPU, FPU_VEC})) begin
 
                     if (CVA6Cfg.FpPresent && ariane_pkg::is_rd_fpr(commit_instr_i[1].op))
                         we_fpr_o[1] = 1'b1;
                     else
-                        we_gpr_o[1] = 1'b1;
+                        we_gpr_o[CVA6Cfg.NrCommitPorts-1] = 1'b1;
 
-                    commit_ack_o[1] = 1'b1;
+                    commit_ack_o[CVA6Cfg.NrCommitPorts-1] = 1'b1;
 
                     // additionally check if we are retiring an FPU instruction because we need to make sure that we write all
                     // exception flags
                     if (CVA6Cfg.FpPresent && commit_instr_i[1].fu inside {FPU, FPU_VEC}) begin
                         if (csr_write_fflags_o)
-                            csr_wdata_o = {{riscv::XLEN-5{1'b0}}, (commit_instr_i[0].ex.cause[4:0] | commit_instr_i[1].ex.cause[4:0])};
+                            csr_wdata_o = {{riscv::XLEN-5{1'b0}}, (commit_instr_i[0].ex.cause[4:0] | commit_instr_i[CVA6Cfg.NrCommitPorts-1].ex.cause[4:0])};
                         else
-                            csr_wdata_o = {{riscv::XLEN-5{1'b0}}, commit_instr_i[1].ex.cause[4:0]};
+                            csr_wdata_o = {{riscv::XLEN-5{1'b0}}, commit_instr_i[CVA6Cfg.NrCommitPorts-1].ex.cause[4:0]};
 
                         csr_write_fflags_o = 1'b1;
                     end

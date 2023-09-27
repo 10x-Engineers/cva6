@@ -274,7 +274,7 @@ module cva6_mmu_sv32 import ariane_pkg::*; #(
         if (riscv::PLEN > riscv::VLEN)
             icache_areq_o.fetch_paddr = {{riscv::PLEN-riscv::VLEN{1'b0}}, icache_areq_i.fetch_vaddr};// play through in case we disabled address translation
         else
-            icache_areq_o.fetch_paddr = icache_areq_i.fetch_vaddr[riscv::PLEN-1:0];// play through in case we disabled address translation
+            icache_areq_o.fetch_paddr = {{riscv::PLEN-32{1'b0}},icache_areq_i.fetch_vaddr[31:0]};// play through in case we disabled address translation
         // two potential exception sources:
         // 1. HPTW threw an exception -> signal with a page fault exception
         // 2. We got an access error because of insufficient permissions -> throw an access exception
@@ -387,8 +387,8 @@ module cva6_mmu_sv32 import ariane_pkg::*; #(
             lsu_paddr_o           = {{riscv::PLEN-riscv::VLEN{1'b0}}, lsu_vaddr_q};
             lsu_dtlb_ppn_o        = {{riscv::PLEN-riscv::VLEN{1'b0}},lsu_vaddr_n[riscv::VLEN-1:12]};
         end else begin
-            lsu_paddr_o           = lsu_vaddr_q[riscv::PLEN-1:0];
-            lsu_dtlb_ppn_o        = lsu_vaddr_n[riscv::PPNW-1:0]; // changing as per TL
+            lsu_paddr_o           = {{riscv::PLEN-32{1'b0}},lsu_vaddr_q[31:0]};
+            lsu_dtlb_ppn_o        = lsu_vaddr_n[riscv::PPNW-1:0]; 
         end
         lsu_valid_o           = lsu_req_q;
         lsu_exception_o       = misaligned_ex_q;
