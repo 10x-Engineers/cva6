@@ -741,47 +741,47 @@ package ariane_pkg;
     endfunction
 
     // generate byte enable mask
-    function automatic logic [(riscv::XLEN/8)-1:0] be_gen(logic [2:0] addr, logic [1:0] size);
+     function automatic logic [7:0] be_gen(logic [2:0] addr, logic [1:0] size);
         case (size)
             2'b11: begin
-                return {riscv::XLEN/8{1'b1}};
+                return 8'b1111_1111;
             end
             2'b10: begin
                 case (addr[2:0])
-                    3'b000: return {{riscv::XLEN/16{1'b0}},  {riscv::XLEN/16{1'b1}}};
-                    3'b001: return {{riscv::XLEN/32+1{1'b0}},{riscv::XLEN/16{1'b1}},{riscv::XLEN/32-1{1'b0}}};
-                    3'b010: return {{riscv::XLEN/32{1'b0}},  {riscv::XLEN/16{1'b1}},{riscv::XLEN/32{1'b0}}};
-                    3'b011: return {{riscv::XLEN/32-1{1'b0}},{riscv::XLEN/16{1'b1}},{riscv::XLEN/32+1{1'b0}}};
-                    3'b100: return {{riscv::XLEN/16{1'b1}},  {riscv::XLEN/16{1'b0}}};
+                    3'b000: return 8'b0000_1111;
+                    3'b001: return 8'b0001_1110;
+                    3'b010: return 8'b0011_1100;
+                    3'b011: return 8'b0111_1000;
+                    3'b100: return 8'b1111_0000;
                     default: ; // Do nothing
                 endcase
             end
             2'b01: begin
                 case (addr[2:0])
-                    3'b000: return {{riscv::XLEN/32{1'b0}},  {riscv::XLEN/16{1'b0}},  {riscv::XLEN/32{1'b1}}};
-                    3'b001: return {{riscv::XLEN/16+1{1'b0}},{riscv::XLEN/32{1'b1}},  {riscv::XLEN/32-1{1'b0}}};
-                    3'b010: return {{riscv::XLEN/16{1'b0}},  {riscv::XLEN/32{1'b1}},  {riscv::XLEN/32{1'b0}}};
-                    3'b011: return {{riscv::XLEN/32+1{1'b0}},{riscv::XLEN/16-2{1'b1}},{riscv::XLEN/32+1{1'b0}}};
-                    3'b100: return {{riscv::XLEN/32{1'b0}},  {riscv::XLEN/32{1'b1}},  {riscv::XLEN/16{1'b0}}}; 
-                    3'b101: return {{riscv::XLEN/32-1{1'b0}},{riscv::XLEN/32{1'b1}},  {riscv::XLEN/16+1{1'b0}}};
-                    3'b110: return {{riscv::XLEN/32{1'b1}},  {riscv::XLEN/16{1'b0}},  {riscv::XLEN/32{1'b0}}};
+                    3'b000: return 8'b0000_0011;
+                    3'b001: return 8'b0000_0110;
+                    3'b010: return 8'b0000_1100;
+                    3'b011: return 8'b0001_1000;
+                    3'b100: return 8'b0011_0000;
+                    3'b101: return 8'b0110_0000;
+                    3'b110: return 8'b1100_0000;
                     default: ; // Do nothing
                 endcase
             end
             2'b00: begin
                 case (addr[2:0])
-                    3'b000: return {{riscv::XLEN/16{1'b0}},  {riscv::XLEN/32+1{1'b0}},{riscv::XLEN/32-1{1'b1}}}; 
-                    3'b001: return {{riscv::XLEN/16+2{1'b0}},{riscv::XLEN/32-1{1'b1}},{riscv::XLEN/32-1{1'b0}}}; 
-                    3'b010: return {{riscv::XLEN/16+1{1'b0}},{riscv::XLEN/32-1{1'b1}},{riscv::XLEN/32{1'b0}}}; 
-                    3'b011: return {{riscv::XLEN/16{1'b0}},  {riscv::XLEN/32-1{1'b1}},{riscv::XLEN/32+1{1'b0}}}; 
-                    3'b100: return {{riscv::XLEN/32+1{1'b0}},{riscv::XLEN/32-1{1'b1}},{riscv::XLEN/16{1'b0}}}; 
-                    3'b101: return {{riscv::XLEN/32{1'b0}},  {riscv::XLEN/32-1{1'b1}},{riscv::XLEN/16+1{1'b0}}}; 
-                    3'b110: return {{riscv::XLEN/32-1{1'b0}},{riscv::XLEN/32-1{1'b1}},{riscv::XLEN/16+2{1'b0}}}; 
-                    3'b111: return {{riscv::XLEN/32-1{1'b1}},{riscv::XLEN/32+1{1'b0}},{riscv::XLEN/16{1'b0}}}; 
+                    3'b000: return 8'b0000_0001;
+                    3'b001: return 8'b0000_0010;
+                    3'b010: return 8'b0000_0100;
+                    3'b011: return 8'b0000_1000;
+                    3'b100: return 8'b0001_0000;
+                    3'b101: return 8'b0010_0000;
+                    3'b110: return 8'b0100_0000;
+                    3'b111: return 8'b1000_0000;
                 endcase
             end
         endcase
-        return {riscv::XLEN/8{1'b0}};
+        return 8'b0;
     endfunction
 
     function automatic logic [3:0] be_gen_32(logic [1:0] addr, logic [1:0] size);

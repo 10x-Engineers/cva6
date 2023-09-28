@@ -413,8 +413,15 @@ module issue_read_operands import ariane_pkg::*; #(
     logic [CVA6Cfg.NrCommitPorts-1:0][4:0]  waddr_pack;
     logic [CVA6Cfg.NrCommitPorts-1:0][riscv::XLEN-1:0] wdata_pack;
     logic [CVA6Cfg.NrCommitPorts-1:0]       we_pack;
-    assign raddr_pack = CVA6Cfg.NrRgprPorts == 3 ? {{riscv::XLEN/32-1{issue_instr_i.result[4:0]}}, issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]}
-                                           : {issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]};
+    generate
+        if (CVA6Cfg.NrRgprPorts == 3) begin
+          assign raddr_pack = {issue_instr_i.result[4:0], issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]};
+        end 
+        else begin
+          assign raddr_pack = {issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]};
+        end
+    endgenerate
+
     for (genvar i = 0; i < CVA6Cfg.NrCommitPorts; i++) begin : gen_write_back_port
         assign waddr_pack[i] = waddr_i[i];
         assign wdata_pack[i] = wdata_i[i];
