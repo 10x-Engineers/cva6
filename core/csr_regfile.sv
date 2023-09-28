@@ -270,7 +270,7 @@ module csr_regfile import ariane_pkg::*; #(
                 riscv::CSR_MIMPID:             csr_rdata = '0; // not implemented
                 riscv::CSR_MHARTID:            csr_rdata = hart_id_i;
                 riscv::CSR_MCONFIGPTR:         csr_rdata = '0; // not implemented
-                riscv::CSR_MCOUNTINHIBIT:      csr_rdata = mcountinhibit_q;
+                riscv::CSR_MCOUNTINHIBIT:      csr_rdata = {{(riscv::XLEN-MHPMCounterNum-3){1'b0}},mcountinhibit_q};
                 // Counters and Timers
                 riscv::CSR_MCYCLE:             csr_rdata = cycle_q[riscv::XLEN-1:0];
                 riscv::CSR_MCYCLEH:            if (riscv::XLEN == 32) csr_rdata = cycle_q[63:32]; else read_access_exception = 1'b1;

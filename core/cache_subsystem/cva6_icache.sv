@@ -116,7 +116,7 @@ module cva6_icache import ariane_pkg::*; import wt_cache_pkg::*; #(
   assign cl_tag_d  = (areq_i.fetch_valid) ? areq_i.fetch_paddr[ICACHE_TAG_WIDTH+ICACHE_INDEX_WIDTH-1:ICACHE_INDEX_WIDTH] : cl_tag_q;
 
   // noncacheable if request goes to I/O space, or if cache is disabled
-  assign paddr_is_nc = (~cache_en_q) | (~config_pkg::is_inside_cacheable_regions(CVA6Cfg, {{{64-riscv::PLEN}{1'b0}}, cl_tag_d, {ICACHE_INDEX_WIDTH{1'b0}}}));
+  assign paddr_is_nc = (~cache_en_q) | (~config_pkg::is_inside_cacheable_regions(CVA6Cfg, {{64-riscv::PLEN{1'b0}}, cl_tag_d, {ICACHE_INDEX_WIDTH{1'b0}}}));
 
   // pass exception through
   assign dreq_o.ex = areq_i.fetch_exception;
@@ -164,7 +164,7 @@ end else begin : gen_piton_offset
 // main control logic
 ///////////////////////////////////////////////////////
   logic addr_ni;
-  assign addr_ni = config_pkg::is_inside_nonidempotent_regions(CVA6Cfg, areq_i.fetch_paddr);
+  assign addr_ni = config_pkg::is_inside_nonidempotent_regions(CVA6Cfg, {{64-riscv::PLEN{1'b0}},areq_i.fetch_paddr});
   always_comb begin : p_fsm
     // default assignment
     state_d      = state_q;

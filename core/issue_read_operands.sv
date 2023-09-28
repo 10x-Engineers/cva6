@@ -222,7 +222,7 @@ module issue_read_operands import ariane_pkg::*; #(
         // for FP operations, the imm field can also be the third operand from the regfile
         if (CVA6Cfg.NrRgprPorts == 3) begin
             imm_n  = (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile} :
-                                                    issue_instr_i.op == OFFLOAD ? operand_c_regfile : issue_instr_i.result;
+                                                    issue_instr_i.op == OFFLOAD ? {{riscv::XLEN-1{1'b0}},operand_c_regfile} : issue_instr_i.result;
         end else begin
             imm_n  = (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile} : issue_instr_i.result;
         end
@@ -512,8 +512,20 @@ module issue_read_operands import ariane_pkg::*; #(
 
     assign operand_a_regfile = (CVA6Cfg.FpPresent && is_rs1_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[0]} : rdata[0];
     assign operand_b_regfile = (CVA6Cfg.FpPresent && is_rs2_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[1]} : rdata[1];
-    assign operand_c_regfile = CVA6Cfg.NrRgprPorts == 3 ? ((CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[2]} : rdata[2])
-                                                  : fprdata[2];
+    generate
+      if (CVA6Cfg.NrRgprPorts == 3) begin
+        if (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) begin
+          assign operand_c_regfile = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[2]};
+        end 
+        else begin
+          assign operand_c_regfile = rdata[2];
+        end
+      end 
+      else begin
+        assign operand_c_regfile = fprdata[2];
+      end
+    endgenerate
+
 
     // ----------------------
     // Registers (ID <-> EX)

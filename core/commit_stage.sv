@@ -232,7 +232,7 @@ module commit_stage import ariane_pkg::*; #(
                                        && (commit_instr_i[CVA6Cfg.NrCommitPorts-1].fu inside {ALU, LOAD, CTRL_FLOW, MULT, FPU, FPU_VEC})) begin
 
                     if (CVA6Cfg.FpPresent && ariane_pkg::is_rd_fpr(commit_instr_i[1].op))
-                        we_fpr_o[1] = 1'b1;
+                        we_fpr_o[CVA6Cfg.NrCommitPorts-1] = 1'b1;
                     else
                         we_gpr_o[CVA6Cfg.NrCommitPorts-1] = 1'b1;
 
