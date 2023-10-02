@@ -128,7 +128,7 @@ module wt_axi_adapter import ariane_pkg::*; import wt_cache_pkg::*; #(
   // request side
   always_comb begin : p_axi_req
     // write channel
-    axi_wr_id_in = arb_idx;
+    axi_wr_id_in = {{3{1'b0}},arb_idx};
     axi_wr_data  = {(CVA6Cfg.AxiDataWidth/riscv::XLEN){dcache_data.data}};
     axi_wr_user  = dcache_data.user;
     // Cast to AXI address width

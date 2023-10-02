@@ -278,7 +278,7 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   assign mem_data_o.way    = (amo_sel) ? '0                  : repl_way;
   assign mem_data_o.data   = (amo_sel) ? amo_data            : miss_wdata_i[miss_port_idx];
   assign mem_data_o.user   = (amo_sel) ? amo_user            : miss_wuser_i[miss_port_idx];
-  assign mem_data_o.size   = (amo_sel) ? amo_req_i.size      : miss_size_i [miss_port_idx];
+  assign mem_data_o.size   = (amo_sel) ? {1'b0,amo_req_i.size}      : miss_size_i [miss_port_idx];
   assign mem_data_o.amo_op = (amo_sel) ? amo_req_i.amo_op    : AMO_NONE;
 
   assign tmp_paddr         = (amo_sel) ? amo_req_i.operand_a[riscv::PLEN-1:0] : miss_paddr_i[miss_port_idx];

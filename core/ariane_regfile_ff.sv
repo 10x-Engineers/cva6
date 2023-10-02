@@ -52,7 +52,7 @@ module ariane_regfile #(
     always_comb begin : we_decoder
         for (int unsigned j = 0; j < CVA6Cfg.NrCommitPorts; j++) begin
             for (int unsigned i = 0; i < NUM_WORDS; i++) begin
-                if (waddr_i[j] == i)
+                if ({{27{1'b0}},waddr_i[j]} == i)
                     we_dec[j][i] = we_i[j];
                 else
                     we_dec[j][i] = 1'b0;

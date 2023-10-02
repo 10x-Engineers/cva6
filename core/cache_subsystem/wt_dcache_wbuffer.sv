@@ -151,7 +151,7 @@ module wt_dcache_wbuffer import ariane_pkg::*; import wt_cache_pkg::*; #(
 
   for (genvar k=0; k<DCACHE_MAX_TX;k++) begin : gen_tx_vld
     assign tx_vld_o[k]   = tx_stat_q[k].vld;
-    assign tx_paddr_o[k] = wbuffer_q[tx_stat_q[k].ptr].wtag<<riscv::XLEN_ALIGN_BYTES;
+    assign tx_paddr_o[k] = {{2{1'b0}},wbuffer_q[tx_stat_q[k].ptr].wtag}<<riscv::XLEN_ALIGN_BYTES;
   end
 
 ///////////////////////////////////////////////////////
@@ -186,8 +186,15 @@ module wt_dcache_wbuffer import ariane_pkg::*; import wt_cache_pkg::*; #(
   // we have to split unaligned data into multiple transfers (see toSize64)
   // e.g. if we have the following valid bytes: 0011_1001 -> TX0: 0000_0001, TX1: 0000_1000, TX2: 0011_0000
 
-  assign miss_size_o = riscv::IS_XLEN64 ? toSize64(bdirty[dirty_ptr]):
-                                          toSize32(bdirty[dirty_ptr]);
+  generate
+      if (riscv::IS_XLEN64) begin
+          assign miss_size_o = {1'b0,toSize64(bdirty[dirty_ptr])};
+      end
+      else begin
+          assign miss_size_o = {1'b0,toSize32(bdirty[dirty_ptr])};
+      end
+  endgenerate
+
 
   // replicate transfers shorter than a dword
   generate
@@ -298,7 +305,7 @@ endgenerate
 
   // trigger TAG readout in cache
   assign rd_tag_only_o = 1'b1;
-  assign rd_paddr   = wbuffer_check_mux.wtag<<riscv::XLEN_ALIGN_BYTES;
+  assign rd_paddr   = {{2{1'b0}},(wbuffer_check_mux.wtag<<riscv::XLEN_ALIGN_BYTES)};
   assign rd_req_o   = |tocheck;
   assign rd_tag_o   = rd_tag_q;//delay by one cycle
   assign rd_idx_o   = rd_paddr[DCACHE_INDEX_WIDTH-1:DCACHE_OFFSET_WIDTH];
@@ -310,7 +317,7 @@ endgenerate
   // if we wrote into a word while it was in-flight, we cannot write the dirty bytes to the cache
   // when the TX returns
   assign wr_data_be_o = tx_stat_q[rtrn_id].be & (~wbuffer_q[rtrn_ptr].dirty);
-  assign wr_paddr     = wbuffer_q[rtrn_ptr].wtag<<riscv::XLEN_ALIGN_BYTES;
+  assign wr_paddr     = {{2{1'b0}},(wbuffer_q[rtrn_ptr].wtag<<riscv::XLEN_ALIGN_BYTES)};
   assign wr_idx_o     = wr_paddr[DCACHE_INDEX_WIDTH-1:DCACHE_OFFSET_WIDTH];
   assign wr_off_o     = wr_paddr[DCACHE_OFFSET_WIDTH-1:0];
   assign wr_data_o    = wbuffer_q[rtrn_ptr].data;
@@ -328,7 +335,7 @@ endgenerate
 
   for (genvar k=0; k<DCACHE_WBUF_DEPTH; k++) begin : gen_flags
     // only for debug, will be pruned
-    assign debug_paddr[k] = wbuffer_q[k].wtag << riscv::XLEN_ALIGN_BYTES;
+    assign debug_paddr[k] = {{2{1'b0}},(wbuffer_q[k].wtag << riscv::XLEN_ALIGN_BYTES)};
 
     // dirty bytes that are ready for transmission.
     // note that we cannot retransmit a word that is already in-flight
