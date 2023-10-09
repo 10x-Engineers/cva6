@@ -267,11 +267,11 @@ package wt_cache_pkg;
     return cnt;
   endfunction : popcnt64
 
-  function automatic logic [7:0] to_byte_enable8(
-    input logic [2:0] offset,
+  function automatic logic[(riscv::XLEN/8) -1 :0] to_byte_enable8(
+    input logic [riscv::XLEN_ALIGN_BYTES-1:0] offset,
     input logic [1:0] size
   );
-    logic [7:0] be;
+    logic[(riscv::XLEN/8) -1 :0] be;
     be = '0;
     unique case(size)
       2'b00:   be[offset]       = '1; // byte
@@ -282,11 +282,11 @@ package wt_cache_pkg;
     return be;
   endfunction : to_byte_enable8
 
-  function automatic logic [3:0] to_byte_enable4(
-    input logic [1:0] offset,
+  function automatic logic [(riscv::XLEN/8) -1 :0] to_byte_enable4(
+    input logic [riscv::XLEN_ALIGN_BYTES-1:0] offset,
     input logic [1:0] size
   );
-    logic [3:0] be;
+    logic [(riscv::XLEN/8) -1 :0] be;
     be = '0;
     unique case(size)
       2'b00:   be[offset]       = '1; // byte
@@ -297,12 +297,12 @@ package wt_cache_pkg;
   endfunction : to_byte_enable4
 
   // openpiton requires the data to be replicated in case of smaller sizes than dwords
-  function automatic logic [63:0] repData64(
-    input logic [63:0] data,
+  function automatic riscv::xlen_t repData64(
+    input riscv::xlen_t data,
     input logic [2:0]  offset,
     input logic [1:0]  size
   );
-    logic [63:0] out;
+    riscv::xlen_t out;
     unique case(size)
       2'b00:   for(int k=0; k<8; k++) out[k*8  +: 8]    = data[offset*8 +: 8];  // byte
       2'b01:   for(int k=0; k<4; k++) out[k*16 +: 16]   = data[offset*8 +: 16]; // hword
@@ -312,12 +312,12 @@ package wt_cache_pkg;
     return out;
   endfunction : repData64
 
-  function automatic logic [31:0] repData32(
-    input logic [31:0] data,
+  function automatic riscv::xlen_t repData32(
+    input riscv::xlen_t data,
     input logic [1:0]  offset,
     input logic [1:0]  size
   );
-    logic [31:0] out;
+    riscv::xlen_t out;
     unique case(size)
       2'b00:   for(int k=0; k<4; k++) out[k*8  +: 8]    = data[offset*8 +: 8];  // byte
       2'b01:   for(int k=0; k<2; k++) out[k*16 +: 16]   = data[offset*8 +: 16]; // hword
