@@ -3,17 +3,71 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // common waiver rules for verilator
-
 `verilator_config
+// waving these warnings since they are in vendor or core_apu
+lint_off -rule CASEINCOMPLETE -file "*/corev_apu/*"
+lint_off -rule WIDTHEXPAND -file "vendor/pulp-platform/*.sv"
+lint_off -rule STMTDLY -file "*/corev_apu/*"
+lint_off -rule CMPCONST -file "*/corev_apu/*"
+lint_off -rule CMPCONST -file "*/vendor/*"
+lint_off -rule UNSIGNED -file "*/corev_apu/*"
+lint_off -rule UNSIGNED -file "*/vendor/*"
+lint_off -rule LITENDIAN -file "*/corev_apu/*"
+lint_off -rule LITENDIAN -file "*/vendor/*"
+lint_off -rule WIDTHEXPAND -file "*/corev_apu/*"
+lint_off -rule WIDTHEXPAND -file "*/vendor/*"
+lint_off -rule WIDTHTRUNC -file "*/corev_apu/*"
+lint_off -rule WIDTHTRUNC -file "*/vendor/*"
+lint_off -rule UNOPTFLAT -file "*/corev_apu/*"
+lint_off -rule UNOPTFLAT -file "*/vendor/*"
 
-// TODO -> Please update the configuration file according to the warnings resolution
-// Timing flag issue CVA6 #1162, waiving it off
-lint_off -rule STMTDLY
+lint_off -rule MODDUP -file "*/core/include/cv32a60x_config_pkg.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/include/std_cache_pkg.sv"
 
-// Big Endian usage issue CVA6 #1176, waiving it off
-lint_off -rule LITENDIAN
+// P2
+lint_off -rule WIDTHCONCAT -file "*/core/cache_subsystem/cva6_icache.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_dcache_missunit.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/cva6_icache.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_axi_adapter.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_wbuffer.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_dcache_wbuffer.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_axi_adapter.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/cva6_icache.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_missunit.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_mem.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/axi_adapter.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_ctrl.sv"
+lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_cache_subsystem.sv"
+lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_axi_adapter.sv"
+lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_dcache_ctrl.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/axi_shim.sv"
 
-// New Line at the end of file in submodule register_interface, waiving it off
-// Commenting this out since CI Verilator does not recognize this rule
-// lint_off -rule EOFNEWLINE -file "corev_apu/*.svh"
-// lint_off -file "corev_apu/*.svh"
+
+lint_off -rule WIDTHTRUNC -file "*/core/cvxif_fu.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/load_store_unit.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/alu.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/issue_read_operands.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/alu.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/cvxif_fu.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/load_store_unit.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/issue_read_operands.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/scoreboard.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/instr_realign.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/load_unit.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/store_unit.sv"
+lint_off -rule WIDTHEXPAND -file "*/common/local/util/sram.sv"
+lint_off -rule WIDTHEXPAND -file "*/core/ariane_regfile_ff.sv"
+
+
+// CVA6 Issue 1194, Issue with Verilator SELRANGE
+lint_off -rule SELRANGE -file "*/core/commit_stage.sv"
+lint_off -rule SELRANGE -file "*/core/alu.sv"
+lint_off -rule SELRANGE -file "*/core/mmu_sv32/cva6_mmu_sv32.sv"
+lint_off -rule SELRANGE -file "*/core/scoreboard.sv"
+
+
+// CVA6 Issue 1157, Circular Combinational Logic
+lint_off -rule UNOPTFLAT -file "*/core/cva6.sv"
+lint_off -rule UNOPTFLAT -file "*/core/id_stage.sv"
+lint_off -rule UNOPTFLAT -file "*/core/mmu_sv32/cva6_mmu_sv32.sv"
+
