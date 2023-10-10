@@ -267,11 +267,11 @@ package wt_cache_pkg;
     return cnt;
   endfunction : popcnt64
 
-  function automatic logic[(riscv::XLEN/8) -1 :0] to_byte_enable8(
+  function automatic logic[(riscv::XLEN/8)-1:0] to_byte_enable8(
     input logic [riscv::XLEN_ALIGN_BYTES-1:0] offset,
     input logic [1:0] size
   );
-    logic[(riscv::XLEN/8) -1 :0] be;
+    logic[(riscv::XLEN/8)-1:0] be;
     be = '0;
     unique case(size)
       2'b00:   be[offset]       = '1; // byte
@@ -282,11 +282,11 @@ package wt_cache_pkg;
     return be;
   endfunction : to_byte_enable8
 
-  function automatic logic [(riscv::XLEN/8) -1 :0] to_byte_enable4(
+  function automatic logic [(riscv::XLEN/8)-1:0] to_byte_enable4(
     input logic [riscv::XLEN_ALIGN_BYTES-1:0] offset,
     input logic [1:0] size
   );
-    logic [(riscv::XLEN/8) -1 :0] be;
+    logic [(riscv::XLEN/8)-1:0] be;
     be = '0;
     unique case(size)
       2'b00:   be[offset]       = '1; // byte
@@ -299,7 +299,7 @@ package wt_cache_pkg;
   // openpiton requires the data to be replicated in case of smaller sizes than dwords
   function automatic riscv::xlen_t repData64(
     input riscv::xlen_t data,
-    input logic [2:0]  offset,
+    input logic [riscv::XLEN_ALIGN_BYTES-1:0]  offset,
     input logic [1:0]  size
   );
     riscv::xlen_t out;
@@ -314,7 +314,7 @@ package wt_cache_pkg;
 
   function automatic riscv::xlen_t repData32(
     input riscv::xlen_t data,
-    input logic [1:0]  offset,
+    input logic [riscv::XLEN_ALIGN_BYTES-1:0]  offset,
     input logic [1:0]  size
   );
     riscv::xlen_t out;
