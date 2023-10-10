@@ -20,6 +20,8 @@ lint_off -rule WIDTHTRUNC -file "*/corev_apu/*"
 lint_off -rule WIDTHTRUNC -file "*/vendor/*"
 lint_off -rule UNOPTFLAT -file "*/corev_apu/*"
 lint_off -rule UNOPTFLAT -file "*/vendor/*"
+lint_off -rule WIDTHEXPAND -file "*/common/local/util/sram.sv"
+
 
 lint_off -rule WIDTHTRUNC -file "*/core/include/std_cache_pkg.sv"
 
@@ -27,32 +29,21 @@ lint_off -rule WIDTHTRUNC -file "*/core/include/std_cache_pkg.sv"
 lint_off -rule WIDTHCONCAT -file "*/core/cache_subsystem/cva6_icache.sv"
 lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/cva6_icache.sv"
 lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_axi_adapter.sv"
+lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_dcache_missunit.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_axi_adapter.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/cva6_icache.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/axi_adapter.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/axi_shim.sv"
 
 
-lint_off -rule WIDTHTRUNC -file "*/core/cvxif_fu.sv"
-lint_off -rule WIDTHTRUNC -file "*/core/load_store_unit.sv"
-lint_off -rule WIDTHTRUNC -file "*/core/alu.sv"
-lint_off -rule WIDTHTRUNC -file "*/core/issue_read_operands.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/alu.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/cvxif_fu.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/load_store_unit.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/issue_read_operands.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/scoreboard.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/instr_realign.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/load_unit.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/store_unit.sv"
-lint_off -rule WIDTHEXPAND -file "*/common/local/util/sram.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/ariane_regfile_ff.sv"
 
 
 // CVA6 Issue 1194, Issue with Verilator SELRANGE
 lint_off -rule SELRANGE -file "*/core/commit_stage.sv"
-lint_off -rule SELRANGE -file "*/core/alu.sv"
-lint_off -rule SELRANGE -file "*/core/mmu_sv32/cva6_mmu_sv32.sv"
 lint_off -rule SELRANGE -file "*/core/scoreboard.sv"
 
 
