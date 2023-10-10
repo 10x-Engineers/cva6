@@ -88,7 +88,7 @@ module issue_read_operands import ariane_pkg::*; #(
     // output flipflop (ID <-> EX)
     riscv::xlen_t operand_a_n, operand_a_q,
                  operand_b_n, operand_b_q,
-                 imm_n, imm_q;
+                 imm_n, imm_q, imm, imm_forward_rs3;
 
     logic          alu_valid_q;
     logic         mult_valid_q;
@@ -214,6 +214,24 @@ module issue_read_operands import ariane_pkg::*; #(
         end
     end
 
+    generate
+        if (CVA6Cfg.NrRgprPorts == 3) begin
+            assign imm_forward_rs3 = rs3_i;
+            if (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op))
+                assign imm = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile};
+            else if (issue_instr_i.op == OFFLOAD)
+                assign imm = operand_c_regfile;
+            else
+                assign imm = issue_instr_i.result;
+        end else begin
+            assign imm_forward_rs3 = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, rs3_i};
+            if (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op))
+                assign imm = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile};
+            else
+                assign imm = issue_instr_i.result;
+        end
+    endgenerate
+
     // Forwarding/Output MUX
     always_comb begin : forwarding_operand_select
         // default is regfiles (gpr or fpr)
@@ -221,12 +239,7 @@ module issue_read_operands import ariane_pkg::*; #(
         operand_b_n = operand_b_regfile;
         // immediates are the third operands in the store case
         // for FP operations, the imm field can also be the third operand from the regfile
-        if (CVA6Cfg.NrRgprPorts == 3) begin
-            imm_n  = (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile} :
-                                                    issue_instr_i.op == OFFLOAD ? operand_c_regfile : issue_instr_i.result;
-        end else begin
-            imm_n  = (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile} : issue_instr_i.result;
-        end
+        imm_n      = imm;
         trans_id_n = issue_instr_i.trans_id;
         fu_n       = issue_instr_i.fu;
         operator_n = issue_instr_i.op;
@@ -240,7 +253,7 @@ module issue_read_operands import ariane_pkg::*; #(
         end
 
         if (forward_rs3) begin
-            imm_n  = CVA6Cfg.NrRgprPorts == 3 ? rs3_i : {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, rs3_i};;
+            imm_n  = imm_forward_rs3;
         end
 
         // use the PC as operand a
@@ -414,8 +427,14 @@ module issue_read_operands import ariane_pkg::*; #(
     logic [CVA6Cfg.NrCommitPorts-1:0][4:0]  waddr_pack;
     logic [CVA6Cfg.NrCommitPorts-1:0][riscv::XLEN-1:0] wdata_pack;
     logic [CVA6Cfg.NrCommitPorts-1:0]       we_pack;
-    assign raddr_pack = CVA6Cfg.NrRgprPorts == 3 ? {issue_instr_i.result[4:0], issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]}
-                                           : {issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]};
+
+    generate
+        if (CVA6Cfg.NrRgprPorts == 3)
+            assign raddr_pack = {issue_instr_i.result[4:0], issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]};
+        else
+            assign raddr_pack = {issue_instr_i.rs2[4:0], issue_instr_i.rs1[4:0]};
+    endgenerate
+
     for (genvar i = 0; i < CVA6Cfg.NrCommitPorts; i++) begin : gen_write_back_port
         assign waddr_pack[i] = waddr_i[i];
         assign wdata_pack[i] = wdata_i[i];
@@ -506,8 +525,16 @@ module issue_read_operands import ariane_pkg::*; #(
 
     assign operand_a_regfile = (CVA6Cfg.FpPresent && is_rs1_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[0]} : rdata[0];
     assign operand_b_regfile = (CVA6Cfg.FpPresent && is_rs2_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[1]} : rdata[1];
-    assign operand_c_regfile = CVA6Cfg.NrRgprPorts == 3 ? ((CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[2]} : rdata[2])
-                                                  : fprdata[2];
+
+    generate
+        if (CVA6Cfg.NrRgprPorts == 3) begin
+            if (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op))
+                assign operand_c_regfile = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, fprdata[2]};
+            else
+                assign operand_c_regfile = rdata[2];
+        end else
+            assign operand_c_regfile = fprdata[2];
+    endgenerate
 
     // ----------------------
     // Registers (ID <-> EX)
