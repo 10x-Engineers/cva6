@@ -31,10 +31,19 @@ module cvxif_fu import ariane_pkg::*; #(
     output cvxif_pkg::cvxif_req_t             cvxif_req_o,
     input  cvxif_pkg::cvxif_resp_t            cvxif_resp_i
 );
+    localparam X_NUM_RS     = ariane_pkg::NR_RGPR_PORTS;
 
     logic illegal_n, illegal_q;
     logic [TRANS_ID_BITS-1:0] illegal_id_n, illegal_id_q;
     logic [31:0] illegal_instr_n, illegal_instr_q;
+    logic [X_NUM_RS-1:0] rs_valid;
+
+    generate
+        if (cvxif_pkg::X_NUM_RS == 3)
+            assign rs_valid = 3'b111;
+        else
+            assign rs_valid = 2'b11;
+    endgenerate
 
     always_comb begin
       cvxif_req_o = '0;
@@ -50,7 +59,7 @@ module cvxif_fu import ariane_pkg::*; #(
         if (cvxif_pkg::X_NUM_RS == 3) begin
           cvxif_req_o.x_issue_req.rs[2]    = fu_data_i.imm;
         end
-        cvxif_req_o.x_issue_req.rs_valid   = cvxif_pkg::X_NUM_RS == 3 ? 3'b111 : 2'b11;
+        cvxif_req_o.x_issue_req.rs_valid   = rs_valid;
         cvxif_req_o.x_commit_valid         = x_valid_i;
         cvxif_req_o.x_commit.id            = fu_data_i.trans_id;
         cvxif_req_o.x_commit.x_commit_kill = 1'b0;
