@@ -21,25 +21,15 @@ lint_off -rule WIDTHTRUNC -file "*/vendor/*"
 lint_off -rule UNOPTFLAT -file "*/corev_apu/*"
 lint_off -rule UNOPTFLAT -file "*/vendor/*"
 
-lint_off -rule MODDUP -file "*/core/include/cv32a60x_config_pkg.sv"
 lint_off -rule WIDTHTRUNC -file "*/core/include/std_cache_pkg.sv"
 
 // P2
 lint_off -rule WIDTHCONCAT -file "*/core/cache_subsystem/cva6_icache.sv"
-lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_dcache_missunit.sv"
 lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/cva6_icache.sv"
 lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_axi_adapter.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_wbuffer.sv"
-lint_off -rule WIDTHTRUNC -file "*/core/cache_subsystem/wt_dcache_wbuffer.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_axi_adapter.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/cva6_icache.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_missunit.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_mem.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/axi_adapter.sv"
-lint_off -rule WIDTHEXPAND -file "*/core/cache_subsystem/wt_dcache_ctrl.sv"
-lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_cache_subsystem.sv"
-lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_axi_adapter.sv"
-lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_dcache_ctrl.sv"
 lint_off -rule WIDTHEXPAND -file "*/core/axi_shim.sv"
 
 
@@ -70,4 +60,7 @@ lint_off -rule SELRANGE -file "*/core/scoreboard.sv"
 lint_off -rule UNOPTFLAT -file "*/core/cva6.sv"
 lint_off -rule UNOPTFLAT -file "*/core/id_stage.sv"
 lint_off -rule UNOPTFLAT -file "*/core/mmu_sv32/cva6_mmu_sv32.sv"
+lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_cache_subsystem.sv"
+lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_axi_adapter.sv"
+lint_off -rule UNOPTFLAT -file "*/core/cache_subsystem/wt_dcache_ctrl.sv"
 
