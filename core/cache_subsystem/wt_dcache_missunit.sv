@@ -131,7 +131,7 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   logic amo_req_d, amo_req_q;
   logic [63:0] amo_rtrn_mux;
   riscv::xlen_t amo_data;
-  logic [63:0] amo_user; //DCACHE USER ? DATA_USER_WIDTH
+  riscv::xlen_t amo_user; //DCACHE USER ? DATA_USER_WIDTH
   logic [riscv::PLEN-1:0] tmp_paddr;
   logic [$clog2(NumPorts)-1:0] miss_port_idx;
   logic [DCACHE_CL_IDX_WIDTH-1:0] cnt_d, cnt_q;
@@ -273,13 +273,13 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   assign amo_req_d = amo_req_i.req;
 
   // outgoing memory requests (AMOs are always uncached)
-  assign mem_data_o.tid    = (amo_sel) ? AmoTxId             : miss_id_i[miss_port_idx];
-  assign mem_data_o.nc     = (amo_sel) ? 1'b1                : miss_nc_i[miss_port_idx];
-  assign mem_data_o.way    = (amo_sel) ? '0                  : repl_way;
-  assign mem_data_o.data   = (amo_sel) ? amo_data            : miss_wdata_i[miss_port_idx];
-  assign mem_data_o.user   = (amo_sel) ? amo_user            : miss_wuser_i[miss_port_idx];
-  assign mem_data_o.size   = (amo_sel) ? amo_req_i.size      : miss_size_i [miss_port_idx];
-  assign mem_data_o.amo_op = (amo_sel) ? amo_req_i.amo_op    : AMO_NONE;
+  assign mem_data_o.tid    = (amo_sel) ? AmoTxId                     : miss_id_i[miss_port_idx];
+  assign mem_data_o.nc     = (amo_sel) ? 1'b1                        : miss_nc_i[miss_port_idx];
+  assign mem_data_o.way    = (amo_sel) ? '0                          : repl_way;
+  assign mem_data_o.data   = (amo_sel) ? amo_data                    : miss_wdata_i[miss_port_idx];
+  assign mem_data_o.user   = (amo_sel) ? amo_user                    : miss_wuser_i[miss_port_idx];
+  assign mem_data_o.size   = (amo_sel) ? {1'b0, ao_rmeq_i.size}      : miss_size_i [miss_port_idx];
+  assign mem_data_o.amo_op = (amo_sel) ? amo_req_i.amo_op            : AMO_NONE;
 
   assign tmp_paddr         = (amo_sel) ? amo_req_i.operand_a[riscv::PLEN-1:0] : miss_paddr_i[miss_port_idx];
   assign mem_data_o.paddr  = paddrSizeAlign(tmp_paddr, mem_data_o.size);
