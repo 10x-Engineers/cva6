@@ -131,7 +131,7 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   logic amo_req_d, amo_req_q;
   logic [63:0] amo_rtrn_mux;
   riscv::xlen_t amo_data;
-  logic [63:0] amo_user; //DCACHE USER ? DATA_USER_WIDTH
+  riscv::xlen_t amo_user; //DCACHE USER ? DATA_USER_WIDTH
   logic [riscv::PLEN-1:0] tmp_paddr;
   logic [$clog2(NumPorts)-1:0] miss_port_idx;
   logic [DCACHE_CL_IDX_WIDTH-1:0] cnt_d, cnt_q;
@@ -236,22 +236,22 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
 ///////////////////////////////////////////////////////
 
   // if size = 32bit word, select appropriate offset, replicate for openpiton...
-  always_comb begin
+  generate
     if (riscv::IS_XLEN64) begin
       if (amo_req_i.size==2'b10) begin
-        amo_data = {amo_req_i.operand_b[0 +: 32], amo_req_i.operand_b[0 +: 32]};
+        assign amo_data = {amo_req_i.operand_b[0 +: 32], amo_req_i.operand_b[0 +: 32]};
       end else begin
-        amo_data = amo_req_i.operand_b;
+        assign amo_data = amo_req_i.operand_b;
       end
     end else begin
-      amo_data = amo_req_i.operand_b[0 +: 32];
+      assign amo_data = amo_req_i.operand_b[0 +: 32];
     end
     if (ariane_pkg::DATA_USER_EN) begin
-      amo_user = amo_data;
+      assign amo_user = amo_data;
     end else begin
-      amo_user = '0;
+      assign amo_user = '0;
     end
-  end
+  endgenerate
 
   // note: openpiton returns a full cacheline!
   if (CVA6Cfg.NOCType == config_pkg::NOC_TYPE_AXI4_ATOP) begin : gen_axi_rtrn_mux
@@ -273,13 +273,13 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   assign amo_req_d = amo_req_i.req;
 
   // outgoing memory requests (AMOs are always uncached)
-  assign mem_data_o.tid    = (amo_sel) ? AmoTxId             : miss_id_i[miss_port_idx];
-  assign mem_data_o.nc     = (amo_sel) ? 1'b1                : miss_nc_i[miss_port_idx];
-  assign mem_data_o.way    = (amo_sel) ? '0                  : repl_way;
-  assign mem_data_o.data   = (amo_sel) ? amo_data            : miss_wdata_i[miss_port_idx];
-  assign mem_data_o.user   = (amo_sel) ? amo_user            : miss_wuser_i[miss_port_idx];
-  assign mem_data_o.size   = (amo_sel) ? amo_req_i.size      : miss_size_i [miss_port_idx];
-  assign mem_data_o.amo_op = (amo_sel) ? amo_req_i.amo_op    : AMO_NONE;
+  assign mem_data_o.tid    = (amo_sel) ? AmoTxId                      : miss_id_i[miss_port_idx];
+  assign mem_data_o.nc     = (amo_sel) ? 1'b1                         : miss_nc_i[miss_port_idx];
+  assign mem_data_o.way    = (amo_sel) ? '0                           : repl_way;
+  assign mem_data_o.data   = (amo_sel) ? amo_data                     : miss_wdata_i[miss_port_idx];
+  assign mem_data_o.user   = (amo_sel) ? amo_user                     : miss_wuser_i[miss_port_idx];
+  assign mem_data_o.size   = (amo_sel) ? {{1'b0},amo_req_i.size}      : miss_size_i [miss_port_idx];
+  assign mem_data_o.amo_op = (amo_sel) ? amo_req_i.amo_op             : AMO_NONE;
 
   assign tmp_paddr         = (amo_sel) ? amo_req_i.operand_a[riscv::PLEN-1:0] : miss_paddr_i[miss_port_idx];
   assign mem_data_o.paddr  = paddrSizeAlign(tmp_paddr, mem_data_o.size);
