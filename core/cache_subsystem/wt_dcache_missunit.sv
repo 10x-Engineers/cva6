@@ -130,7 +130,7 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
   logic amo_sel, miss_is_write;
   logic amo_req_d, amo_req_q;
   logic [63:0] amo_rtrn_mux;
-  riscv::xlen_t amo_data;
+  riscv::xlen_t amo_data, amo_data_a, amo_data_b;
   riscv::xlen_t amo_user; //DCACHE USER ? DATA_USER_WIDTH
   logic [riscv::PLEN-1:0] tmp_paddr;
   logic [$clog2(NumPorts)-1:0] miss_port_idx;
@@ -236,22 +236,33 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
 ///////////////////////////////////////////////////////
 
   // if size = 32bit word, select appropriate offset, replicate for openpiton...
-  always_comb begin
+   
+  generate 
     if (riscv::IS_XLEN64) begin
-      if (amo_req_i.size==2'b10) begin
-        amo_data = {amo_req_i.operand_b[0 +: 32], amo_req_i.operand_b[0 +: 32]};
-      end else begin
-        amo_data = amo_req_i.operand_b;
-      end
+      assign amo_data_a = {amo_req_i.operand_b[0 +: 32], amo_req_i.operand_b[0 +: 32]};
+      assign amo_data_b = amo_req_i.operand_b;
     end else begin
-      amo_data = amo_req_i.operand_b[0 +: 32];
+      assign amo_data_a = amo_req_i.operand_b[0 +: 32];
     end
     if (ariane_pkg::DATA_USER_EN) begin
       amo_user = amo_data;
     end else begin
       amo_user = '0;
     end
+  endgenerate
+
+  always_comb begin
+    if (riscv::IS_XLEN64) begin
+      if(amo_req_i.size==2'b10) begin
+        amo_data = amo_data_a;
+      end else begin
+        amo_data = amo_data_b;
+      end
+    end else begin
+      amo_data = amo_data_a;
+    end
   end
+
 
   // note: openpiton returns a full cacheline!
   if (CVA6Cfg.NOCType == config_pkg::NOC_TYPE_AXI4_ATOP) begin : gen_axi_rtrn_mux
