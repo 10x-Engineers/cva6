@@ -65,7 +65,7 @@ module cva6_icache import ariane_pkg::*; import wt_cache_pkg::*; #(
 
   // signals
   logic                                 cache_en_d, cache_en_q;       // cache is enabled
-  logic [riscv::VLEN-1:0]               vaddr_d, vaddr_q;
+  logic [riscv::VLEN-1:0]               vaddr_d, vaddr_q, tmp_vaddr;
   logic                                 paddr_is_nc;                  // asserted if physical address is non-cacheable
   logic [ICACHE_SET_ASSOC-1:0]          cl_hit;                       // hit from tag compare
   logic                                 cache_rden;                   // triggers cache lookup
@@ -107,16 +107,24 @@ module cva6_icache import ariane_pkg::*; import wt_cache_pkg::*; #(
   // cpmtroller FSM
   typedef enum logic[2:0] {FLUSH, IDLE, READ, MISS, KILL_ATRANS, KILL_MISS} state_e;
   state_e state_d, state_q;
+  logic [(64-riscv::PLEN)-1:0] paddr_upperbits;
 
 ///////////////////////////////////////////////////////
 // address -> cl_index mapping, interface plumbing
 ///////////////////////////////////////////////////////
-
+  generate
+    if(riscv::IS_XLEN64) begin
+      assign paddr_upperbits = 8'b0;
+    end
+    else begin
+      assign paddr_upperbits = 30'b0;
+    end
+  endgenerate
   // extract tag from physical address, check if NC
   assign cl_tag_d  = (areq_i.fetch_valid) ? areq_i.fetch_paddr[ICACHE_TAG_WIDTH+ICACHE_INDEX_WIDTH-1:ICACHE_INDEX_WIDTH] : cl_tag_q;
 
   // noncacheable if request goes to I/O space, or if cache is disabled
-  assign paddr_is_nc = (~cache_en_q) | (~config_pkg::is_inside_cacheable_regions(CVA6Cfg, {{{64-riscv::PLEN}{1'b0}}, cl_tag_d, {ICACHE_INDEX_WIDTH{1'b0}}}));
+  assign paddr_is_nc = (~cache_en_q) | (~config_pkg::is_inside_cacheable_regions(CVA6Cfg, {paddr_upperbits, cl_tag_d, {ICACHE_INDEX_WIDTH{1'b0}}}));
 
   // pass exception through
   assign dreq_o.ex = areq_i.fetch_exception;
@@ -124,7 +132,8 @@ module cva6_icache import ariane_pkg::*; import wt_cache_pkg::*; #(
   // latch this in case we have to stall later on
   // make sure this is 32bit aligned
   assign vaddr_d = (dreq_o.ready & dreq_i.req) ? dreq_i.vaddr : vaddr_q;
-  assign areq_o.fetch_vaddr = {vaddr_q>>2, 2'b0};
+  assign tmp_vaddr = vaddr_q>>2;
+  assign areq_o.fetch_vaddr = {tmp_vaddr[29:0], 2'b0};
 
   // split virtual address into index and offset to address cache arrays
   assign cl_index    = vaddr_d[ICACHE_INDEX_WIDTH-1:ICACHE_OFFSET_WIDTH];
@@ -164,7 +173,7 @@ end else begin : gen_piton_offset
 // main control logic
 ///////////////////////////////////////////////////////
   logic addr_ni;
-  assign addr_ni = config_pkg::is_inside_nonidempotent_regions(CVA6Cfg, areq_i.fetch_paddr);
+  assign addr_ni = config_pkg::is_inside_nonidempotent_regions(CVA6Cfg, {paddr_upperbits, areq_i.fetch_paddr});
   always_comb begin : p_fsm
     // default assignment
     state_d      = state_q;
@@ -354,7 +363,7 @@ end else begin : gen_piton_offset
 
   assign vld_req  = (flush_en || cache_rden)        ? '1                                    :
                     (mem_rtrn_i.inv.all && inv_en)  ? '1                                    :
-                    (mem_rtrn_i.inv.vld && inv_en)  ? icache_way_bin2oh(mem_rtrn_i.inv.way) :
+                    (mem_rtrn_i.inv.vld && inv_en)  ? icache_way_bin2oh(mem_rtrn_i.inv.way[1:0]) :
                                                       repl_way_oh_q;
 
   assign vld_wdata = (cache_wren) ? '1 : '0;
