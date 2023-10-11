@@ -245,9 +245,9 @@ module wt_dcache_missunit import ariane_pkg::*; import wt_cache_pkg::*; #(
       assign amo_data_a = amo_req_i.operand_b[0 +: 32];
     end
     if (ariane_pkg::DATA_USER_EN) begin
-      amo_user = amo_data;
+     assign amo_user = amo_data;
     end else begin
-      amo_user = '0;
+     assign amo_user = '0;
     end
   endgenerate
 
