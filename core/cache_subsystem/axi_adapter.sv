@@ -359,7 +359,7 @@ module axi_adapter #(
         if (axi_resp_i.r_valid) begin
           if (CRITICAL_WORD_FIRST) begin
             // this is the first word of a cacheline read, e.g.: the word which was causing the miss
-            if (state_q == WAIT_R_VALID_MULTIPLE && cnt_q == BURST_SIZE[ADDR_INDEX-1:0]) begin
+            if (state_q == WAIT_R_VALID_MULTIPLE && cnt_q == BURST_SIZE) begin
               critical_word_valid_o = 1'b1;
               critical_word_o       = axi_resp_i.r.data;
             end
