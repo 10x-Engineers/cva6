@@ -88,7 +88,7 @@ module issue_read_operands import ariane_pkg::*; #(
     // output flipflop (ID <-> EX)
     riscv::xlen_t operand_a_n, operand_a_q,
                  operand_b_n, operand_b_q,
-                 imm_n, imm_q, imm, imm_forward_rs3;
+                 imm_n, imm_q, imm_forward_rs3;
 
     logic          alu_valid_q;
     logic         mult_valid_q;
@@ -215,21 +215,10 @@ module issue_read_operands import ariane_pkg::*; #(
     end
 
     generate
-        if (CVA6Cfg.NrRgprPorts == 3) begin
+        if (CVA6Cfg.NrRgprPorts == 3)
             assign imm_forward_rs3 = rs3_i;
-            if (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op))
-                assign imm = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile};
-            else if (issue_instr_i.op == OFFLOAD)
-                assign imm = operand_c_regfile;
-            else
-                assign imm = issue_instr_i.result;
-        end else begin
+        else
             assign imm_forward_rs3 = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, rs3_i};
-            if (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op))
-                assign imm = {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile};
-            else
-                assign imm = issue_instr_i.result;
-        end
     endgenerate
 
     // Forwarding/Output MUX
@@ -239,7 +228,14 @@ module issue_read_operands import ariane_pkg::*; #(
         operand_b_n = operand_b_regfile;
         // immediates are the third operands in the store case
         // for FP operations, the imm field can also be the third operand from the regfile
-        imm_n      = imm;
+
+        if (CVA6Cfg.NrRgprPorts == 3) begin
+            imm_n  = (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile} :
+                                                    issue_instr_i.op == OFFLOAD ? operand_c_regfile : issue_instr_i.result;
+        end else begin
+            imm_n  = (CVA6Cfg.FpPresent && is_imm_fpr(issue_instr_i.op)) ? {{riscv::XLEN-CVA6Cfg.FLen{1'b0}}, operand_c_regfile} : issue_instr_i.result;
+        end
+
         trans_id_n = issue_instr_i.trans_id;
         fu_n       = issue_instr_i.fu;
         operator_n = issue_instr_i.op;
