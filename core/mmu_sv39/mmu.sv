@@ -68,150 +68,213 @@ module mmu
     input logic [15:0][riscv::PLEN-3:0] pmpaddr_i
 );
 
-  logic                   iaccess_err;  // insufficient privilege to access this instruction page
-  logic                   daccess_err;  // insufficient privilege to access this data page
-  logic                   ptw_active;  // PTW is currently walking a page table
-  logic                   walking_instr;  // PTW is walking because of an ITLB miss
-  logic                   ptw_error;  // PTW threw an exception
-  logic                   ptw_access_exception;  // PTW threw an access exception (PMPs)
-  logic [riscv::PLEN-1:0] ptw_bad_paddr;  // PTW PMP exception bad physical addr
+    logic                   iaccess_err;   // insufficient privilege to access this instruction page
+    logic                   daccess_err;   // insufficient privilege to access this data page
+    logic                   ptw_active;    // PTW is currently walking a page table
+    logic                   walking_instr; // PTW is walking because of an ITLB miss
+    logic                   ptw_error;     // PTW threw an exception
+    logic                   ptw_access_exception; // PTW threw an access exception (PMPs)
+    logic [riscv::PLEN-1:0] ptw_bad_paddr; // PTW PMP exception bad physical addr
 
-  logic [riscv::VLEN-1:0] update_vaddr;
-  tlb_update_t update_ptw_itlb, update_ptw_dtlb;
+    logic [riscv::VLEN-1:0] update_vaddr;
+    tlb_update_t update_itlb, update_dtlb, update_shared_tlb;
 
-  logic        itlb_lu_access;
-  riscv::pte_t itlb_content;
-  logic        itlb_is_2M;
-  logic        itlb_is_1G;
-  logic        itlb_lu_hit;
+    logic        itlb_lu_access;
+    riscv::pte_t itlb_content;
+    logic        itlb_is_2M;
+    logic        itlb_is_1G;
+    logic        itlb_lu_hit;
 
-  logic        dtlb_lu_access;
-  riscv::pte_t dtlb_content;
-  logic        dtlb_is_2M;
-  logic        dtlb_is_1G;
-  logic        dtlb_lu_hit;
+    logic        dtlb_lu_access;
+    riscv::pte_t dtlb_content;
+    logic        dtlb_is_2M;
+    logic        dtlb_is_1G;
+    logic        dtlb_lu_hit;
 
+    logic                     shared_tlb_access;
+    logic [riscv::VLEN-1:0]   shared_tlb_vaddr;
+    logic                     shared_tlb_hit;
 
-  // Assignments
-  assign itlb_lu_access = icache_areq_i.fetch_req;
-  assign dtlb_lu_access = lsu_req_i;
+    logic             itlb_req;
 
-
-  tlb #(
-      .CVA6Cfg    (CVA6Cfg),
-      .TLB_ENTRIES(INSTR_TLB_ENTRIES),
-      .ASID_WIDTH (ASID_WIDTH)
-  ) i_itlb (
-      .clk_i  (clk_i),
-      .rst_ni (rst_ni),
-      .flush_i(flush_tlb_i),
-
-      .update_i(update_ptw_itlb),
-
-      .lu_access_i          (itlb_lu_access),
-      .lu_asid_i            (asid_i),
-      .asid_to_be_flushed_i (asid_to_be_flushed_i),
-      .vaddr_to_be_flushed_i(vaddr_to_be_flushed_i),
-      .lu_vaddr_i           (icache_areq_i.fetch_vaddr),
-      .lu_content_o         (itlb_content),
-
-      .lu_is_2M_o(itlb_is_2M),
-      .lu_is_1G_o(itlb_is_1G),
-      .lu_hit_o  (itlb_lu_hit)
-  );
-
-  tlb #(
-      .CVA6Cfg    (CVA6Cfg),
-      .TLB_ENTRIES(DATA_TLB_ENTRIES),
-      .ASID_WIDTH (ASID_WIDTH)
-  ) i_dtlb (
-      .clk_i  (clk_i),
-      .rst_ni (rst_ni),
-      .flush_i(flush_tlb_i),
-
-      .update_i(update_ptw_dtlb),
-
-      .lu_access_i          (dtlb_lu_access),
-      .lu_asid_i            (asid_i),
-      .asid_to_be_flushed_i (asid_to_be_flushed_i),
-      .vaddr_to_be_flushed_i(vaddr_to_be_flushed_i),
-      .lu_vaddr_i           (lsu_vaddr_i),
-      .lu_content_o         (dtlb_content),
-
-      .lu_is_2M_o(dtlb_is_2M),
-      .lu_is_1G_o(dtlb_is_1G),
-      .lu_hit_o  (dtlb_lu_hit)
-  );
+    // Assignments
+    assign itlb_lu_access = icache_areq_i.fetch_req;
+    assign dtlb_lu_access = lsu_req_i;
 
 
-  ptw #(
-      .CVA6Cfg   (CVA6Cfg),
-      .ASID_WIDTH(ASID_WIDTH)
-  ) i_ptw (
-      .clk_i                 (clk_i),
-      .rst_ni                (rst_ni),
-      .ptw_active_o          (ptw_active),
-      .walking_instr_o       (walking_instr),
-      .ptw_error_o           (ptw_error),
-      .ptw_access_exception_o(ptw_access_exception),
-      .enable_translation_i  (enable_translation_i),
+    tlb #(
+        .CVA6Cfg          ( CVA6Cfg                    ),
+        .TLB_ENTRIES      ( INSTR_TLB_ENTRIES          ),
+        .ASID_WIDTH       ( ASID_WIDTH                 )
+    ) i_itlb (
+        .clk_i            ( clk_i                      ),
+        .rst_ni           ( rst_ni                     ),
+        .flush_i          ( flush_tlb_i                ),
 
-      .update_vaddr_o(update_vaddr),
-      .itlb_update_o (update_ptw_itlb),
-      .dtlb_update_o (update_ptw_dtlb),
+        .update_i         ( update_itlb            ),
 
-      .itlb_access_i(itlb_lu_access),
-      .itlb_hit_i   (itlb_lu_hit),
-      .itlb_vaddr_i (icache_areq_i.fetch_vaddr),
+        .lu_access_i      ( itlb_lu_access             ),
+        .lu_asid_i        ( asid_i                     ),
+        .asid_to_be_flushed_i  ( asid_to_be_flushed_i  ),
+        .vaddr_to_be_flushed_i ( vaddr_to_be_flushed_i ),
+        .lu_vaddr_i       ( icache_areq_i.fetch_vaddr  ),
+        .lu_content_o     ( itlb_content               ),
 
-      .dtlb_access_i(dtlb_lu_access),
-      .dtlb_hit_i   (dtlb_lu_hit),
-      .dtlb_vaddr_i (lsu_vaddr_i),
+        .lu_is_2M_o       ( itlb_is_2M                 ),
+        .lu_is_1G_o       ( itlb_is_1G                 ),
+        .lu_hit_o         ( itlb_lu_hit                )
+    );
 
-      .req_port_i (req_port_i),
-      .req_port_o (req_port_o),
-      .pmpcfg_i,
-      .pmpaddr_i,
-      .bad_paddr_o(ptw_bad_paddr),
-      .*
-  );
+    tlb #(
+        .CVA6Cfg         ( CVA6Cfg                      ),
+        .TLB_ENTRIES     ( DATA_TLB_ENTRIES             ),
+        .ASID_WIDTH      ( ASID_WIDTH                   )
+    ) i_dtlb (
+        .clk_i            ( clk_i                       ),
+        .rst_ni           ( rst_ni                      ),
+        .flush_i          ( flush_tlb_i                 ),
 
-  // ila_1 i_ila_1 (
-  //     .clk(clk_i), // input wire clk
-  //     .probe0({req_port_o.address_tag, req_port_o.address_index}),
-  //     .probe1(req_port_o.data_req), // input wire [63:0]  probe1
-  //     .probe2(req_port_i.data_gnt), // input wire [0:0]  probe2
-  //     .probe3(req_port_i.data_rdata), // input wire [0:0]  probe3
-  //     .probe4(req_port_i.data_rvalid), // input wire [0:0]  probe4
-  //     .probe5(ptw_error), // input wire [1:0]  probe5
-  //     .probe6(update_vaddr), // input wire [0:0]  probe6
-  //     .probe7(update_ptw_itlb.valid), // input wire [0:0]  probe7
-  //     .probe8(update_ptw_dtlb.valid), // input wire [0:0]  probe8
-  //     .probe9(dtlb_lu_access), // input wire [0:0]  probe9
-  //     .probe10(lsu_vaddr_i), // input wire [0:0]  probe10
-  //     .probe11(dtlb_lu_hit), // input wire [0:0]  probe11
-  //     .probe12(itlb_lu_access), // input wire [0:0]  probe12
-  //     .probe13(icache_areq_i.fetch_vaddr), // input wire [0:0]  probe13
-  //     .probe14(itlb_lu_hit) // input wire [0:0]  probe13
-  // );
+        .update_i         ( update_dtlb             ),
 
-  //-----------------------
-  // Instruction Interface
-  //-----------------------
-  logic match_any_execute_region;
-  logic pmp_instr_allow;
+        .lu_access_i      ( dtlb_lu_access              ),
+        .lu_asid_i        ( asid_i                      ),
+        .asid_to_be_flushed_i  ( asid_to_be_flushed_i   ),
+        .vaddr_to_be_flushed_i ( vaddr_to_be_flushed_i  ),
+        .lu_vaddr_i       ( lsu_vaddr_i                 ),
+        .lu_content_o     ( dtlb_content                ),
 
-  // The instruction interface is a simple request response interface
-  always_comb begin : instr_interface
-    // MMU disabled: just pass through
-    icache_areq_o.fetch_valid = icache_areq_i.fetch_req;
-    icache_areq_o.fetch_paddr  = icache_areq_i.fetch_vaddr[riscv::PLEN-1:0]; // play through in case we disabled address translation
-    // two potential exception sources:
-    // 1. HPTW threw an exception -> signal with a page fault exception
-    // 2. We got an access error because of insufficient permissions -> throw an access exception
-    icache_areq_o.fetch_exception = '0;
-    // Check whether we are allowed to access this memory region from a fetch perspective
-    iaccess_err   = icache_areq_i.fetch_req && enable_translation_i
+        .lu_is_2M_o       ( dtlb_is_2M                  ),
+        .lu_is_1G_o       ( dtlb_is_1G                  ),
+        .lu_hit_o         ( dtlb_lu_hit                 )
+    );
+
+
+    shared_tlb #(
+        .CVA6Cfg          ( CVA6Cfg  ),
+        .SHARED_TLB_DEPTH ( 64 ),
+        .SHARED_TLB_WAYS  ( 2 ),
+        .ASID_WIDTH ( ASID_WIDTH )
+    ) i_shared_tlb (
+        .clk_i            ( clk_i                       ),
+        .rst_ni           ( rst_ni                      ),
+        .flush_i          ( flush_tlb_i                 ),
+
+        .enable_translation_i   ( enable_translation_i  ),
+        .en_ld_st_translation_i ( en_ld_st_translation_i),
+
+        .asid_i           (asid_i                       ),
+        .asid_to_be_flushed_i  ( asid_to_be_flushed_i   ),
+        .vaddr_to_be_flushed_i ( vaddr_to_be_flushed_i  ),
+        // from TLBs
+        // did we miss?
+        .itlb_access_i    ( itlb_lu_access              ),
+        .itlb_hit_i       ( itlb_lu_hit                 ),
+        .itlb_vaddr_i     ( icache_areq_i.fetch_vaddr   ),
+
+        .dtlb_access_i    ( dtlb_lu_access              ),
+        .dtlb_hit_i       ( dtlb_lu_hit                 ),
+        .dtlb_vaddr_i     ( lsu_vaddr_i                 ),
+
+        // to TLBs, update logic
+        .itlb_update_o    ( update_itlb                 ),
+        .dtlb_update_o    ( update_dtlb                 ),
+
+        // Performance counters
+        .itlb_miss_o      (itlb_miss_o                  ),
+        .dtlb_miss_o      (dtlb_miss_o                  ),
+
+        .shared_tlb_access_o ( shared_tlb_access        ),
+        .shared_tlb_hit_o    ( shared_tlb_hit           ),
+        .shared_tlb_vaddr_o  ( shared_tlb_vaddr         ),
+
+        .itlb_req_o          ( itlb_req                 ),
+        // to update shared tlb
+        .shared_tlb_update_i (update_shared_tlb         )
+    );
+
+    ptw  #(
+        .CVA6Cfg                ( CVA6Cfg               ),
+        .ASID_WIDTH             ( ASID_WIDTH            )
+    ) i_ptw (
+        .clk_i                  ( clk_i                 ),
+        .rst_ni                 ( rst_ni                ),
+        .flush_i                ( flush_i ),
+
+        .ptw_active_o           ( ptw_active            ),
+        .walking_instr_o        ( walking_instr         ),
+        .ptw_error_o            ( ptw_error             ),
+        .ptw_access_exception_o ( ptw_access_exception  ),
+
+        .lsu_is_store_i         ( lsu_is_store_i        ),
+         // PTW memory interface
+        .req_port_i             ( req_port_i            ),
+        .req_port_o             ( req_port_o            ),
+
+        // to Shared TLB, update logic
+        .shared_tlb_update_o    ( update_shared_tlb     ),
+
+        .update_vaddr_o         ( update_vaddr          ),
+
+        .asid_i                 ( asid_i                ),
+
+        // from shared TLB
+        // did we miss?
+        .shared_tlb_access_i    ( shared_tlb_access     ),
+        .shared_tlb_hit_i       ( shared_tlb_hit        ),
+        .shared_tlb_vaddr_i     ( shared_tlb_vaddr      ),
+
+        .itlb_req_i             ( itlb_req              ),
+
+        // from CSR file
+       .satp_ppn_i              ( satp_ppn_i            ), // ppn from satp
+       .mxr_i                   ( mxr_i                 ),
+
+       // Performance counters
+       .shared_tlb_miss_o       (                       ), //open for now
+
+       // PMP
+      .pmpcfg_i                 ( pmpcfg_i              ),
+      .pmpaddr_i                ( pmpaddr_i             ),
+      .bad_paddr_o              ( ptw_bad_paddr         )
+
+);
+
+    // ila_1 i_ila_1 (
+    //     .clk(clk_i), // input wire clk
+    //     .probe0({req_port_o.address_tag, req_port_o.address_index}),
+    //     .probe1(req_port_o.data_req), // input wire [63:0]  probe1
+    //     .probe2(req_port_i.data_gnt), // input wire [0:0]  probe2
+    //     .probe3(req_port_i.data_rdata), // input wire [0:0]  probe3
+    //     .probe4(req_port_i.data_rvalid), // input wire [0:0]  probe4
+    //     .probe5(ptw_error), // input wire [1:0]  probe5
+    //     .probe6(update_vaddr), // input wire [0:0]  probe6
+    //     .probe7(update_itlb.valid), // input wire [0:0]  probe7
+    //     .probe8(update_ptw_dtlb.valid), // input wire [0:0]  probe8
+    //     .probe9(dtlb_lu_access), // input wire [0:0]  probe9
+    //     .probe10(lsu_vaddr_i), // input wire [0:0]  probe10
+    //     .probe11(dtlb_lu_hit), // input wire [0:0]  probe11
+    //     .probe12(itlb_lu_access), // input wire [0:0]  probe12
+    //     .probe13(icache_areq_i.fetch_vaddr), // input wire [0:0]  probe13
+    //     .probe14(itlb_lu_hit) // input wire [0:0]  probe13
+    // );
+
+    //-----------------------
+    // Instruction Interface
+    //-----------------------
+    logic match_any_execute_region;
+    logic pmp_instr_allow;
+
+    // The instruction interface is a simple request response interface
+    always_comb begin : instr_interface
+        // MMU disabled: just pass through
+        icache_areq_o.fetch_valid  = icache_areq_i.fetch_req;
+        icache_areq_o.fetch_paddr  = icache_areq_i.fetch_vaddr[riscv::PLEN-1:0]; // play through in case we disabled address translation
+        // two potential exception sources:
+        // 1. HPTW threw an exception -> signal with a page fault exception
+        // 2. We got an access error because of insufficient permissions -> throw an access exception
+        icache_areq_o.fetch_exception      = '0;
+        // Check whether we are allowed to access this memory region from a fetch perspective
+        iaccess_err   = icache_areq_i.fetch_req && enable_translation_i
                                                  && (((priv_lvl_i == riscv::PRIV_LVL_U) && ~itlb_content.u)
                                                  || ((priv_lvl_i == riscv::PRIV_LVL_S) && itlb_content.u));
 
