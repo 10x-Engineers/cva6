@@ -79,7 +79,8 @@ module ptw
     PTE_LOOKUP,
     WAIT_RVALID,
     PROPAGATE_ERROR,
-    PROPAGATE_ACCESS_ERROR
+    PROPAGATE_ACCESS_ERROR,
+    LATENCY
   }
       state_q, state_d;
 
@@ -120,19 +121,14 @@ module ptw
   // -----------
   // TLB Update
   // -----------
-  assign itlb_update_o.vpn = {{39 - riscv::SV{1'b0}}, vaddr_q[riscv::SV-1:12]};
-  assign dtlb_update_o.vpn = {{39 - riscv::SV{1'b0}}, vaddr_q[riscv::SV-1:12]};
+  assign shared_tlb_update_o.vpn = {{39 - riscv::SV{1'b0}}, vaddr_q[riscv::SV-1:12]};
   // update the correct page table level
-  assign itlb_update_o.is_2M = (ptw_lvl_q == LVL2);
-  assign itlb_update_o.is_1G = (ptw_lvl_q == LVL1);
-  assign dtlb_update_o.is_2M = (ptw_lvl_q == LVL2);
-  assign dtlb_update_o.is_1G = (ptw_lvl_q == LVL1);
+  assign shared_tlb_update_o.is_2M = (ptw_lvl_q == LVL2);
+  assign shared_tlb_update_o.is_1G = (ptw_lvl_q == LVL1);
   // output the correct ASID
-  assign itlb_update_o.asid = tlb_update_asid_q;
-  assign dtlb_update_o.asid = tlb_update_asid_q;
+  assign shared_tlb_update_o.asid = tlb_update_asid_q;
   // set the global mapping bit
-  assign itlb_update_o.content = pte | (global_mapping_q << 5);
-  assign dtlb_update_o.content = pte | (global_mapping_q << 5);
+  assign shared_tlb_update_o.content = pte | (global_mapping_q << 5);
 
   assign req_port_o.tag_valid = tag_valid_q;
 
@@ -180,129 +176,7 @@ module ptw
   //      - If i > 0, then this is a superpage translation and
   //        pa.ppn[i-1:0] = va.vpn[i-1:0].
   //      - pa.ppn[LEVELS-1:i] = pte.ppn[LEVELS-1:i].
-  always_comb begin : ptw
-    // default assignments
-    // PTW memory interface
-    tag_valid_n            = 1'b0;
-    req_port_o.data_req    = 1'b0;
-    req_port_o.data_be     = 8'hFF;
-    req_port_o.data_size   = 2'b11;
-    req_port_o.data_we     = 1'b0;
-    ptw_error_o            = 1'b0;
-    ptw_access_exception_o = 1'b0;
-    itlb_update_o.valid    = 1'b0;
-    dtlb_update_o.valid    = 1'b0;
-    is_instr_ptw_n         = is_instr_ptw_q;
-    ptw_lvl_n              = ptw_lvl_q;
-    ptw_pptr_n             = ptw_pptr_q;
-    state_d                = state_q;
-    global_mapping_n       = global_mapping_q;
-    // input registers
-    logic data_rvalid_q;
-    riscv::xlen_t data_rdata_q;
 
-    riscv::pte_t pte;
-    assign pte = riscv::pte_t'(data_rdata_q);
-
-    enum logic[2:0] {
-      IDLE,
-      WAIT_GRANT,
-      PTE_LOOKUP,
-      WAIT_RVALID,
-      PROPAGATE_ERROR,
-      PROPAGATE_ACCESS_ERROR,
-      LATENCY
-    } state_q, state_d;
-
-    // SV39 defines three levels of page tables
-    enum logic [1:0] {
-        LVL1, LVL2, LVL3
-    } ptw_lvl_q, ptw_lvl_n;
-
-    // is this an instruction page table walk?
-    logic is_instr_ptw_q,   is_instr_ptw_n;
-    logic global_mapping_q, global_mapping_n;
-    // latched tag signal
-    logic tag_valid_n,      tag_valid_q;
-    // register the ASID
-    logic [ASID_WIDTH-1:0]  tlb_update_asid_q, tlb_update_asid_n;
-    // register the VPN we need to walk, SV39 defines a 39 bit virtual address
-    logic [riscv::VLEN-1:0] vaddr_q,   vaddr_n;
-    // 4 byte aligned physical pointer
-    logic [riscv::PLEN-1:0] ptw_pptr_q, ptw_pptr_n;
-
-    // Assignments
-    assign update_vaddr_o  = vaddr_q;
-
-    assign ptw_active_o    = (state_q != IDLE);
-    assign walking_instr_o = is_instr_ptw_q;
-    // directly output the correct physical address
-    assign req_port_o.address_index = ptw_pptr_q[DCACHE_INDEX_WIDTH-1:0];
-    assign req_port_o.address_tag   = ptw_pptr_q[DCACHE_INDEX_WIDTH+DCACHE_TAG_WIDTH-1:DCACHE_INDEX_WIDTH];
-    // we are never going to kill this request
-    assign req_port_o.kill_req      = '0;
-    // we are never going to write with the HPTW
-    assign req_port_o.data_wdata    = 64'b0;
-    // we only issue one single request at a time
-    assign req_port_o.data_id       = '0;
-    // -----------
-    // Shared TLB Update
-    // -----------
-    assign shared_tlb_update_o.vpn = {{39-riscv::SV{1'b0}}, vaddr_q[riscv::SV-1:12]};
-    // update the correct page table level
-    assign shared_tlb_update_o.is_2M = (ptw_lvl_q == LVL2);
-    assign shared_tlb_update_o.is_1G = (ptw_lvl_q == LVL1);
-    // output the correct ASID
-    assign shared_tlb_update_o.asid = tlb_update_asid_q;
-    // set the global mapping bit
-    assign shared_tlb_update_o.content = pte | (global_mapping_q << 5);
-
-    assign req_port_o.tag_valid      = tag_valid_q;
-
-    logic allow_access;
-
-    assign bad_paddr_o = ptw_access_exception_o ? ptw_pptr_q : 'b0;
-
-    pmp #(
-        .CVA6Cfg    ( CVA6Cfg                ),
-        .PLEN       ( riscv::PLEN            ),
-        .PMP_LEN    ( riscv::PLEN - 2        ),
-        .NR_ENTRIES ( CVA6Cfg.NrPMPEntries   )
-    ) i_pmp_ptw (
-        .addr_i        ( ptw_pptr_q         ),
-        // PTW access are always checked as if in S-Mode...
-        .priv_lvl_i    ( riscv::PRIV_LVL_S  ),
-        // ...and they are always loads
-        .access_type_i ( riscv::ACCESS_READ ),
-        // Configuration
-        .conf_addr_i   ( pmpaddr_i          ),
-        .conf_i        ( pmpcfg_i           ),
-        .allow_o       ( allow_access       )
-    );
-
-    //-------------------
-    // Page table walker
-    //-------------------
-    // A virtual address va is translated into a physical address pa as follows:
-    // 1. Let a be sptbr.ppn × PAGESIZE, and let i = LEVELS-1. (For Sv39,
-    //    PAGESIZE=2^12 and LEVELS=3.)
-    // 2. Let pte be the value of the PTE at address a+va.vpn[i]×PTESIZE. (For
-    //    Sv32, PTESIZE=4.)
-    // 3. If pte.v = 0, or if pte.r = 0 and pte.w = 1, stop and raise an access
-    //    exception.
-    // 4. Otherwise, the PTE is valid. If pte.r = 1 or pte.x = 1, go to step 5.
-    //    Otherwise, this PTE is a pointer to the next level of the page table.
-    //    Let i=i-1. If i < 0, stop and raise an access exception. Otherwise, let
-    //    a = pte.ppn × PAGESIZE and go to step 2.
-    // 5. A leaf PTE has been found. Determine if the requested memory access
-    //    is allowed by the pte.r, pte.w, and pte.x bits. If not, stop and
-    //    raise an access exception. Otherwise, the translation is successful.
-    //    Set pte.a to 1, and, if the memory access is a store, set pte.d to 1.
-    //    The translated physical address is given as follows:
-    //      - pa.pgoff = va.pgoff.
-    //      - If i > 0, then this is a superpage translation and
-    //        pa.ppn[i-1:0] = va.vpn[i-1:0].
-    //      - pa.ppn[LEVELS-1:i] = pte.ppn[LEVELS-1:i].
     always_comb begin : ptw
         // default assignments
         // PTW memory interface
@@ -455,42 +329,8 @@ module ptw
                         state_d = PROPAGATE_ACCESS_ERROR;
                     end
                 end
-              end
-              // check if the ppn is correctly aligned:
-              // 6. If i > 0 and pa.ppn[i − 1 : 0] != 0, this is a misaligned superpage; stop and raise a page-fault
-              // exception.
-              if (ptw_lvl_q == LVL1 && pte.ppn[17:0] != '0) begin
-                state_d             = PROPAGATE_ERROR;
-                dtlb_update_o.valid = 1'b0;
-                itlb_update_o.valid = 1'b0;
-              end else if (ptw_lvl_q == LVL2 && pte.ppn[8:0] != '0) begin
-                state_d             = PROPAGATE_ERROR;
-                dtlb_update_o.valid = 1'b0;
-                itlb_update_o.valid = 1'b0;
-              end
-              // this is a pointer to the next TLB level
-            end else begin
-              // pointer to next level of page table
-              if (ptw_lvl_q == LVL1) begin
-                // we are in the second level now
-                ptw_lvl_n  = LVL2;
-                ptw_pptr_n = {pte.ppn, vaddr_q[29:21], 3'b0};
-              end
-
-              if (ptw_lvl_q == LVL2) begin
-                // here we received a pointer to the third level
-                ptw_lvl_n  = LVL3;
-                ptw_pptr_n = {pte.ppn, vaddr_q[20:12], 3'b0};
-              end
-
-              state_d = WAIT_GRANT;
-
-              if (ptw_lvl_q == LVL3) begin
-                // Should already be the last level page table => Error
-                ptw_lvl_n = LVL3;
-                state_d   = PROPAGATE_ERROR;
-              end
             end
+              
             // Propagate error to MMU/LSU
             PROPAGATE_ERROR: begin
                 state_d     = LATENCY;
