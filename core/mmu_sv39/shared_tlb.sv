@@ -32,8 +32,6 @@ input  logic                    en_ld_st_translation_i, // enable virtual memory
 
 // input logic flag_mprv_i,
 input  logic [ASID_WIDTH-1:0]   asid_i,
-input  logic [ASID_WIDTH-1:0]   asid_to_be_flushed_i,
-input  logic [riscv::VLEN-1:0]  vaddr_to_be_flushed_i,
 
 // from TLBs
 // did we miss?
@@ -72,6 +70,7 @@ function logic [SHARED_TLB_WAYS-1:0] shared_tlb_way_bin2oh ( input logic [$clog2
 endfunction
 
 typedef struct packed {
+  logic [ASID_WIDTH-1:0] asid; //16 bits wide
   logic [riscv::VPN2:0]  vpn2; //9 bits wide 
   logic [8:0]            vpn1; //9 bits wide
   logic [8:0]            vpn0; //9 bits wide
@@ -80,13 +79,8 @@ typedef struct packed {
   logic                  valid;
 } shared_tag_t;
 
-typedef logic [ASID_WIDTH-1:0] shared_asid_t;
-
 shared_tag_t shared_tag_wr;
 shared_tag_t [SHARED_TLB_WAYS-1:0] shared_tag_rd;
-
-shared_asid_t [SHARED_TLB_DEPTH-1:0][SHARED_TLB_WAYS-1:0] shared_asid_q, shared_asid_d;
-shared_asid_t [SHARED_TLB_WAYS-1:0] shared_asid;
 
 logic [SHARED_TLB_DEPTH-1:0][SHARED_TLB_WAYS-1:0] shared_tag_valid_q, shared_tag_valid_d;
 
@@ -172,63 +166,45 @@ always_comb begin : itlb_dtlb_miss
     tag_rd_addr    = '0;
     pte_rd_addr    = '0;
 
-    if (flush_i) begin
+    // if we got an ITLB miss
+    if (enable_translation_i & itlb_access_i & ~itlb_hit_i & ~dtlb_access_i) begin
         tag_rd_en        = '1;
+        tag_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
         pte_rd_en        = '1;
+        pte_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
 
-        vpn0_d           = vaddr_to_be_flushed_i[20:12];
-        vpn1_d           = vaddr_to_be_flushed_i[29:21];
-        vpn2_d           = vaddr_to_be_flushed_i[30+riscv::VPN2:30];
+        vpn0_d           = itlb_vaddr_i[20:12];
+        vpn1_d           = itlb_vaddr_i[29:21];
+        vpn2_d           = itlb_vaddr_i[30+riscv::VPN2:30];
+
+        itlb_miss_o      = 1'b1;
+        itlb_req_d       = 1'b1;
 
         tlb_update_asid_d   = asid_i;
 
         shared_tlb_access_d = 1'b1;
-        shared_tlb_vaddr_d  = vaddr_to_be_flushed_i;
+        shared_tlb_vaddr_d  = itlb_vaddr_i;
 
-        tag_rd_addr      = vaddr_to_be_flushed_i[12+:$clog2(SHARED_TLB_DEPTH)];
-        pte_rd_addr      = vaddr_to_be_flushed_i[12+:$clog2(SHARED_TLB_DEPTH)];
+    // we got an DTLB miss
+    end else if (en_ld_st_translation_i & dtlb_access_i & ~dtlb_hit_i) begin
+        tag_rd_en        = '1;
+        tag_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
+        pte_rd_en        = '1;
+        pte_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
 
-    end else begin
+        vpn0_d           = dtlb_vaddr_i[20:12];
+        vpn1_d           = dtlb_vaddr_i[29:21];
+        vpn2_d           = dtlb_vaddr_i[30+riscv::VPN2:30];
 
-        // if we got an ITLB miss
-        if (enable_translation_i & itlb_access_i & ~itlb_hit_i & ~dtlb_access_i) begin
-            tag_rd_en        = '1;
-            tag_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
-            pte_rd_en        = '1;
-            pte_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
+        dtlb_miss_o      = 1'b1;
+        dtlb_req_d       = 1'b1;
 
-            vpn0_d           = itlb_vaddr_i[20:12];
-            vpn1_d           = itlb_vaddr_i[29:21];
-            vpn2_d           = itlb_vaddr_i[30+riscv::VPN2:30];
+        tlb_update_asid_d   = asid_i;
 
-            itlb_miss_o      = 1'b1;
-            itlb_req_d       = 1'b1;
-
-            tlb_update_asid_d   = asid_i;
-
-            shared_tlb_access_d = 1'b1;
-            shared_tlb_vaddr_d  = itlb_vaddr_i;
-
-        // we got an DTLB miss
-        end else if (en_ld_st_translation_i & dtlb_access_i & ~dtlb_hit_i) begin
-            tag_rd_en        = '1;
-            tag_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
-            pte_rd_en        = '1;
-            pte_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
-
-            vpn0_d           = dtlb_vaddr_i[20:12];
-            vpn1_d           = dtlb_vaddr_i[29:21];
-            vpn2_d           = dtlb_vaddr_i[30+riscv::VPN2:30];
-
-            dtlb_miss_o      = 1'b1;
-            dtlb_req_d       = 1'b1;
-
-            tlb_update_asid_d   = asid_i;
-
-            shared_tlb_access_d = 1'b1;
-            shared_tlb_vaddr_d  = dtlb_vaddr_i;
-        end
+        shared_tlb_access_d = 1'b1;
+        shared_tlb_vaddr_d  = dtlb_vaddr_i;
     end
+
 end //itlb_dtlb_miss
 
 always_comb begin : tag_comparison
@@ -237,7 +213,7 @@ always_comb begin : tag_comparison
     itlb_update_o = '0;
     //number of ways
     for (int unsigned i = 0; i < SHARED_TLB_WAYS; i++) begin
-        if (shared_tag_valid[i] && ((tlb_update_asid_q == shared_asid[i]) || pte[i].g)  && vpn2_q == shared_tag_rd[i].vpn2) begin
+        if (shared_tag_valid[i] && ((tlb_update_asid_q == shared_tag_rd[i].asid) || pte[i].g)  && vpn2_q == shared_tag_rd[i].vpn2) begin
             if (shared_tag_rd[i].is_1G) begin
                 shared_tlb_hit_d    = 1'b1;
                 if (itlb_req_q) begin
@@ -292,8 +268,6 @@ always_ff @(posedge clk_i or negedge rst_ni) begin
     itlb_req_q <= '0;
     dtlb_req_q <= '0;
     shared_tag_valid <= '0;
-    shared_asid_q    <= '0;
-    shared_asid      <= '0;
   end else begin
     itlb_vpn_q   <= itlb_vaddr_i[riscv::SV-1:12];
     dtlb_vpn_q   <= dtlb_vaddr_i[riscv::SV-1:12];
@@ -307,58 +281,24 @@ always_ff @(posedge clk_i or negedge rst_ni) begin
     itlb_req_q <= itlb_req_d;
     dtlb_req_q <= dtlb_req_d;
     shared_tag_valid <= shared_tag_valid_q[tag_rd_addr];
-    shared_asid_q <= shared_asid_d;
-    shared_asid   <= shared_asid_q[tag_rd_addr];
   end
 end
-
-logic asid_to_be_flushed_is0;   // indicates that the ASID provided by SFENCE.VMA (rs2)is 0, active high
-logic vaddr_to_be_flushed_is0;  // indicates that the VADDR provided by SFENCE.VMA (rs1)is 0, active high
-logic [SHARED_TLB_WAYS-1:0] vaddr_vpn0_match;
-logic [SHARED_TLB_WAYS-1:0] vaddr_vpn1_match;
-logic [SHARED_TLB_WAYS-1:0] vaddr_vpn2_match;
-
-assign asid_to_be_flushed_is0 =  ~(|asid_to_be_flushed_i);
-assign vaddr_to_be_flushed_is0 = ~(|vaddr_to_be_flushed_i);
 
 // ------------------
 // Update and Flush
 // ------------------
 always_comb begin : update_flush
     shared_tag_valid_d = shared_tag_valid_q;
-    shared_asid_d = shared_asid_q;
     tag_wr_en = '0;
     pte_wr_en = '0;
 
-    for (int unsigned i = 0; i < SHARED_TLB_WAYS; i++) begin
+    if (flush_i) begin
+        shared_tag_valid_d = '0;
 
-        vaddr_vpn0_match[i] = (vaddr_to_be_flushed_i[20:12]   == shared_tag_rd[i].vpn0);
-        vaddr_vpn1_match[i] = (vaddr_to_be_flushed_i[29:21]   == shared_tag_rd[i].vpn1);
-        vaddr_vpn2_match[i] = (vaddr_to_be_flushed_i[30+riscv::VPN2:30] == shared_tag_rd[i].vpn2);
-
-        if (flush_i) begin
-            // invalidate logic
-            // flush everything if ASID is 0 and vaddr is 0 ("SFENCE.VMA x0 x0" case)
-            if (asid_to_be_flushed_is0 && vaddr_to_be_flushed_is0 )
-                shared_tag_valid_d = '0;
-            // flush vaddr in all addressing space ("SFENCE.VMA vaddr x0" case), it should happen only for leaf pages
-            else if (asid_to_be_flushed_is0 && ((vaddr_vpn0_match[i] && vaddr_vpn1_match[i] && vaddr_vpn2_match[i]) || (vaddr_vpn2_match[i] && shared_tag_rd[i].is_1G) || (vaddr_vpn1_match[i] && vaddr_vpn2_match[i] && shared_tag_rd[i].is_2M) ) && (~vaddr_to_be_flushed_is0))
-                shared_tag_valid_d[tag_rd_addr][i] = '0;
-            // the entry is flushed if it's not global and asid and vaddr both matches with the entry to be flushed ("SFENCE.VMA vaddr asid" case)
-            else if ((!pte[i].g) && ((vaddr_vpn0_match[i] && vaddr_vpn1_match[i] && vaddr_vpn2_match[i]) || (vaddr_vpn2_match[i] && shared_tag_rd[i].is_1G) || (vaddr_vpn1_match[i] && vaddr_vpn2_match[i] && shared_tag_rd[i].is_2M)) && (asid_to_be_flushed_i == shared_asid[i]) && (!vaddr_to_be_flushed_is0) && (!asid_to_be_flushed_is0))
-                shared_tag_valid_d[tag_rd_addr][i] = '0;
-            // the entry is flushed if it's not global, and the asid matches and vaddr is 0. ("SFENCE.VMA 0 asid" case)
-            else if ( (!pte[i].g) && (vaddr_to_be_flushed_is0) && (!asid_to_be_flushed_is0) ) begin
-                for (int unsigned k = 0; k < SHARED_TLB_DEPTH; ++k) begin
-                    if (asid_to_be_flushed_i == shared_asid_q[k][i])
-                        shared_tag_valid_d[k][i] = '0;
-                end
-            end
-
-        end else if (shared_tlb_update_i.valid) begin 
+    end else if (shared_tlb_update_i.valid) begin 
+        for (int unsigned i = 0; i < SHARED_TLB_WAYS; i++) begin
             if (repl_way_oh_d[i]) begin
                 shared_tag_valid_d[shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)-1:0]][i] = 1'b1;
-                shared_asid_d[shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)-1:0]][i] = shared_tlb_update_i.asid[ASID_WIDTH-1:0];
                 tag_wr_en[i] = 1'b1;
                 pte_wr_en[i] = 1'b1;
             end
@@ -366,6 +306,7 @@ always_comb begin : update_flush
     end
 end //update_flush
 
+assign shared_tag_wr.asid = shared_tlb_update_i.asid;
 assign shared_tag_wr.vpn2  = shared_tlb_update_i.vpn[27-1:18];
 assign shared_tag_wr.vpn1  = shared_tlb_update_i.vpn[17:9];
 assign shared_tag_wr.vpn0  = shared_tlb_update_i.vpn[8:0];
