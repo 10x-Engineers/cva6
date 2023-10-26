@@ -180,7 +180,6 @@ ${CVA6_REPO_DIR}/common/local/util/sram.sv
 ${CVA6_REPO_DIR}/core/mmu_sv39/mmu.sv
 ${CVA6_REPO_DIR}/core/mmu_sv39/ptw.sv
 ${CVA6_REPO_DIR}/core/mmu_sv39/tlb.sv
-${CVA6_REPO_DIR}/core/mmu_sv39/shared_tlb.sv
 
 // MMU Sv32
 ${CVA6_REPO_DIR}/core/mmu_sv32/cva6_mmu_sv32.sv
