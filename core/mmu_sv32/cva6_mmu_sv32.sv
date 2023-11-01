@@ -169,7 +169,10 @@ module cva6_mmu_sv32
       .enable_translation_i  (enable_translation_i),
       .en_ld_st_translation_i(en_ld_st_translation_i),
 
-      .asid_i       (asid_i),
+      .asid_i                (asid_i),
+      .asid_to_be_flushed_i  (asid_to_be_flushed_i),
+      .vaddr_to_be_flushed_i (vaddr_to_be_flushed_i),
+
       // from TLBs
       // did we miss?
       .itlb_access_i(itlb_lu_access),
