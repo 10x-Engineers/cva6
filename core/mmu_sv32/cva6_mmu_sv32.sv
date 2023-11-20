@@ -52,6 +52,7 @@ module cva6_mmu_sv32
     // if we need to walk the page table we can't grant in the same cycle
     // Cycle 0
     output logic                            lsu_dtlb_hit_o,   // sent in the same cycle as the request if translation hits in the DTLB
+    output logic                      lsu_shared_tlb_hit_o,
     output logic [riscv::PPNW-1:0] lsu_dtlb_ppn_o,  // ppn (send same cycle as hit)
     // Cycle 1
     output logic lsu_valid_o,  // translation is valid
@@ -391,7 +392,7 @@ module cva6_mmu_sv32
 
   // check if we need to do translation or if we are always ready (e.g.: we are not translating anything)
   assign lsu_dtlb_hit_o = (en_ld_st_translation_i) ? dtlb_lu_hit : 1'b1;
-
+  assign lsu_shared_tlb_hit_o = (en_ld_st_translation_i) ? shared_tlb_hit : 1'b1;
   // Wires to PMP checks
   riscv::pmp_access_t pmp_access_type;
   logic               pmp_data_allow;

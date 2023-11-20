@@ -132,7 +132,7 @@ module load_store_unit
 
   logic         [             11:0] page_offset;
   logic                             page_offset_matches;
-
+  logic shared_tlb_hit;
   exception_t                       misaligned_exception;
   exception_t                       ld_ex;
   exception_t                       st_ex;
@@ -185,6 +185,7 @@ module load_store_unit
         .lsu_paddr_o    (mmu_paddr),
         .lsu_exception_o(mmu_exception),
         .lsu_dtlb_hit_o (dtlb_hit),               // send in the same cycle as the request
+        .lsu_shared_tlb_hit_o (shared_tlb_hit),
         .lsu_dtlb_ppn_o (dtlb_ppn),               // send in the same cycle as the request
         // connecting PTW to D$ IF
         .req_port_i     (dcache_req_ports_i[0]),
@@ -304,6 +305,7 @@ module load_store_unit
       .paddr_i              (mmu_paddr),
       .ex_i                 (mmu_exception),
       .dtlb_hit_i           (dtlb_hit),
+      .shared_tlb_hit_i     (shared_tlb_hit),
       .dtlb_ppn_i           (dtlb_ppn),
       // to store unit
       .page_offset_o        (page_offset),

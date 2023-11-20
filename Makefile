@@ -52,9 +52,9 @@ ifeq ($(support_verilator_4), 0)
 	verilator_threads := 1
 endif
 # Location of Verilator headers and optional source files
-VL_INC_DIR := $(VERILATOR_INSTALL_DIR)/share/verilator/include
+VL_INC_DIR := $(VERILATOR_INSTALL_DIR)/include
 
-ifndef RISCV
+ifndef RISCV32
 $(error RISCV not set - please point your RISCV variable to your RISCV installation)
 endif
 
@@ -89,7 +89,7 @@ endif
 # target takes one of the following cva6 hardware configuration:
 # cv64a6_imafdc_sv39, cv32a6_imac_sv0, cv32a6_imac_sv32, cv32a6_imafc_sv32, cv32a6_ima_sv32_fpga
 # Changing the default target to cv32a60x for Step1 verification
-target     ?= cv64a6_imafdc_sv39
+target     ?= cv32a60x
 ifndef TARGET_CFG
 	export TARGET_CFG = $(target)
 endif
@@ -131,7 +131,7 @@ dpi_hdr := $(wildcard corev_apu/tb/dpi/*.h)
 dpi_hdr := $(addprefix $(root-dir), $(dpi_hdr))
 CFLAGS += -I$(QUESTASIM_HOME)/include         \
           -I$(VCS_HOME)/include               \
-          -I$(RISCV)/include                  \
+          -I$(RISCV32)/include                  \
           -I$(SPIKE_INSTALL_DIR)/include      \
           -std=c++17 -I../corev_apu/tb/dpi -O3
 
@@ -322,7 +322,7 @@ $(dpi-library)/%.o: corev_apu/tb/dpi/%.cc $(dpi_hdr)
 $(dpi-library)/ariane_dpi.so: $(dpi)
 	mkdir -p $(dpi-library)
 	# Compile C-code and generate .so file
-	$(CXX) -shared -m64 -o $(dpi-library)/ariane_dpi.so $? -L$(RISCV)/lib -L$(SPIKE_INSTALL_DIR)/lib -Wl,-rpath,$(RISCV)/lib -Wl,-rpath,$(SPIKE_INSTALL_DIR)/lib -lfesvr
+	$(CXX) -shared -m64 -o $(dpi-library)/ariane_dpi.so $? -L$(RISCV32)/lib -L$(SPIKE_INSTALL_DIR)/lib -Wl,-rpath,$(RISCV32)/lib -Wl,-rpath,$(SPIKE_INSTALL_DIR)/lib -lfesvr
 
 # single test runs on Questa can be started by calling make <testname>, e.g. make towers.riscv
 # the test names are defined in ci/riscv-asm-tests.list, and in ci/riscv-benchmarks.list
@@ -536,7 +536,7 @@ xrun-check-benchmarks:
 xrun-ci: xrun-asm-tests xrun-amo-tests xrun-mul-tests xrun-fp-tests xrun-benchmarks
 
 # verilator-specific
-verilate_command := $(verilator) verilator_config.vlt                                                            \
+verilate_command := $(verilator) verilator_config.vlt      --no-timing                                           \
                     -f core/Flist.cva6                                                                           \
                     $(filter-out %.vhd, $(ariane_pkg))                                                           \
                     $(filter-out core/fpu_wrap.sv, $(filter-out %.vhd, $(filter-out %_config_pkg.sv, $(src))))   \
@@ -561,7 +561,7 @@ verilate_command := $(verilator) verilator_config.vlt                           
                     $(if $(DEBUG), --trace-structs,)                                                             \
                     $(if $(TRACE_COMPACT), --trace-fst $(VL_INC_DIR)/verilated_fst_c.cpp)                        \
                     $(if $(TRACE_FAST), --trace $(VL_INC_DIR)/verilated_vcd_c.cpp)                               \
-                    -LDFLAGS "-L$(RISCV)/lib -L$(SPIKE_INSTALL_DIR)/lib -Wl,-rpath,$(RISCV)/lib -Wl,-rpath,$(SPIKE_INSTALL_DIR)/lib -lfesvr$(if $(PROFILE), -g -pg,) -lpthread $(if $(TRACE_COMPACT), -lz,)" \
+                    -LDFLAGS "-L$(RISCV32)/lib -L$(SPIKE_INSTALL_DIR)/lib -Wl,-rpath,$(RISCV32)/lib -Wl,-rpath,$(SPIKE_INSTALL_DIR)/lib -lfesvr$(if $(PROFILE), -g -pg,) -lpthread $(if $(TRACE_COMPACT), -lz,)" \
                     -CFLAGS "$(CFLAGS)$(if $(PROFILE), -g -pg,) -DVL_DEBUG"                                      \
                     --cc  --vpi                                                                                  \
                     $(list_incdir) --top-module ariane_testharness                                               \
@@ -685,7 +685,7 @@ fpga: $(ariane_pkg) $(src) $(fpga_src) $(uart_src) $(src_flist)
 .PHONY: fpga
 
 build-spike:
-	cd tb/riscv-isa-sim && mkdir -p build && cd build && ../configure --prefix=`pwd`/../install --with-fesvr=$(RISCV) --enable-commitlog && make -j8 install
+	cd tb/riscv-isa-sim && mkdir -p build && cd build && ../configure --prefix=`pwd`/../install --with-fesvr=$(RISCV32) --enable-commitlog && make -j8 install
 
 clean:
 	rm -rf $(riscv-torture-dir)/output/test*
