@@ -68,8 +68,8 @@ output logic [riscv::PLEN-1:0]  bad_paddr_o
 logic data_rvalid_q;
 riscv::xlen_t data_rdata_q;
 
-riscv::pte_t pte;
-assign pte = riscv::pte_t'(data_rdata_q);
+riscv::pte_sv39_t pte;
+assign pte = riscv::pte_sv39_t'(data_rdata_q);
 
 enum logic[2:0] {
 IDLE,
@@ -115,7 +115,7 @@ assign req_port_o.data_id       = '0;
 // -----------
 // Shared TLB Update
 // -----------
-assign shared_tlb_update_o.vpn = {{39-riscv::SV{1'b0}}, vaddr_q[riscv::SV-1:12]};
+assign shared_tlb_update_o.vpn = vaddr_q[riscv::SV-1:12];
 // update the correct page table level
 assign shared_tlb_update_o.is_2M = (ptw_lvl_q == LVL2);
 assign shared_tlb_update_o.is_1G = (ptw_lvl_q == LVL1);
@@ -269,24 +269,24 @@ always_comb begin : ptw
                           if (pte.a && (pte.r || (pte.x && mxr_i))) begin
                               shared_tlb_update_o.valid = 1'b1;
                           end else begin
-                              state_d   = PROPAGATE_ERROR;
+                              state_d = PROPAGATE_ERROR;
                           end
                           // Request is a store: perform some additional checks
                           // If the request was a store and the page is not write-able, raise an error
                           // the same applies if the dirty flag is not set
                           if (lsu_is_store_i && (!pte.w || !pte.d)) begin
                               shared_tlb_update_o.valid = 1'b0;
-                              state_d             = PROPAGATE_ERROR;
+                              state_d = PROPAGATE_ERROR;
                           end
                       end
                       // check if the ppn is correctly aligned:
                       // 6. If i > 0 and pa.ppn[i − 1 : 0] != 0, this is a misaligned superpage; stop and raise a page-fault
                       // exception.
-                      if (ptw_lvl_q == LVL1 && pte.ppn[17:0] != '0) begin
-                          state_d                   = PROPAGATE_ERROR;
+                      if (ptw_lvl_q == LVL1 && pte.ppn[8:0] != '0) begin  // PPN0 in PTE is not zero
+                          state_d = PROPAGATE_ERROR;
                           shared_tlb_update_o.valid = 1'b0;
-                      end else if (ptw_lvl_q == LVL2 && pte.ppn[8:0] != '0) begin
-                          state_d                   = PROPAGATE_ERROR;
+                      end else if (ptw_lvl_q == LVL2 && pte.ppn[17:9] != '0) begin // PPN1 in PTE is not zero
+                          state_d = PROPAGATE_ERROR;
                           shared_tlb_update_o.valid = 1'b0;
                       end
                   // this is a pointer to the next TLB level
@@ -339,7 +339,7 @@ always_comb begin : ptw
               state_d = IDLE;
       end
       LATENCY: begin
-          state_d     = IDLE;
+          state_d = IDLE;
       end
       default: begin
           state_d = IDLE;

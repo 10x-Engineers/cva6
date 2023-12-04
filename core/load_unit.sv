@@ -230,7 +230,7 @@ module load_unit
               state_d = WAIT_GNT;
             end else begin
               if (ariane_pkg::MMU_PRESENT && !dtlb_hit_i) begin
-                if (ariane_pkg::SV32_PRESENT) begin
+                if (ariane_pkg::MMU_SV32) begin
                   state_d = WAIT_SHARED_TLB_HIT;
                 end else begin
                   state_d = ABORT_TRANSACTION;
@@ -313,7 +313,7 @@ module load_unit
         if (req_port_i.data_gnt) begin
           // so we send the tag in the next cycle
           if (ariane_pkg::MMU_PRESENT && !dtlb_hit_i) begin
-            if (ariane_pkg::SV32_PRESENT) begin
+            if (ariane_pkg::MMU_SV32) begin
               state_d = WAIT_SHARED_TLB_HIT;
             end else begin
               state_d = ABORT_TRANSACTION;
@@ -351,7 +351,7 @@ module load_unit
             end else begin
               // we got a grant so we can send the tag in the next cycle
               if (ariane_pkg::MMU_PRESENT && !dtlb_hit_i) begin
-                if (ariane_pkg::SV32_PRESENT) begin
+                if (ariane_pkg::MMU_SV32) begin
                   state_d = WAIT_SHARED_TLB_HIT;
                 end else begin
                   state_d = ABORT_TRANSACTION;
@@ -550,3 +550,4 @@ module load_unit
   //pragma translate_on
 
 endmodule
+

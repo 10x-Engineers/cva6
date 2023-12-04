@@ -28,7 +28,7 @@ input  logic                    clk_i,                  // Clock
 input  logic                    rst_ni,                 // Asynchronous reset active low
 input  logic                    flush_i,
 
-input  logic                    enable_translation_i,   // CSRs indicate to enable SV32
+input  logic                    enable_translation_i,   // CSRs indicate to enable SV39
 input  logic                    en_ld_st_translation_i, // enable virtual memory translation for load/stores
 
 // input logic flag_mprv_i,
@@ -101,11 +101,11 @@ logic [$clog2(SHARED_TLB_DEPTH)-1:0] tag_addr;
 
 logic [SHARED_TLB_WAYS-1:0]          pte_wr_en;
 logic [$clog2(SHARED_TLB_DEPTH)-1:0] pte_wr_addr;
-logic [$bits(riscv::pte_t)-1:0] pte_wr_data;
+logic [$bits(riscv::pte_sv39_t)-1:0] pte_wr_data;
 
 logic [SHARED_TLB_WAYS-1:0]          pte_rd_en;
 logic [$clog2(SHARED_TLB_DEPTH)-1:0] pte_rd_addr;
-logic [$bits(riscv::pte_t)-1:0] pte_rd_data [SHARED_TLB_WAYS-1:0];
+logic [$bits(riscv::pte_sv39_t)-1:0] pte_rd_data [SHARED_TLB_WAYS-1:0];
 
 logic [SHARED_TLB_WAYS-1:0]          pte_req;
 logic [SHARED_TLB_WAYS-1:0]          pte_we;
@@ -114,7 +114,7 @@ logic [$clog2(SHARED_TLB_DEPTH)-1:0] pte_addr;
 logic [8:0] vpn0_d, vpn1_d, vpn0_q, vpn1_q;
 logic [riscv::VPN2:0] vpn2_d, vpn2_q;
 
-riscv::pte_t [SHARED_TLB_WAYS-1:0] pte;
+riscv::pte_sv39_t [SHARED_TLB_WAYS-1:0] pte;
 
 logic [riscv::VLEN-1-12:0]  itlb_vpn_q;
 logic [riscv::VLEN-1-12:0]  dtlb_vpn_q;
@@ -170,9 +170,9 @@ always_comb begin : itlb_dtlb_miss
     // if we got an ITLB miss
     if (enable_translation_i & itlb_access_i & ~itlb_hit_i & ~dtlb_access_i) begin
         tag_rd_en        = '1;
-        tag_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
+        tag_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH) + 2];   // 9-bit set index extracted from VPN0
         pte_rd_en        = '1;
-        pte_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
+        pte_rd_addr      = itlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH) + 2];
 
         vpn0_d           = itlb_vaddr_i[20:12];
         vpn1_d           = itlb_vaddr_i[29:21];
@@ -189,9 +189,9 @@ always_comb begin : itlb_dtlb_miss
     // we got an DTLB miss
     end else if (en_ld_st_translation_i & dtlb_access_i & ~dtlb_hit_i) begin
         tag_rd_en        = '1;
-        tag_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
+        tag_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH) + 2];   // 9-bit set index extracted from VPN0
         pte_rd_en        = '1;
-        pte_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH)];
+        pte_rd_addr      = dtlb_vaddr_i[12+:$clog2(SHARED_TLB_DEPTH) + 2];
 
         vpn0_d           = dtlb_vaddr_i[20:12];
         vpn1_d           = dtlb_vaddr_i[29:21];
@@ -232,7 +232,6 @@ always_comb begin : tag_comparison
                 end
             end
             else if (vpn1_q == shared_tag_rd[i].vpn1) begin
-                
                 if (shared_tag_rd[i].is_2M || vpn0_q == shared_tag_rd[i].vpn0) begin
                     shared_tlb_hit_d    = 1'b1;
                     if (itlb_req_q) begin
@@ -299,7 +298,7 @@ always_comb begin : update_flush
     end else if (shared_tlb_update_i.valid) begin 
         for (int unsigned i = 0; i < SHARED_TLB_WAYS; i++) begin
             if (repl_way_oh_d[i]) begin
-                shared_tag_valid_d[shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)-1:0]][i] = 1'b1;
+                shared_tag_valid_d[shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)+2:0]][i] = 1'b1;
                 tag_wr_en[i] = 1'b1;
                 pte_wr_en[i] = 1'b1;
             end
@@ -308,19 +307,19 @@ always_comb begin : update_flush
 end //update_flush
 
 assign shared_tag_wr.asid = shared_tlb_update_i.asid;
-assign shared_tag_wr.vpn2  = shared_tlb_update_i.vpn[27-1:18];
+assign shared_tag_wr.vpn2  = shared_tlb_update_i.vpn[26:18];
 assign shared_tag_wr.vpn1  = shared_tlb_update_i.vpn[17:9];
 assign shared_tag_wr.vpn0  = shared_tlb_update_i.vpn[8:0];
 assign shared_tag_wr.is_1G = shared_tlb_update_i.is_1G;
 assign shared_tag_wr.is_2M = shared_tlb_update_i.is_2M;
 
-assign tag_wr_addr = shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)-1:0];
+assign tag_wr_addr = shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)+2:0];
 assign tag_wr_data = shared_tag_wr;
 
-assign pte_wr_addr = shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)-1:0];
+assign pte_wr_addr = shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)+2:0];
 assign pte_wr_data = shared_tlb_update_i.content;
 
-assign way_valid     = shared_tag_valid_q[shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)-1:0]];
+assign way_valid     = shared_tag_valid_q[shared_tlb_update_i.vpn[$clog2(SHARED_TLB_DEPTH)+2:0]];
 assign repl_way      = (all_ways_valid) ? rnd_way : inv_way;
 assign update_lfsr   = shared_tlb_update_i.valid & all_ways_valid;
 assign repl_way_oh_d = (shared_tlb_update_i.valid) ? shared_tlb_way_bin2oh(repl_way) : '0;
@@ -377,7 +376,7 @@ for (genvar i = 0; i < SHARED_TLB_WAYS; i++) begin : gen_sram
 
     // PTE RAM
     sram #(
-        .DATA_WIDTH ( $bits(riscv::pte_t) ),
+        .DATA_WIDTH ( $bits(riscv::pte_sv39_t) ),
         .NUM_WORDS  ( SHARED_TLB_DEPTH   )
     ) pte_sram (
         .clk_i      ( clk_i           ),
@@ -391,8 +390,9 @@ for (genvar i = 0; i < SHARED_TLB_WAYS; i++) begin : gen_sram
         .ruser_o    (                 ),
         .rdata_o    ( pte_rd_data[i]  )
     );
-    assign pte[i] = riscv::pte_t'(pte_rd_data[i]);
+    assign pte[i] = riscv::pte_sv39_t'(pte_rd_data[i]);
 end
 endmodule
 
 /* verilator lint_on WIDTH */
+

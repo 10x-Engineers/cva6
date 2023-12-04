@@ -721,7 +721,7 @@ package ariane_pkg;
   // MMU instanciation
   // ---------------
   localparam bit MMU_PRESENT = cva6_config_pkg::CVA6ConfigMmuPresent;
-  localparam bit SV32_PRESENT = cva6_config_pkg::CVA6ConfigXlen;
+  localparam bit MMU_SV32 = cva6_config_pkg::CVA6ConfigXlen;
 
   localparam int unsigned INSTR_TLB_ENTRIES = cva6_config_pkg::CVA6ConfigInstrTlbEntries;
   localparam int unsigned DATA_TLB_ENTRIES = cva6_config_pkg::CVA6ConfigDataTlbEntries;
@@ -758,7 +758,7 @@ package ariane_pkg;
     logic                  is_1G;    //
     logic [27-1:0]         vpn;      // VPN (39bits) = 27bits + 12bits offset
     logic [ASID_WIDTH-1:0] asid;
-    riscv::pte_t           content;
+    riscv::pte_sv39_t      content;
   } tlb_update_t;
 
   // Bits required for representation of physical address space as 4K pages
@@ -1011,3 +1011,4 @@ package ariane_pkg;
     endcase
   endfunction
 endpackage
+

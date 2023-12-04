@@ -78,13 +78,13 @@ module mmu import ariane_pkg::*; #(
   tlb_update_t update_itlb, update_dtlb, update_shared_tlb;
 
   logic        itlb_lu_access;
-  riscv::pte_t itlb_content;
+  riscv::pte_sv39_t itlb_content;
   logic        itlb_is_2M;
   logic        itlb_is_1G;
   logic        itlb_lu_hit;
 
   logic        dtlb_lu_access;
-  riscv::pte_t dtlb_content;
+  riscv::pte_sv39_t dtlb_content;
   logic        dtlb_is_2M;
   logic        dtlb_is_1G;
   logic        dtlb_lu_hit;
@@ -352,7 +352,7 @@ module mmu import ariane_pkg::*; #(
   // Data Interface
   //-----------------------
   logic [riscv::VLEN-1:0] lsu_vaddr_n,     lsu_vaddr_q;
-  riscv::pte_t dtlb_pte_n,      dtlb_pte_q;
+  riscv::pte_sv39_t dtlb_pte_n,      dtlb_pte_q;
   exception_t  misaligned_ex_n, misaligned_ex_q;
   logic        lsu_req_n,       lsu_req_q;
   logic        lsu_is_store_n,  lsu_is_store_q;
