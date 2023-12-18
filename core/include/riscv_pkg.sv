@@ -305,7 +305,7 @@ package riscv;
     logic w;
     logic r;
     logic v;
-  } pte_sv39_t;
+  } pte_t;
 
   // memory management, pte for sv32
   typedef struct packed {

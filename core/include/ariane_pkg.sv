@@ -758,7 +758,7 @@ package ariane_pkg;
     logic                  is_1G;    //
     logic [27-1:0]         vpn;      // VPN (39bits) = 27bits + 12bits offset
     logic [ASID_WIDTH-1:0] asid;
-    riscv::pte_sv39_t      content;
+    riscv::pte_t      content;
   } tlb_update_t;
 
   // Bits required for representation of physical address space as 4K pages

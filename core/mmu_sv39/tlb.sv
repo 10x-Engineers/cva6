@@ -31,7 +31,7 @@ module tlb
     input  logic                          lu_access_i,
     input  logic        [ ASID_WIDTH-1:0] lu_asid_i,
     input  logic        [riscv::VLEN-1:0] lu_vaddr_i,
-    output riscv::pte_sv39_t                   lu_content_o,
+    output riscv::pte_t                   lu_content_o,
     input  logic        [ ASID_WIDTH-1:0] asid_to_be_flushed_i,
     input  logic        [riscv::VLEN-1:0] vaddr_to_be_flushed_i,
     output logic                          lu_is_2M_o,
@@ -45,13 +45,13 @@ module tlb
     logic [riscv::VPN2:0]  vpn2;
     logic [8:0]            vpn1;
     logic [8:0]            vpn0;
-    logic                  is_2M;   //level 1
-    logic                  is_1G;   //level 2
+    logic                  is_2M;
+    logic                  is_1G;
     logic                  valid;
   } [TLB_ENTRIES-1:0]
       tags_q, tags_n;
 
-  riscv::pte_sv39_t [TLB_ENTRIES-1:0] content_q, content_n;
+  riscv::pte_t [TLB_ENTRIES-1:0] content_q, content_n;
   logic [8:0] vpn0, vpn1;
   logic [  riscv::VPN2:0] vpn2;
   logic [TLB_ENTRIES-1:0] lu_hit;  // to replacement logic
