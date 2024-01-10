@@ -41,6 +41,7 @@ module load_unit
     input logic [riscv::PLEN-1:0] paddr_i,  // physical address in
     input  exception_t               ex_i,                // exception which may has happened earlier. for example: mis-aligned exception
     input logic dtlb_hit_i,  // hit on the dtlb, send in the same cycle as the request
+    input logic shared_tlb_hit_i,
     input  logic [riscv::PPNW-1:0]   dtlb_ppn_i,          // ppn on the dtlb, send in the same cycle as the request
     // address checker
     output logic [11:0] page_offset_o,
@@ -61,7 +62,8 @@ module load_unit
     ABORT_TRANSACTION_NI,
     WAIT_TRANSLATION,
     WAIT_FLUSH,
-    WAIT_WB_EMPTY
+    WAIT_WB_EMPTY,
+    WAIT_SHARED_TLB_HIT
   }
       state_d, state_q;
 
@@ -230,7 +232,11 @@ module load_unit
               state_d = WAIT_GNT;
             end else begin
               if (ariane_pkg::MMU_PRESENT && !dtlb_hit_i) begin
-                state_d = ABORT_TRANSACTION;
+                if (ariane_pkg::MMU_SV32) begin
+                  state_d = WAIT_SHARED_TLB_HIT;
+                end else begin
+                  state_d = ABORT_TRANSACTION;
+                end
               end else begin
                 if (!stall_ni) begin
                   // we got a grant and a hit on the DTLB so we can send the tag in the next cycle
@@ -249,6 +255,19 @@ module load_unit
         end
       end
 
+      WAIT_SHARED_TLB_HIT: begin 
+        // keep the translation request up
+        translation_req_o = 1'b1;
+        // keep the data request up
+        req_port_o.data_req = 1'b1;
+
+        if (shared_tlb_hit_i) begin
+          state_d = WAIT_TRANSLATION;
+        end else begin
+          state_d = WAIT_SHARED_TLB_HIT;
+        end
+      end
+      
       // wait here for the page offset to not match anymore
       WAIT_PAGE_OFFSET: begin
         // we make a new request as soon as the page offset does not match anymore
@@ -266,7 +285,11 @@ module load_unit
         if (req_port_i.data_gnt) begin
           // so we send the tag in the next cycle
           if (ariane_pkg::MMU_PRESENT && !dtlb_hit_i) begin
-            state_d = ABORT_TRANSACTION;
+            if (ariane_pkg::MMU_SV32) begin
+              state_d = WAIT_SHARED_TLB_HIT;
+            end else begin
+              state_d = ABORT_TRANSACTION;
+            end
           end else begin
             if (!stall_ni) begin
               // we got a grant and a hit on the DTLB so we can send the tag in the next cycle
@@ -300,7 +323,11 @@ module load_unit
             end else begin
               // we got a grant so we can send the tag in the next cycle
               if (ariane_pkg::MMU_PRESENT && !dtlb_hit_i) begin
-                state_d = ABORT_TRANSACTION;
+                if (ariane_pkg::MMU_SV32) begin
+                  state_d = WAIT_SHARED_TLB_HIT;
+                end else begin
+                  state_d = ABORT_TRANSACTION;
+                end
               end else begin
                 if (!stall_ni) begin
                   // we got a grant and a hit on the DTLB so we can send the tag in the next cycle
