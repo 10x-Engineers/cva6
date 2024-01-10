@@ -574,7 +574,7 @@ verilate_command := $(verilator) --no-timing verilator_config.vlt               
                     --threads-dpi none                                                                           \
                     --Mdir $(ver-library) -O3                                                                    \
                     --exe corev_apu/tb/ariane_tb.cpp corev_apu/tb/dpi/SimDTM.cc corev_apu/tb/dpi/SimJTAG.cc      \
-                    corev_apu/tb/dpi/remote_bitbang.cc corev_apu/tb/dpi/msim_helper.cc /home/muhammad/CVA6_TEST/Master/cva6/verif/core-v-verif/vendor/riscv/riscv-isa-sim/fesvr/fesvr_dpi.cc
+                    corev_apu/tb/dpi/remote_bitbang.cc corev_apu/tb/dpi/msim_helper.cc
 
 # User Verilator, at some point in the future this will be auto-generated
 verilate:
