@@ -69,26 +69,26 @@ module id_stage #(
     compressed_decoder #(
         .CVA6Cfg(CVA6Cfg)
     ) compressed_decoder_i (
-        .instr_i        (fetch_entry_i.instruction),
-        .instr_o        (compressed_instr),
-        .illegal_instr_o(is_illegal),
-        .is_compressed_o(is_compressed),
+        .instr_i            (fetch_entry_i.instruction),
+        .instr_o            (compressed_instr),
+        .illegal_instr_o    (is_illegal),
+        .is_compressed_o    (is_compressed),
         .is_push_pop_instr_o(is_push_pop)
     );
-      //sequencial decoder
-      zcmp_decoder #(
-        .CVA6Cfg(CVA6Cfg)
-      ) zcmp_decoder_i (
-        .instr_i              (compressed_instr),
-        .is_push_pop_instr_i  (is_push_pop),
-        .clk_i                (clk_i),
-        .rst_ni               (rst_ni),
-        .instr_o              (instruction),
-        .illegal_instr_i      (is_illegal),
-        .is_compressed_i      (is_compressed),
-        .illegal_instr_o      (is_illegal_cmp),
-        .is_compressed_o      (is_compressed_cmp),
-        .fetch_stall          (stall_instr_fetch)
+    //sequencial decoder
+    zcmp_decoder #(
+      .CVA6Cfg(CVA6Cfg)
+    ) zcmp_decoder_i (
+        .instr_i            (compressed_instr),
+        .is_push_pop_instr_i(is_push_pop),
+        .clk_i              (clk_i),
+        .rst_ni             (rst_ni),
+        .instr_o            (instruction),
+        .illegal_instr_i    (is_illegal),
+        .is_compressed_i    (is_compressed),
+        .illegal_instr_o    (is_illegal_cmp),
+        .is_compressed_o    (is_compressed_cmp),
+        .fetch_stall        (stall_instr_fetch)
       );
   end else begin
     assign instruction = fetch_entry_i.instruction;
