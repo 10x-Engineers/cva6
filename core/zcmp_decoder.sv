@@ -10,8 +10,9 @@
 //
 // Author: Rohan Arshid, 10xEngineers
 // Date: 22.01.2024
-// Description: Instruction decode, contains the logic for decode,
-//              issue and read operands.
+// Description: Contains the logic for decoding cm.push, cm.pop, cm.popret, 
+//              cm.popretz, cm.mvsa01, and cm.mva01s instructions of the 
+//              Zcmp Extension
 
 module zcmp_decoder #(
     parameter config_pkg::cva6_cfg_t CVA6Cfg = config_pkg::cva6_cfg_empty
