@@ -59,7 +59,7 @@ module id_stage #(
   logic                          [31:0] compressed_instr;
   logic                                 is_compressed;
   logic                                 is_compressed_cmp;
-  logic                                 is_push_pop;
+  logic                                 is_zcmp_instr_i;
   logic                                 stall_instr_fetch;
 
   if (CVA6Cfg.RVC) begin
@@ -73,7 +73,7 @@ module id_stage #(
         .instr_o            (compressed_instr),
         .illegal_instr_o    (is_illegal),
         .is_compressed_o    (is_compressed),
-        .is_push_pop_instr_o(is_push_pop)
+        .is_zcmp_instr_i    (is_zcmp_instr_i)
     );
     if (CVA6Cfg.RVZCMP) begin
       //sequencial decoder
@@ -81,16 +81,16 @@ module id_stage #(
           .CVA6Cfg(CVA6Cfg)
       ) zcmp_decoder_i (
           .instr_i            (compressed_instr),
-          .is_push_pop_instr_i(is_push_pop),
+          .is_zcmp_instr_i    (is_zcmp_instr_i),
           .clk_i              (clk_i),
           .rst_ni             (rst_ni),
           .instr_o            (instruction),
           .illegal_instr_i    (is_illegal),
           .is_compressed_i    (is_compressed),
-          .issue_ack          (issue_instr_ack_i),
+          .issue_ack_i        (issue_instr_ack_i),
           .illegal_instr_o    (is_illegal_cmp),
           .is_compressed_o    (is_compressed_cmp),
-          .fetch_stall        (stall_instr_fetch)
+          .fetch_stall_o      (stall_instr_fetch)
       );
     end else begin
       assign instruction = compressed_instr;
