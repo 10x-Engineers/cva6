@@ -55,6 +55,7 @@ package config_pkg;
     bit                          RVV;
     bit                          RVC;
     bit                          RVZCB;
+    bit                          RVZCMP;
     bit                          XFVec;
     bit                          CvxifEn;
     bit                          ZiCondExtEn;

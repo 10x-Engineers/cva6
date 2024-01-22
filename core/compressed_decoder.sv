@@ -24,6 +24,7 @@ module compressed_decoder #(
 ) (
     input  logic [31:0] instr_i,
     output logic [31:0] instr_o,
+    output logic        is_push_pop_instr_o,
     output logic        illegal_instr_o,
     output logic        is_compressed_o
 );
@@ -36,6 +37,7 @@ module compressed_decoder #(
     instr_o         = '0;
     is_compressed_o = 1'b1;
     instr_o         = instr_i;
+    is_push_pop_instr_o = 0;
 
     // I: |    imm[11:0]    | rs1 | funct3 |    rd    | opcode |
     // S: | imm[11:5] | rs2 | rs1 | funct3 | imm[4:0] | opcode |
@@ -848,19 +850,24 @@ module compressed_decoder #(
           end
 
           riscv::OpcodeC2Fsdsp: begin
-            if (CVA6Cfg.FpPresent) begin
-              // c.fsdsp -> fsd rs2, imm(x2)
-              instr_o = {
-                3'b0,
-                instr_i[9:7],
-                instr_i[12],
-                instr_i[6:2],
-                5'h02,
-                3'b011,
-                instr_i[11:10],
-                3'b000,
-                riscv::OpcodeStoreFp
-              };
+            if (CVA6Cfg.FpPresent || CVA6Cfg.RVZCMP) begin
+              if (instr_i[12:10] == 3'b110 || instr_i[12:10] == 3'b111 || instr_i[12:10] == 3'b011) begin //is a push/pop instruction
+                is_push_pop_instr_o = 1;
+                instr_o = instr_i;
+              end else begin
+                // c.fsdsp -> fsd rs2, imm(x2)
+                instr_o = {
+                  3'b0,
+                  instr_i[9:7],
+                  instr_i[12],
+                  instr_i[6:2],
+                  5'h02,
+                  3'b011,
+                  instr_i[11:10],
+                  3'b000,
+                  riscv::OpcodeStoreFp
+                };
+              end
             end else begin
               illegal_instr_o = 1'b1;
             end
