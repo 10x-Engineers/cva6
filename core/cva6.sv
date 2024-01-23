@@ -180,6 +180,7 @@ module cva6
     CVA6Cfg.RVV,
     CVA6Cfg.RVC,
     CVA6Cfg.RVZCB,
+    CVA6Cfg.RVZCMP,
     CVA6Cfg.XFVec,
     CVA6Cfg.CvxifEn,
     CVA6Cfg.ZiCondExtEn,
