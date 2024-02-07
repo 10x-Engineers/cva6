@@ -25,8 +25,9 @@ module bht #(
     input  logic                                                          clk_i,
     input  logic                                                          rst_ni,
     input  logic                                                          flush_i,
+    input  logic                                                          write_ghr,
     input  logic                                                          debug_mode_i,
-    input  logic                        [                riscv::VLEN-1:0] vpc_i,
+    input  logic                                        [riscv::VLEN-1:0] vpc_i,
     input  ariane_pkg::bht_update_t                                       bht_update_i,
     // we potentially need INSTR_PER_FETCH predictions/cycle
     output ariane_pkg::bht_prediction_t [ariane_pkg::INSTR_PER_FETCH-1:0] bht_prediction_o
@@ -51,9 +52,22 @@ module bht #(
       bht_q[NR_ROWS-1:0][ariane_pkg::INSTR_PER_FETCH-1:0];
 
   logic [$clog2(NR_ROWS)-1:0] index, update_pc;
+  logic [$clog2(NR_ROWS)-1:0] global_history, hash_index;
   logic [ROW_INDEX_BITS-1:0] update_row_index;
 
   assign index     = vpc_i[PREDICTION_BITS-1:ROW_ADDR_BITS+OFFSET];
+
+  // global history shift register
+  always_ff @(posedge clk_i)
+    if (rst_ni) begin
+      global_history <= 0;
+    end else if (write_ghr) begin
+      global_history <= {global_history[$clog2(NR_ROWS)-2:0], bht_update_i.taken};
+    end
+
+  // Hashing branch address and global history
+  assign hash_index = global_history ^ index;
+  
   assign update_pc = bht_update_i.pc[PREDICTION_BITS-1:ROW_ADDR_BITS+OFFSET];
   if (CVA6Cfg.RVC) begin : gen_update_row_index
     assign update_row_index = bht_update_i.pc[ROW_ADDR_BITS+OFFSET-1:OFFSET];
@@ -66,8 +80,8 @@ module bht #(
     logic [1:0] saturation_counter;
     // prediction assignment
     for (genvar i = 0; i < ariane_pkg::INSTR_PER_FETCH; i++) begin : gen_bht_output
-      assign bht_prediction_o[i].valid = bht_q[index][i].valid;
-      assign bht_prediction_o[i].taken = bht_q[index][i].saturation_counter[1] == 1'b1;
+      assign bht_prediction_o[i].valid = bht_q[hash_index][i].valid;
+      assign bht_prediction_o[i].taken = bht_q[hash_index][i].saturation_counter[1] == 1'b1;
     end
 
     always_comb begin : update_bht
@@ -152,7 +166,7 @@ module bht #(
 
       for (int i = 0; i < ariane_pkg::INSTR_PER_FETCH; i++) begin
         if (row_index == i) begin
-          bht_ram_read_address_0[i*$clog2(NR_ROWS)+:$clog2(NR_ROWS)] = index;
+          bht_ram_read_address_0[i*$clog2(NR_ROWS)+:$clog2(NR_ROWS)] = hash_index;
           bht_prediction_o[i].valid = bht_ram_rdata_0[i*BRAM_WORD_BITS+2];
           bht_prediction_o[i].taken = bht_ram_rdata_0[i*BRAM_WORD_BITS+1];
         end
