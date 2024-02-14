@@ -25,7 +25,7 @@ module bht #(
     input  logic                                                          clk_i,
     input  logic                                                          rst_ni,
     input  logic                                                          flush_i,
-    input  logic                                                          write_ghr,
+  //  input  logic                                                          write_ghr,
     input  logic                                                          debug_mode_i,
     input  logic                                        [riscv::VLEN-1:0] vpc_i,
     input  ariane_pkg::bht_update_t                                       bht_update_i,
@@ -61,7 +61,7 @@ module bht #(
   always_ff @(posedge clk_i)
     if (rst_ni) begin
       global_history <= 0;
-    end else if (write_ghr) begin
+    end else begin //if (write_ghr) begin
       global_history <= {global_history[$clog2(NR_ROWS)-2:0], bht_update_i.taken};
     end
 
