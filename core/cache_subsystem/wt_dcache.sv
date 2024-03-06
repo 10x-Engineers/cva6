@@ -87,6 +87,10 @@ module wt_dcache
   logic         [              NumPorts-1:0]                          miss_rtrn_vld;
   logic         [        CACHE_ID_WIDTH-1:0]                          miss_rtrn_id;
 
+  logic                                                               update_lfsr, all_ways_valid;
+  logic         [$clog2(DCACHE_SET_ASSOC)-1:0]                        rnd_way, mrut_r_way;
+
+
   // memory <-> read controllers/miss unit
   logic         [              NumPorts-1:0]                          rd_prio;
   logic         [              NumPorts-1:0]                          rd_tag_only;
@@ -156,6 +160,12 @@ module wt_dcache
       .wr_cl_user_o   (wr_cl_user),
       .wr_cl_data_be_o(wr_cl_data_be),
       .wr_vld_bits_o  (wr_vld_bits),
+      /////// MRUT/////
+      .update_lfsr_o  (update_lfsr),
+      .all_ways_valid_o(all_ways_valid),
+      .rnd_way_o       (rnd_way),
+      .mrut_r_way_i    (mrut_r_way),
+
       // memory interface
       .mem_rtrn_vld_i (mem_rtrn_vld_i),
       .mem_rtrn_i     (mem_rtrn_i),
@@ -334,6 +344,29 @@ module wt_dcache
       // write buffer forwarding
       .wbuffer_data_i (wbuffer_data)
   );
+
+  //////////////MRUT module/////////////
+  wt_mrut_rp #(
+    .CVA6Cfg (CVA6Cfg),
+    .AmoTxId (RdAmoTxId),
+    .NumPorts(NumPorts)
+  ) i_wt_mrut_rp (
+    .clk_i          (clk_i),
+    .rst_ni         (rst_ni),
+    .enable_i       (enable_i),
+    .flush_i        (flush_i),
+    .miss_i         (miss_o),
+    .cache_en       (cache_en),
+    .rd_hit_oh      (rd_hit_oh),
+    .rd_idx         (rd_idx),
+    .wr_cl_idx      (wr_cl_idx),
+    .wr_cl_vld      (wr_cl_vld),
+    .wr_cl_we       (wr_cl_we),
+    .rnd_way_i      (rnd_way),
+    .update_lfsr_i  (update_lfsr),
+    .all_ways_valid_i (all_ways_valid),
+    .mrut_r_way_o    (mrut_r_way)
+);
 
   ///////////////////////////////////////////////////////
   // assertions

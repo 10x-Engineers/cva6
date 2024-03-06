@@ -35,6 +35,7 @@ module wt_dcache_missunit
     // AMO interface
     input amo_req_t amo_req_i,
     output amo_resp_t amo_resp_o,
+
     // miss handling interface (ld, ptw, wbuffer)
     input logic [NumPorts-1:0] miss_req_i,
     output logic [NumPorts-1:0] miss_ack_o,
@@ -54,6 +55,7 @@ module wt_dcache_missunit
     // from writebuffer
     input  logic [DCACHE_MAX_TX-1:0][riscv::PLEN-1:0]  tx_paddr_i,         // used to check for address collisions with read operations
     input  logic [DCACHE_MAX_TX-1:0]                   tx_vld_i,           // used to check for address collisions with read operations
+   
     // write interface to cache memory
     output logic wr_cl_vld_o,  // writes a full cacheline
     output logic wr_cl_nc_o,  // writes a full cacheline
@@ -65,6 +67,12 @@ module wt_dcache_missunit
     output logic [DCACHE_USER_LINE_WIDTH-1:0] wr_cl_user_o,
     output logic [DCACHE_LINE_WIDTH/8-1:0] wr_cl_data_be_o,
     output logic [DCACHE_SET_ASSOC-1:0] wr_vld_bits_o,
+
+    output logic                                update_lfsr_o, all_ways_valid_o,
+    output logic [$clog2(DCACHE_SET_ASSOC)-1:0] rnd_way_o,
+
+    input logic  [$clog2(DCACHE_SET_ASSOC)-1:0] mrut_r_way_i,
+   
     // memory interface
     input logic mem_rtrn_vld_i,
     input dcache_rtrn_t mem_rtrn_i,
@@ -204,7 +212,12 @@ module wt_dcache_missunit
       .out_o (rnd_way)
   );
 
-  assign repl_way             = (all_ways_valid) ? rnd_way : inv_way;
+  assign update_lfsr_o = update_lfsr;
+  assign all_ways_valid_o = all_ways_valid;
+  assign rnd_way_o = rnd_way;
+
+  //assign repl_way             = (all_ways_valid) ? rnd_way : inv_way;     //uncomment this line and comment out the below line when to use random replacement
+  assign repl_way             = (all_ways_valid) ? mrut_r_way_i : inv_way;   //uncomment this line and comment out above line when to use MRUT Replacement
 
   assign mshr_d.size          = (mshr_allocate) ? miss_size_i[miss_port_idx] : mshr_q.size;
   assign mshr_d.paddr         = (mshr_allocate) ? miss_paddr_i[miss_port_idx] : mshr_q.paddr;
@@ -219,7 +232,10 @@ module wt_dcache_missunit
 
   assign miss_o               = (mshr_allocate) ? ~miss_nc_i[miss_port_idx] : 1'b0;
 
-
+  /*always_comb begin
+    $display("replecement way generated: %b",repl_way);
+  end
+*/
   for (genvar k = 0; k < NumPorts; k++) begin : gen_rdrd_collision
     assign mshr_rdrd_collision[k]   = (mshr_q.paddr[riscv::PLEN-1:DCACHE_OFFSET_WIDTH] == miss_paddr_i[k][riscv::PLEN-1:DCACHE_OFFSET_WIDTH]) && (mshr_vld_q | mshr_vld_q1);
     assign mshr_rdrd_collision_d[k] = (!miss_req_i[k]) ? 1'b0 : mshr_rdrd_collision_q[k] | mshr_rdrd_collision[k];
@@ -485,7 +501,8 @@ module wt_dcache_missunit
             end else if (!tx_rdwr_collision) begin
               mem_data_req_o   = 1'b1;
               mem_data_o.rtype = DCACHE_LOAD_REQ;
-              update_lfsr      = all_ways_valid & mem_data_ack_i;  // need to evict a random way
+              update_lfsr      = all_ways_valid & mem_data_ack_i;  // need to evict a random way 
+             // update_lfsr      = valid_repl_i & mem_data_ack_i;  // used for MRUT
               mshr_allocate    = mem_data_ack_i;
               if (!mem_data_ack_i) begin
                 state_d = LOAD_WAIT;
@@ -511,7 +528,8 @@ module wt_dcache_missunit
         mem_data_req_o   = 1'b1;
         mem_data_o.rtype = DCACHE_LOAD_REQ;
         if (mem_data_ack_i) begin
-          update_lfsr   = all_ways_valid;  // need to evict a random way
+          update_lfsr   = all_ways_valid;  // need to evict a random way 
+         // update_lfsr   = valid_repl_i;      //need for MRUT
           mshr_allocate = 1'b1;
           state_d       = IDLE;
         end
