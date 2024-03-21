@@ -90,7 +90,7 @@ endif
 # target takes one of the following cva6 hardware configuration:
 # cv64a6_imafdc_sv39, cv32a6_imac_sv0, cv32a6_imac_sv32, cv32a6_imafc_sv32, cv32a6_ima_sv32_fpga
 # Changing the default target to cv32a60x for Step1 verification
-target     ?= cv32a60x
+target     ?= cv64a6_imafdc_sv39
 ifndef TARGET_CFG
 	export TARGET_CFG = $(target)
 endif
@@ -575,7 +575,7 @@ verilate_command := $(verilator) --no-timing verilator_config.vlt               
                     --threads-dpi none                                                                           \
                     --Mdir $(ver-library) -O3                                                                    \
                     --exe corev_apu/tb/ariane_tb.cpp corev_apu/tb/dpi/SimDTM.cc corev_apu/tb/dpi/SimJTAG.cc      \
-                    corev_apu/tb/dpi/remote_bitbang.cc corev_apu/tb/dpi/msim_helper.cc /home/muhammad/10x_Training/TCP/BP_CVA6/cva6/verif/core-v-verif/vendor/riscv/riscv-isa-sim/fesvr/fesvr_dpi.cc
+                    corev_apu/tb/dpi/remote_bitbang.cc corev_apu/tb/dpi/msim_helper.cc
 
 
 # User Verilator, at some point in the future this will be auto-generated

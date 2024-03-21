@@ -25,7 +25,6 @@ module bht #(
     input  logic                                                          clk_i,
     input  logic                                                          rst_ni,
     input  logic                                                          flush_i,
-  //  input  logic                                                          write_ghr,
     input  logic                                                          debug_mode_i,
     input  logic                                        [riscv::VLEN-1:0] vpc_i,
     input  ariane_pkg::bht_update_t                                       bht_update_i,
@@ -52,29 +51,37 @@ module bht #(
       bht_q[NR_ROWS-1:0][ariane_pkg::INSTR_PER_FETCH-1:0];
 
   logic [$clog2(NR_ROWS)-1:0] index, update_pc;
-  logic [$clog2(NR_ROWS)-1:0] global_history, hash_index;
+  logic [$clog2(NR_ROWS)-1:0] hash_update_pc;
+  logic [$clog2(NR_ROWS)-1:0] hash_index, global_history;
   logic [ROW_INDEX_BITS-1:0] update_row_index;
+  logic [ROW_INDEX_BITS-1:0] hash_update_row_index;
 
-  assign index     = vpc_i[PREDICTION_BITS-1:ROW_ADDR_BITS+OFFSET];
+  assign index = vpc_i[PREDICTION_BITS-1:ROW_ADDR_BITS+OFFSET];
 
   // global history shift register
-  always_ff @(posedge clk_i)
-    if (rst_ni) begin
-      global_history <= 0;
-    end else begin //if (write_ghr) begin
+  always_ff @(posedge clk_i) begin
+    if (!rst_ni) begin
+      global_history <= '0;
+    end else begin
       global_history <= {global_history[$clog2(NR_ROWS)-2:0], bht_update_i.taken};
     end
+  end
 
-  // Hashing branch address and global history
+  // Hashing of branch address and global history
   assign hash_index = global_history ^ index;
   
   assign update_pc = bht_update_i.pc[PREDICTION_BITS-1:ROW_ADDR_BITS+OFFSET];
-  if (CVA6Cfg.RVC) begin : gen_update_row_index
-    assign update_row_index = bht_update_i.pc[ROW_ADDR_BITS+OFFSET-1:OFFSET];
-  end else begin
-    assign update_row_index = '0;
-  end
 
+  // Hashing of updated value of pc and global history 
+  assign hash_update_pc = global_history ^ update_pc;
+  assign update_row_index = bht_update_i.pc[ROW_ADDR_BITS+OFFSET-1:OFFSET];
+
+  if (CVA6Cfg.RVC) begin : gen_update_rowbht_q
+    assign hash_update_row_index = update_row_index ^ global_history[ROW_ADDR_BITS+OFFSET-1:OFFSET];
+  end else begin
+    assign hash_update_row_index = '0;
+  end
+  
   if (!ariane_pkg::FPGA_EN) begin : gen_asic_bht  // ASIC TARGET
 
     logic [1:0] saturation_counter;
@@ -86,24 +93,24 @@ module bht #(
 
     always_comb begin : update_bht
       bht_d = bht_q;
-      saturation_counter = bht_q[update_pc][update_row_index].saturation_counter;
+      saturation_counter = bht_q[hash_update_pc][hash_update_row_index].saturation_counter;
 
       if ((bht_update_i.valid && CVA6Cfg.DebugEn && !debug_mode_i) || (bht_update_i.valid && !CVA6Cfg.DebugEn)) begin
-        bht_d[update_pc][update_row_index].valid = 1'b1;
+        bht_d[hash_update_pc][hash_update_row_index].valid = 1'b1;
 
         if (saturation_counter == 2'b11) begin
           // we can safely decrease it
           if (!bht_update_i.taken)
-            bht_d[update_pc][update_row_index].saturation_counter = saturation_counter - 1;
+            bht_d[hash_update_pc][hash_update_row_index].saturation_counter = saturation_counter - 1;
           // then check if it saturated in the negative regime e.g.: branch not taken
         end else if (saturation_counter == 2'b00) begin
           // we can safely increase it
           if (bht_update_i.taken)
-            bht_d[update_pc][update_row_index].saturation_counter = saturation_counter + 1;
+            bht_d[hash_update_pc][hash_update_row_index].saturation_counter = saturation_counter + 1;
         end else begin  // otherwise we are not in any boundaries and can decrease or increase it
           if (bht_update_i.taken)
-            bht_d[update_pc][update_row_index].saturation_counter = saturation_counter + 1;
-          else bht_d[update_pc][update_row_index].saturation_counter = saturation_counter - 1;
+            bht_d[hash_update_pc][hash_update_row_index].saturation_counter = saturation_counter + 1;
+          else bht_d[hash_update_pc][hash_update_row_index].saturation_counter = saturation_counter - 1;
         end
       end
     end
@@ -112,7 +119,7 @@ module bht #(
       if (!rst_ni) begin
         for (int unsigned i = 0; i < NR_ROWS; i++) begin
           for (int j = 0; j < ariane_pkg::INSTR_PER_FETCH; j++) begin
-            bht_q[i][j] <= '0;
+            bht_q[i][j] = '0;
           end
         end
       end else begin
@@ -174,8 +181,8 @@ module bht #(
 
       if (bht_update_i.valid && !debug_mode_i) begin
         for (int i = 0; i < ariane_pkg::INSTR_PER_FETCH; i++) begin
-          if (update_row_index == i) begin
-            bht_ram_read_address_1[i*$clog2(NR_ROWS)+:$clog2(NR_ROWS)] = update_pc;
+          if (hash_update_row_index == i) begin
+            bht_ram_read_address_1[i*$clog2(NR_ROWS)+:$clog2(NR_ROWS)] = hash_update_pc;
             bht[i].saturation_counter = bht_ram_rdata_1[i*BRAM_WORD_BITS+:2];
 
             if (bht[i].saturation_counter == 2'b11) begin
@@ -197,7 +204,7 @@ module bht #(
 
             bht_updated[i].valid = 1'b1;
             bht_ram_we[i] = 1'b1;
-            bht_ram_write_address[i*$clog2(NR_ROWS)+:$clog2(NR_ROWS)] = update_pc;
+            bht_ram_write_address[i*$clog2(NR_ROWS)+:$clog2(NR_ROWS)] = hash_update_pc;
             //bht_ram_wdata[(i+1)*BRAM_WORD_BITS-1] =  1'b1; //valid
             bht_ram_wdata[i*BRAM_WORD_BITS+:BRAM_WORD_BITS] = {
               bht_updated[i].valid, bht_updated[i].saturation_counter
