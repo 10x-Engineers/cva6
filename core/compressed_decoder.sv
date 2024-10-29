@@ -867,8 +867,8 @@ module compressed_decoder #(
                 3'b000,
                 riscv::OpcodeStoreFp
               };
-            end else if (CVA6Cfg.RVZCMP) begin
-              if (instr_i[12:10] == 3'b110 || instr_i[12:10] == 3'b111 || instr_i[12:10] == 3'b011) begin //is a push/pop instruction
+            end else if (CVA6Cfg.RVZCMP||CVA6Cfg.RVZCMT) begin
+              if (instr_i[12:10] == 3'b110 || instr_i[12:10] == 3'b111 || instr_i[12:10] == 3'b011 || instr_i[12:10] == 3'b000) begin //is a push/pop//jt/jalt instruction
                 is_macro_instr_o = 1;
                 instr_o = instr_i;
               end else begin

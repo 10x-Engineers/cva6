@@ -228,7 +228,9 @@ module ex_stage
     // Information dedicated to RVFI - RVFI
     output lsu_ctrl_t rvfi_lsu_ctrl_o,
     // Information dedicated to RVFI - RVFI
-    output [CVA6Cfg.PLEN-1:0] rvfi_mem_paddr_o
+    output [CVA6Cfg.PLEN-1:0] rvfi_mem_paddr_o,
+    //jvt table address
+    input logic [CVA6Cfg.XLEN-1:0] table_address
 );
 
   // -------------------------

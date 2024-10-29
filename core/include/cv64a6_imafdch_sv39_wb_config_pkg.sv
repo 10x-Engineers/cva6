@@ -21,7 +21,7 @@ package cva6_config_pkg;
   localparam CVA6ConfigCvxifEn = 1;
   localparam CVA6ConfigCExtEn = 1;
   localparam CVA6ConfigZcbExtEn = 1;
-  localparam CVA6ConfigZcmpExtEn = 0;
+  localparam CVA6ConfigZcmpExtEn = 1;
   localparam CVA6ConfigAExtEn = 1;
   localparam CVA6ConfigBExtEn = 1;
   localparam CVA6ConfigVExtEn = 0;
@@ -72,10 +72,8 @@ package cva6_config_pkg;
 
   localparam config_pkg::cva6_user_cfg_t cva6_cfg = '{
       XLEN: unsigned'(CVA6ConfigXlen),
-      VLEN: unsigned'(64),
-      FpgaEn: bit'(0),  // for Xilinx and Altera
-      FpgaAlteraEn: bit'(0),  // for Altera (only)
-      TechnoCut: bit'(0),
+      FpgaEn: bit'(CVA6ConfigFpgaEn),
+      TechnoCut: bit'(CVA6ConfigTechnoCut),
       SuperscalarEn: bit'(0),
       NrCommitPorts: unsigned'(2),
       AxiAddrWidth: unsigned'(CVA6ConfigAxiAddrWidth),
