@@ -135,7 +135,23 @@ build_tools:
   - head -10000 verif/sim/logfile.log > artifacts/logs/logfile.log.head
   - if [ -n "$SPIKE_TANDEM" ]; then python3 .gitlab-ci/scripts/report_tandem.py verif/sim/out*/"$DV_SIMULATORS"_sim; else python3 .gitlab-ci/scripts/report_simu.py verif/sim/logfile.log; fi
 
-smoke:
+smoke-tests-cv32a65x:
+  extends:
+    - .fe_smoke_test
+  variables:
+    DASHBOARD_JOB_TITLE: "Smoke test $DV_SIMULATORS"
+    DASHBOARD_JOB_DESCRIPTION: "Short tests to challenge most architectures with most testbenchs configurations"
+    DASHBOARD_SORT_INDEX: 0
+    DASHBOARD_JOB_CATEGORY: "Basic"
+    SPIKE_TANDEM: 1
+    COLLECT_SIMU_LOGS: 1
+    DV_SIMULATORS: "vcs-uvm"
+  script:
+    - bash verif/regress/smoke-tests-cv32a65x.sh
+    - if [[ $DV_SIMULATORS == *"spike"* ]]; then unset SPIKE_TANDEM; fi # dirty hack to do trace comparison between tandem execution and spike standalone
+    - !reference [.simu_after_script]
+
+smoke-tests-cv32a6_imac_sv32:
   extends:
     - .fe_smoke_test
   variables:
@@ -150,14 +166,34 @@ smoke:
       - DV_SIMULATORS:
         - "vcs-testharness"
         - "questa-testharness"
-        - "vcs-uvm"
   script:
     - source $QUESTA_BASHRC
-    - bash verif/regress/smoke-tests.sh
+    - bash verif/regress/smoke-tests-cv32a6_imac_sv32.sh
     - if [[ $DV_SIMULATORS == *"spike"* ]]; then unset SPIKE_TANDEM; fi # dirty hack to do trace comparison between tandem execution and spike standalone
     - !reference [.simu_after_script]
 
-gen_smoke:
+smoke-tests-cv64a6_imafdc_sv39:
+  extends:
+    - .fe_smoke_test
+  variables:
+    DASHBOARD_JOB_TITLE: "Smoke test $DV_SIMULATORS"
+    DASHBOARD_JOB_DESCRIPTION: "Short tests to challenge most architectures with most testbenchs configurations"
+    DASHBOARD_SORT_INDEX: 0
+    DASHBOARD_JOB_CATEGORY: "Basic"
+    SPIKE_TANDEM: 1
+    COLLECT_SIMU_LOGS: 1
+  parallel:
+    matrix:
+      - DV_SIMULATORS:
+        - "vcs-testharness"
+        - "questa-testharness"
+  script:
+    - source $QUESTA_BASHRC
+    - bash verif/regress/smoke-tests-cv64a6_imafdc_sv39.sh
+    - if [[ $DV_SIMULATORS == *"spike"* ]]; then unset SPIKE_TANDEM; fi # dirty hack to do trace comparison between tandem execution and spike standalone
+    - !reference [.simu_after_script]
+
+smoke-gen:
   extends:
     - .fe_smoke_test
   variables:
@@ -172,20 +208,21 @@ gen_smoke:
     - bash verif/regress/smoke-gen_tests.sh
     - !reference [.simu_after_script]
 
-coremark:
+smoke-bench:
   extends:
-    - .regress_test
+    - .fe_smoke_test
   variables:
-    DASHBOARD_JOB_TITLE: "CoreMark"
+    DASHBOARD_JOB_TITLE: "smoke-bench"
     DASHBOARD_JOB_DESCRIPTION: "Performance indicator"
     DASHBOARD_SORT_INDEX: 5
     DASHBOARD_JOB_CATEGORY: "Performance"
     SPIKE_TANDEM: 1
+    BENCH: "dhrystone"
   script:
-    - bash verif/regress/coremark.sh --no-print
-    - python3 .gitlab-ci/scripts/report_benchmark.py --coremark verif/sim/out_*/vcs-uvm_sim/core_main.*.log
+    - bash verif/regress/"$BENCH"_smoke.sh --no-print
+    - python3 .gitlab-ci/scripts/report_benchmark.py --"$BENCH"_cv32a65x verif/sim/out_*/vcs-uvm_sim/"$BENCH"_main.*.log
 
-hwconfig:
+smoke-hwconfig:
   extends:
     - .fe_smoke_test
   variables:
@@ -193,8 +230,10 @@ hwconfig:
     DASHBOARD_JOB_DESCRIPTION: "Short tests to challenge target configurations"
     DASHBOARD_SORT_INDEX: 1
     DASHBOARD_JOB_CATEGORY: "Basic"
-    DV_SIMULATORS: "veri-testharness,spike"
-    DV_HWCONFIG_OPTS: "cv32a6_imac_sv32"
+    DV_SIMULATORS: "vcs-uvm"
+    SPIKE_TANDEM: 1
+    DV_TARGET: "hwconfig"
+    DV_HWCONFIG_OPTS: "cv32a65x"
   script:
     - source verif/regress/hwconfig_tests.sh
     - python3 .gitlab-ci/scripts/report_pass.py
@@ -268,7 +307,7 @@ asic-synthesis:
     - echo $PERIOD
     - echo $DV_TARGET
     - source ./verif/sim/setup-env.sh
-    - git clone ${SYNTH_SCRIPT} ${SYNTH_SCRIPT_PATH}
+    - git clone ${SYNTH_SCRIPT} ${SYNTH_SCRIPT_PATH} -b ${SYNTH_SCRIPT_BRANCH}
     - cp -r ${SYNTH_SCRIPT_PATH}/cva6/ ../
     - git apply ${SYNTH_SCRIPT_PATH}/patches/*.patch
     - echo $SYN_DCSHELL_BASHRC; source $SYN_DCSHELL_BASHRC
@@ -309,18 +348,32 @@ fpga-build:
     - when: manual
       allow_failure: true
 
-dhrystone:
+benchmarks:
   extends:
-    - .fe_smoke_test
+    - .regress_test
   variables:
-    DASHBOARD_JOB_TITLE: "Dhrystone"
+    DASHBOARD_JOB_TITLE: "benchmarks"
     DASHBOARD_JOB_DESCRIPTION: "Performance indicator"
     DASHBOARD_SORT_INDEX: 5
     DASHBOARD_JOB_CATEGORY: "Performance"
     SPIKE_TANDEM: 1
+  parallel:
+    matrix:
+      - BENCH: "dhrystone"
+        ISSUE: "single"
+        DV_HWCONFIG_OPTS: ["cv32a65x SuperscalarEn=0 IcacheByteSize=16384 IcacheSetAssoc=8 DcacheByteSize=32768 DcacheSetAssoc=8 BHTEntries=128 NrScoreboardEntries=8 DCacheType=config_pkg::WT"]
+      - BENCH: "dhrystone"
+        ISSUE: "dual"
+        DV_HWCONFIG_OPTS: ["cv32a65x IcacheByteSize=16384 IcacheSetAssoc=8 DcacheByteSize=32768 DcacheSetAssoc=8 BHTEntries=128 NrScoreboardEntries=8 DCacheType=config_pkg::WT"]
+      - BENCH: "coremark"
+        ISSUE: "single"
+        DV_HWCONFIG_OPTS: ["cv32a65x SuperscalarEn=0 IcacheByteSize=16384 IcacheSetAssoc=8 DcacheByteSize=32768 DcacheSetAssoc=8 BHTEntries=128 NrScoreboardEntries=8 DCacheType=config_pkg::WT"]
+      - BENCH: "coremark"
+        ISSUE: "dual"
+        DV_HWCONFIG_OPTS: ["cv32a65x IcacheByteSize=16384 IcacheSetAssoc=8 DcacheByteSize=32768 DcacheSetAssoc=8 BHTEntries=128 NrScoreboardEntries=8 DCacheType=config_pkg::WT"]
   script:
-    - bash verif/regress/dhrystone.sh
-    - python3 .gitlab-ci/scripts/report_benchmark.py --dhrystone verif/sim/out_*/vcs-uvm_sim/dhrystone_main.*.log
+    - bash verif/regress/"$BENCH".sh
+    - python3 .gitlab-ci/scripts/report_benchmark.py --"$BENCH"_"$ISSUE" verif/sim/out_*/vcs-uvm_sim/"$BENCH"_main.*.log
 
 riscv_arch_test:
   extends:
@@ -508,6 +561,7 @@ simu-gate:
     matrix:
       - SIMU_PERIOD: ["20"]  # 50 Mhz
         PERIOD:      ["15"]  # 66 Mhz
+        PROG_NAME:   "dhrystone"
   variables:
     DASHBOARD_JOB_TITLE: "Gate Level Simulation $DV_TARGET"
     DASHBOARD_JOB_DESCRIPTION: "Tests to check netlist from ASIC synthesis and power consumption over different patterns"
@@ -515,12 +569,13 @@ simu-gate:
     DASHBOARD_JOB_CATEGORY: "Post Synthesis"
     DV_TARGET: cv32a65x
     TARGET: $DV_TARGET
+    SPIKE_TANDEM: 1
   script:
     - git -C verif/core-v-verif fetch --unshallow
     - !reference [.copy_spike_artifacts]
     - echo $PERIOD
     - source ./verif/sim/setup-env.sh
-    - git clone ${SYNTH_SCRIPT} ${SYNTH_SCRIPT_PATH}
+    - git clone ${SYNTH_SCRIPT} ${SYNTH_SCRIPT_PATH} -b ${SYNTH_SCRIPT_BRANCH}
     - cp -r ${SYNTH_SCRIPT_PATH}/cva6/ ../
     - git apply ${SYNTH_SCRIPT_PATH}/patches/*.patch
     - source verif/regress/install-riscv-tests.sh
@@ -530,6 +585,7 @@ simu-gate:
     - mkdir -p pd/synth/cva6_${DV_TARGET}/outputs/
     - python3 ${SYNTH_SCRIPT_PATH}/scharm -p configs/modules/CVA6.yml --runner=True --compaign="simu-gate" --name=$PROG_NAME
     - mv ${SYNTH_SCRIPT_PATH}/artifacts/ artifacts/artifacts_gate/
+    - rm artifacts/artifacts_gate/*/build/*.fsdb
   after_script: *simu_after_script
 
 fpga-boot:
