@@ -97,7 +97,7 @@ cd ./verif/sim
 
 python3 cva6.py --target cv32a60x --iss=$DV_SIMULATORS --iss_yaml=cva6.yaml \
 --c_tests ../tests/custom/hello_world/hello_world.c \
---linker=../tests/custom/common/test.ld \
+--linker=../../config/gen_from_riscv_config/linker/link.ld \
 --gcc_opts="-static -mcmodel=medany -fvisibility=hidden -nostdlib \
 -nostartfiles -g ../tests/custom/common/syscalls.c \
 ../tests/custom/common/crt.S -lgcc \
@@ -416,6 +416,10 @@ If you use CVA6 in your academic work you can cite us:
 </details>
 <br/>
 
+
+# Resources and Ecosystem
+
+The CVA6 core is part of a vivid ecosystem. In [this document](RESOURCES.md), we gather pointers to this ecosystem (building blocks, designs, partners...)
 
 # Acknowledgements
 
