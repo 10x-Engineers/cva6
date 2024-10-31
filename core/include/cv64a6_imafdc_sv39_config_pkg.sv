@@ -12,7 +12,7 @@ package cva6_config_pkg;
 
   localparam CVA6ConfigXlen = 64;
 
-  localparam CVA6ConfigRVF = 1;
+  localparam CVA6ConfigRVF = 0;
   localparam CVA6ConfigF16En = 0;
   localparam CVA6ConfigF16AltEn = 0;
   localparam CVA6ConfigF8En = 0;
@@ -21,7 +21,7 @@ package cva6_config_pkg;
   localparam CVA6ConfigCvxifEn = 1;
   localparam CVA6ConfigCExtEn = 1;
   localparam CVA6ConfigZcbExtEn = 1;
-  localparam CVA6ConfigZcmpExtEn = 0;
+  localparam CVA6ConfigZcmpExtEn = 1;
   localparam CVA6ConfigAExtEn = 1;
   localparam CVA6ConfigHExtEn = 0;  // always disabled
   localparam CVA6ConfigBExtEn = 1;
