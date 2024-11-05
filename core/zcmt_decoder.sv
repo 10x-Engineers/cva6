@@ -8,11 +8,9 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// Author: Rohan Arshid, 10xEngineers
-// Date: 22.01.2024
-// Description: Contains the logic for decoding cm.push, cm.pop, cm.popret, 
-//              cm.popretz, cm.mvsa01, and cm.mva01s instructions of the 
-//              Zcmp Extension
+// Author: Farhan Ali Shah, 10xEngineers
+// Date: 05.11.2024
+// Description: ZCMT Extension
 
 module zcmt_decoder #(
   parameter config_pkg::cva6_cfg_t CVA6Cfg = config_pkg::cva6_cfg_empty,
@@ -43,14 +41,17 @@ module zcmt_decoder #(
   );
 
 // FSM States
-enum logic {
+enum logic [1:0]{
   IDLE,
-  TABLE_FETCH
+  REQ_SENT,
+  TABLE_FETCH,
+  JUMP
 }
     state_d, state_q;
 
 //zcmt instruction type
-enum logic{
+enum logic [1:0]{
+  no,
   JT,
   JALT
 } zcmt_instr_type;
@@ -58,19 +59,15 @@ enum logic{
 // Temporary registers
 
 logic [31:0] instr_o_reg;
-
 logic [7:0] index;
 logic [31:0] jvt_table_add;
-
-
 logic                                 data_gnt;
 logic                                 data_rvalid;
 logic [CVA6Cfg.DcacheIdWidth-1:0]     data_rid;
-logic [CVA6Cfg.XLEN-1:0]              data_rdata;
+logic [CVA6Cfg.XLEN-1:0]              data_rdata_d, data_rdata_q;
 logic [CVA6Cfg.DCACHE_USER_WIDTH-1:0] data_ruser;
-
 logic [CVA6Cfg.XLEN+1:0]               table_a;
-logic [20:0]              jump_add;
+logic [11:0]                           jump_add;
 logic [20:0]                          pc_offset;
 
 
@@ -80,16 +77,19 @@ assign data_rid     = req_port_i.data_rid;
 
 assign data_ruser   = req_port_i.data_ruser;
 
-riscv::itype_t itype_inst;
+riscv::utype_t utype_inst;
 assign instr_o = instr_o_reg;
 always_comb begin
   state_d                    = state_q;
+
+  data_rdata_d               = data_rdata_q;
   illegal_instr_o            = 1'b0;
-  fetch_stall_o              = 1'b0;
-  is_last_macro_instr_o      = 1'b0;
+  //fetch_stall_o              = 1'b0;
   is_double_rd_macro_instr_o = 1'b0;
   is_compressed_o            = is_macro_instr_i ? 1'b1 : is_compressed_i;
-  table_address              = '0;
+  //table_address              = '0;
+  illegal_instr_o            = 1'b0;
+  is_last_macro_instr_o      = 1'b0;
 
   if (is_macro_instr_i) begin
 
@@ -121,11 +121,16 @@ always_comb begin
   unique case (state_q)
     IDLE: begin
       if (is_macro_instr_i) begin
-        state_d = TABLE_FETCH;
+        state_d = REQ_SENT;
         fetch_stall_o = 1;
-        //is_last_macro_instr_o = 1;
-      
-        case (zcmt_instr_type)
+        //is_last_macro_instr_o = 1;        
+      end else begin
+        state_d = IDLE;
+      end
+    end
+    REQ_SENT: begin
+      state_d = TABLE_FETCH;
+      case (zcmt_instr_type)
           JT: begin
               if(CVA6Cfg.XLEN  == 32) begin
                   jvt_table_add = {jvt_base_i[31:6],6'b000000};
@@ -180,29 +185,29 @@ always_comb begin
                   instr_o_reg     = instr_i;
                   
                 end
-                
           end
           default: state_d = IDLE;
         endcase
-        
-      end else begin
-        state_d = IDLE;
-      end
     end
     TABLE_FETCH: begin
       if (data_rid & data_rvalid) begin
-          data_rdata   = req_port_i.data_rdata;
-          //pc_offset = pc_i - data_rdata;
-          //jump_add = pc_offset & ~1;
-          jump_add = $unsigned($signed(pc_i) - $signed(data_rdata));
-          instr_o_reg = {jump_add, 5'h0, riscv::OpcodeJal};  //- jal pc_offset, x0
+          data_rdata_d   = req_port_i.data_rdata;
+          state_d = JUMP;
+      end else begin
+          state_d = TABLE_FETCH;
+      end
+    end
+    JUMP: begin
+      if (issue_ack_i) begin
+          pc_offset = pc_i - data_rdata_q;
+          jump_add = $signed(data_rdata_q)- $signed(pc_i);
+          instr_o_reg = {1'b0,jump_add, 8'b00000000,5'h0, riscv::OpcodeJal};  //- jal pc_offset, x0
   
           fetch_stall_o = 0;
           is_last_macro_instr_o = 1;
-          //is_double_rd_macro_instr_o = 1;
           state_d = IDLE;
       end else begin
-          state_d = TABLE_FETCH;
+          state_d = JUMP;
       end
     end
     default: begin
@@ -213,11 +218,14 @@ end
 
 always_ff @(posedge clk_i or negedge rst_ni) begin
   if (~rst_ni) begin
-    state_q <= IDLE;
+    state_q       <= IDLE;
+    data_rdata_q  <= '0;
 
   end else begin
-    state_q <= state_d;
+    state_q       <= state_d;
+    data_rdata_q  <= data_rdata_d;
 
   end
 end
 endmodule
+
