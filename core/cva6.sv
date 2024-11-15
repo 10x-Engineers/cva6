@@ -567,6 +567,7 @@ module cva6
   logic [CVA6Cfg.XLEN-1:6] jvt_base;
   logic [5:0] jvt_mode;
   logic [CVA6Cfg.XLEN-1:0] table_address;
+  logic is_zcmt_id_is, is_zcmt_is_ex;
   // ----------------------------
   // Performance Counters <-> *
   // ----------------------------
@@ -726,7 +727,7 @@ module cva6
       .compressed_req_o  (x_compressed_req),
       .jvt_base_i        (jvt_base),
       .jvt_mode_i        (jvt_mode),
-      .table_address     (table_address),
+      .is_zcmt_o         (is_zcmt_id_is),
       // DCACHE interfaces
       .dcache_req_ports_i(dcache_req_ports_cache_id),
       .dcache_req_ports_o(dcache_req_ports_id_cache)
@@ -824,6 +825,8 @@ module cva6
       .decoded_instr_valid_i   (issue_entry_valid_id_issue),
       .is_ctrl_flow_i          (is_ctrl_fow_id_issue),
       .decoded_instr_ack_o     (issue_instr_issue_id),
+      .is_zcmt_i                (is_zcmt_id_is),
+      .is_zcmt_o                (is_zcmt_is_ex),
       // Functional Units
       .rs1_forwarding_o        (rs1_forwarding_id_ex),
       .rs2_forwarding_o        (rs2_forwarding_id_ex),
@@ -1031,7 +1034,7 @@ module cva6
       //RVFI
       .rvfi_lsu_ctrl_o         (rvfi_lsu_ctrl),
       .rvfi_mem_paddr_o        (rvfi_mem_paddr),
-      .table_address           (table_address)
+      .is_zcmt_i               (is_zcmt_is_ex)
   );
 
   // ---------
@@ -1765,4 +1768,3 @@ module cva6
   //pragma translate_on
 
 endmodule  // ariane
-
