@@ -28,7 +28,6 @@ package cva6_config_pkg;
   localparam config_pkg::cva6_user_cfg_t cva6_cfg = '{
       XLEN: unsigned'(CVA6ConfigXlen),
       FpgaEn: bit'(0),
-      FpgaAlteraEn: bit'(0),
       TechnoCut: bit'(0),
       SuperscalarEn: bit'(0),
       NrCommitPorts: unsigned'(1),
@@ -50,6 +49,7 @@ package cva6_config_pkg;
       RVH: bit'(0),
       RVZCB: bit'(1),
       RVZCMP: bit'(0),
+      RVZCMT: bit'(0),
       XFVec: bit'(0),
       CvxifEn: bit'(1),
       RVZiCond: bit'(0),

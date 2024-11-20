@@ -21,6 +21,7 @@ package cva6_config_pkg;
   localparam CVA6ConfigCExtEn = 1;
   localparam CVA6ConfigZcbExtEn = 1;
   localparam CVA6ConfigZcmpExtEn = 0;
+  localparam CVA6ConfigZcmtExtEn = 0;
   localparam CVA6ConfigAExtEn = 0;
   localparam CVA6ConfigHExtEn = 0;  // always disabled
   localparam CVA6ConfigBExtEn = 1;
@@ -51,6 +52,8 @@ package cva6_config_pkg;
   localparam CVA6ConfigNrCommitPorts = 1;
   localparam CVA6ConfigNrScoreboardEntries = 4;
 
+  localparam CVA6ConfigFpgaEn = 0;
+
   localparam CVA6ConfigNrLoadPipeRegs = 0;
   localparam CVA6ConfigNrStorePipeRegs = 0;
   localparam CVA6ConfigNrLoadBufEntries = 1;
@@ -73,8 +76,7 @@ package cva6_config_pkg;
 
   localparam config_pkg::cva6_user_cfg_t cva6_cfg = '{
       XLEN: unsigned'(CVA6ConfigXlen),
-      FpgaEn: bit'(0),  // for Xilinx and Altera
-      FpgaAlteraEn: bit'(0),  // for Altera (only)
+      FpgaEn: bit'(CVA6ConfigFpgaEn),
       TechnoCut: bit'(0),
       NrCommitPorts: unsigned'(CVA6ConfigNrCommitPorts),
       AxiAddrWidth: unsigned'(CVA6ConfigAxiAddrWidth),
@@ -94,6 +96,7 @@ package cva6_config_pkg;
       RVC: bit'(CVA6ConfigCExtEn),
       RVH: bit'(CVA6ConfigHExtEn),
       RVZCB: bit'(CVA6ConfigZcbExtEn),
+      RVZCMT: bit'(CVA6ConfigZcmtExtEn),
       RVZCMP: bit'(CVA6ConfigZcmpExtEn),
       XFVec: bit'(CVA6ConfigFVecEn),
       CvxifEn: bit'(CVA6ConfigCvxifEn),
