@@ -84,7 +84,7 @@ module id_stage #(
     // CVXIF Compressed interface
     input logic [CVA6Cfg.XLEN-1:0] hart_id_i,
     input logic compressed_ready_i,
-    //JVT
+    //JVT base 
     input logic [CVA6Cfg.XLEN-1:6] jvt_base_i,
     input logic [5:0] jvt_mode_i,
     output logic  is_zcmt_o,
@@ -131,9 +131,6 @@ module id_stage #(
 
   assign is_zcmt_n = is_zcmt_o2;
   assign is_zcmt_o = is_zcmt_q;
-    //jvt
- // logic [CVA6Cfg.XLEN-1:6] jvt_base;
- // logic [5:0] jvt_mode;
 
   if (CVA6Cfg.RVC) begin
     // ---------------------------------------------------------
@@ -194,7 +191,7 @@ module id_stage #(
         .is_zcmt_o                 (is_zcmt),
         .req_port_i                (dcache_req_ports_i),
         .req_port_o                (dcache_req_ports_o)
-    );
+      );
       if (CVA6Cfg.SuperscalarEn) begin
         assign instruction_cvxif[CVA6Cfg.NrIssuePorts-1] = '0;
         assign is_illegal_cvxif[CVA6Cfg.NrIssuePorts-1] = '0;
@@ -284,7 +281,7 @@ module id_stage #(
         .is_compressed_i           (is_compressed_cmp[i]),
         .is_macro_instr_i          (is_macro_instr_i[i]),
         .is_zcmt_i                 (is_zcmt),
-        .is_zcmt_o                  (is_zcmt_o2),
+        .is_zcmt_o                 (is_zcmt_o2),
         .is_last_macro_instr_i     (is_last_macro_instr_o),
         .is_double_rd_macro_instr_i(is_double_rd_macro_instr_o),
         .is_illegal_i              (is_illegal_cmp[i]),

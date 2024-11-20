@@ -92,7 +92,7 @@ module branch_unit #(
       if(is_zcmt_q) begin
         // Unconditional jump handling
         resolved_branch_o.is_taken = 1'b1;
-        resolved_branch_o.is_mispredict = 1'b1; // No prediction for unconditional jumps
+        resolved_branch_o.is_mispredict = 1'b1; // miss prediction for ZCMT 
         resolved_branch_o.target_address = target_address; // Use calculated address directly
         resolved_branch_o.cf_type = ariane_pkg::Jump;
       end else begin

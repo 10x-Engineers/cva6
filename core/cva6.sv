@@ -566,7 +566,6 @@ module cva6
   //jvt
   logic [CVA6Cfg.XLEN-1:6] jvt_base;
   logic [5:0] jvt_mode;
-  logic [CVA6Cfg.XLEN-1:0] table_address;
   logic is_zcmt_id_is, is_zcmt_is_ex;
   // ----------------------------
   // Performance Counters <-> *

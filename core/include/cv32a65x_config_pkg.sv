@@ -43,7 +43,7 @@ package cva6_config_pkg;
       RVH: bit'(0),
       RVZCB: bit'(1),
       RVZCMP: bit'(0),
-      RVZCMT: bit'(0),
+      RVZCMT: bit'(1),
       XFVec: bit'(0),
       CvxifEn: bit'(1),
       RVZiCond: bit'(0),

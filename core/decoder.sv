@@ -86,7 +86,7 @@ module decoder
     output logic [31:0] orig_instr_o,
     // Is a control flow instruction - ISSUE_STAGE
     output logic is_control_flow_instr_o,
-    //zcmt
+    //zcmt instruction
     input logic is_zcmt_i,
     output logic is_zcmt_o
 );

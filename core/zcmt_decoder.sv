@@ -64,7 +64,7 @@ always_comb begin
   is_compressed_o                   = is_zcmt_instr_i ? 1'b1 : is_compressed_i;
   illegal_instr_o                   = 1'b0;
   is_zcmt_o                         = 1'b0;
- // fetch_stall_o                     = 1'b0; 
+  fetch_stall_o                     = is_zcmt_instr_i ? 1'b1 : 0;
 
   if (is_zcmt_instr_i) begin
 
@@ -74,10 +74,11 @@ always_comb begin
         if(instr_i[9:2] < 32) begin                 //JT instruction
             zcmt_instr_type = JT;
             index = instr_i[9:2];
-        end else if(instr_i[9:2] >= 32) begin       //JALT instruction
+        end else if(instr_i[9:2] >= 32 & instr_i[9:2] <= 32) begin       //JALT instruction
             zcmt_instr_type = JALT;
             index = instr_i[9:2];
         end else begin
+            zcmt_instr_type = NOT_ZCMT;
             illegal_instr_o = 1'b1;
             instr_o_reg     = instr_i;
         end
@@ -85,6 +86,7 @@ always_comb begin
       default: begin
         illegal_instr_o = 1'b1;
         instr_o_reg     = instr_i;
+        zcmt_instr_type = NOT_ZCMT;
       end
     endcase
 
@@ -96,8 +98,7 @@ always_comb begin
   unique case (state_q)
     IDLE: begin
       if (is_zcmt_instr_i) begin
-        state_d = REQ_SENT;
-        fetch_stall_o = 1'b1;     
+        state_d = REQ_SENT; 
       end else begin
         state_d = IDLE;
       end
@@ -183,10 +184,9 @@ always_comb begin
 
           pc_offset = pc_i + jump_add;
           is_zcmt_o =1'b1;
-          fetch_stall_o = 0;
           state_d = IDLE;
       end else begin
-          state_d = JUMP;
+        state_d = JUMP;
       end
     end
     default: begin
