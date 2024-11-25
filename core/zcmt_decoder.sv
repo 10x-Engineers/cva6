@@ -74,12 +74,12 @@ module zcmt_decoder #(
           end else if (instr_i[9:2] >= 32 & instr_i[9:2] <= 32) begin  //JALT instruction
             zcmt_instr_type = JALT;
             index = instr_i[9:2];
-            end else begin
-              zcmt_instr_type = NOT_ZCMT;  //NOT ZCMT instruction
-              illegal_instr_o = 1'b1;
-              instr_o_reg     = instr_i;
-            end
+          end else begin
+            zcmt_instr_type = NOT_ZCMT;  //NOT ZCMT instruction
+            illegal_instr_o = 1'b1;
+            instr_o_reg     = instr_i;
           end
+        end
         default: begin
           illegal_instr_o = 1'b1;
           instr_o_reg     = instr_i;
@@ -98,7 +98,7 @@ module zcmt_decoder #(
         end else begin
           state_d = IDLE;
         end
-        end
+      end
       REQ_SENT: begin
         state_d = TABLE_FETCH;
         case (zcmt_instr_type)
@@ -160,15 +160,15 @@ module zcmt_decoder #(
           end
           default: state_d = IDLE;
         endcase
-        end
+      end
       TABLE_FETCH: begin
         if (req_port_i.data_rid & req_port_i.data_rvalid) begin
           data_rdata_d = req_port_i.data_rdata;
           state_d = JUMP;
         end else begin
           state_d = TABLE_FETCH;
-          end
         end
+      end
       JUMP: begin
         if (issue_ack_i) begin
 
@@ -180,20 +180,20 @@ module zcmt_decoder #(
             };  //- jal pc_offset, x0
           end else if (zcmt_instr_type == JALT) begin
             instr_o_reg = {
-            jump_add[20], jump_add[10:1], jump_add[11], jump_add[19:12], 5'h1, riscv::OpcodeJal
+              jump_add[20], jump_add[10:1], jump_add[11], jump_add[19:12], 5'h1, riscv::OpcodeJal
             };
           end
 
           is_zcmt_o = 1'b1;
           fetch_stall_o = 1'b0;
-          state_d   = IDLE;
+          state_d = IDLE;
         end else begin
           state_d = JUMP;
         end
       end
       default: begin
         state_d = IDLE;
-        end
+      end
     endcase
   end
 
@@ -202,7 +202,7 @@ module zcmt_decoder #(
       state_q      <= IDLE;
       data_rdata_q <= '0;
 
-  end else begin
+    end else begin
       state_q      <= state_d;
       data_rdata_q <= data_rdata_d;
     end
