@@ -1,23 +1,25 @@
 // Author: Farhan Ali Shah, 10xEngineers
 // Date: 15.11.2024
-// Description: ZCMT Extension
-
+// Description: ZCMT extension in the CVA6 core targeting the 32-bit embedded-class platforms (CV32A60X and CV32A65X).
+// ZCMT is a code-size reduction feature that utilizes compressed table jump instructions (cm.jt and cm.jalt) to
+//reduce code size for embedded systems
+//
 module zcmt_decoder #(
     parameter config_pkg::cva6_cfg_t CVA6Cfg = config_pkg::cva6_cfg_empty,
     parameter type dcache_req_i_t = logic,
     parameter type dcache_req_o_t = logic,
+    parameter type jvt_t = logic,
     parameter type branchpredict_sbe_t = logic
 ) (
     input logic clk_i,  // Clock
-    input logic rst_ni,  // Synchronous reset  
-    input logic [31:0] instr_i,  // instruction 
+    input logic rst_ni,  // Synchronous reset
+    input logic [31:0] instr_i,  // instruction
     input logic [CVA6Cfg.VLEN-1:0] pc_i,  // PC
     input logic is_zcmt_instr_i,  // Intruction is of macro extension
     input logic illegal_instr_i,  // From compressed decoder
     input logic is_compressed_i,  // is compressed instruction
     input logic issue_ack_i,  // Check if the intruction is acknowledged
-    input logic [CVA6Cfg.XLEN-6:0] jvt_base_i,  // JVT CSR base
-    input logic [5:0] jvt_mode_i,  // JVT CSR mode
+    input jvt_t jvt_i,
     input dcache_req_o_t req_port_i,  // Data cache request ouput - CACHE
 
     output logic          [31:0] instr_o,          // Instruction out
@@ -41,17 +43,16 @@ module zcmt_decoder #(
   enum logic [1:0] {
     NOT_ZCMT,  // 00: Not a ZCMT instrcution
     JT,        // 01: cm.jt instruction
-    JALT       // 10: cm.jalt instruction  
+    JALT       // 10: cm.jalt instruction
   } zcmt_instr_type;
 
   // Temporary registers
   logic [31:0] instr_o_reg;
   logic [7:0] index;  //index of instruction
-  logic [CVA6Cfg.XLEN-1:0] table_address;  //Physical address: jvt + (index <<2)
-  logic [CVA6Cfg.XLEN+1:0] table_a;  //Virtual  address: {00,Physical address}
-  logic [31:0] jvt_table_add;
+  //Physical address: jvt + (index <<2)
+  logic [CVA6Cfg.XLEN+1:0] table_address;  //Virtual  address: {00,Physical address}
   logic [CVA6Cfg.XLEN-1:0] data_rdata_d, data_rdata_q;  //data received from instruction memory
-  logic [20:0] jump_add;  //jump address immidiate
+  logic [20:0] jump_addr;  //jump address immidiate
 
   assign instr_o = instr_o_reg;  //instruction output assigned
 
@@ -63,6 +64,7 @@ module zcmt_decoder #(
     illegal_instr_o = 1'b0;
     is_zcmt_o       = 1'b0;
     fetch_stall_o   = is_zcmt_instr_i ? 1'b1 : 0;
+    zcmt_instr_type = NOT_ZCMT;
 
     if (is_zcmt_instr_i) begin
       unique case (instr_i[12:10])
@@ -93,7 +95,7 @@ module zcmt_decoder #(
 
     unique case (state_q)
       IDLE: begin
-        if (is_zcmt_instr_i) begin
+        if (zcmt_instr_type == JT | zcmt_instr_type == JALT) begin
           state_d = REQ_SENT;
         end else begin
           state_d = IDLE;
@@ -104,11 +106,9 @@ module zcmt_decoder #(
         case (zcmt_instr_type)
           JT: begin
             if (CVA6Cfg.XLEN == 32) begin
-              jvt_table_add = {jvt_base_i, 6'b000000};
-              table_address = jvt_table_add + (index << 2);
-              table_a = {2'b00, table_address[CVA6Cfg.XLEN-1:0]};
-              req_port_o.address_index = table_a[9:0];
-              req_port_o.address_tag = table_a[33:10];
+              table_address = {2'b00, ({jvt_i.base, jvt_i.mode} + (index << 2))};
+              req_port_o.address_index = table_address[9:0];
+              req_port_o.address_tag = table_address[33:10];
               req_port_o.data_wdata = 1'b0;
               req_port_o.data_wuser = '0;
               req_port_o.data_req = 1'b1;
@@ -120,9 +120,7 @@ module zcmt_decoder #(
               req_port_o.tag_valid = 1;
 
             end else if (CVA6Cfg.XLEN == 64) begin
-              //jvt_table_add = {jvt_base_i, 6'b000000};
-              //table_address = jvt_table_add + (index << 3);
-              //table_a = {2'b00, table_address[CVA6Cfg.XLEN-1:0]};
+              //table_address = {2'b00,({jvt_i.base, jvt_i.mode} + (index << 3))};
               // will will completed in future( for 64 bit embedded core)
               illegal_instr_o = 1'b1;
             end else begin
@@ -132,11 +130,9 @@ module zcmt_decoder #(
           end
           JALT: begin
             if (CVA6Cfg.XLEN == 32) begin
-              jvt_table_add = {jvt_base_i, 6'b000000};
-              table_address = jvt_table_add + (index << 2);
-              table_a = {2'b00, table_address[CVA6Cfg.XLEN-1:0]};
-              req_port_o.address_index = table_a[9:0];
-              req_port_o.address_tag = table_a[33:10];
+              table_address = {2'b00, ({jvt_i.base, jvt_i.mode} + (index << 2))};
+              req_port_o.address_index = table_address[9:0];
+              req_port_o.address_tag = table_address[33:10];
               req_port_o.data_wdata = 1'b0;
               req_port_o.data_wuser = '0;
               req_port_o.data_req = 1'b1;
@@ -148,9 +144,7 @@ module zcmt_decoder #(
               req_port_o.tag_valid = 1;
 
             end else if (CVA6Cfg.XLEN == 64) begin
-              //jvt_table_add = {jvt_base_i, 6'b000000};
-              //table_address = jvt_table_add + (index << 3);
-              //table_a = {2'b00, table_address[CVA6Cfg.XLEN-1:0]};
+              //table_address = {2'b00,({jvt_i.base, jvt_i.mode} + (index << 3))};
               // will will completed in future( for 64 bit embedded core)
               illegal_instr_o = 1'b1;
             end else begin
@@ -172,21 +166,30 @@ module zcmt_decoder #(
       JUMP: begin
         if (issue_ack_i) begin
 
-          jump_add = $unsigned($signed(data_rdata_q) - $signed(pc_i));
+          jump_addr = $unsigned($signed(data_rdata_q) - $signed(pc_i));
 
           if (zcmt_instr_type == JT) begin
             instr_o_reg = {
-              jump_add[20], jump_add[10:1], jump_add[11], jump_add[19:12], 5'h0, riscv::OpcodeJal
+              jump_addr[20],
+              jump_addr[10:1],
+              jump_addr[11],
+              jump_addr[19:12],
+              5'h0,
+              riscv::OpcodeJal
             };  //- jal pc_offset, x0
           end else if (zcmt_instr_type == JALT) begin
             instr_o_reg = {
-              jump_add[20], jump_add[10:1], jump_add[11], jump_add[19:12], 5'h1, riscv::OpcodeJal
-            };
+              jump_addr[20],
+              jump_addr[10:1],
+              jump_addr[11],
+              jump_addr[19:12],
+              5'h1,
+              riscv::OpcodeJal
+            };  //- jal pc_offset, x1
           end
 
           is_zcmt_o = 1'b1;
-          fetch_stall_o = 1'b0;
-          state_d = IDLE;
+          state_d   = IDLE;
         end else begin
           state_d = JUMP;
         end
