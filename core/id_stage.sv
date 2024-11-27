@@ -20,6 +20,7 @@ module id_stage #(
     parameter type dcache_req_o_t = logic,
     parameter type exception_t = logic,
     parameter type fetch_entry_t = logic,
+    parameter type jvt_t = logic,
     parameter type irq_ctrl_t = logic,
     parameter type scoreboard_entry_t = logic,
     parameter type interrupts_t = logic,
@@ -84,10 +85,8 @@ module id_stage #(
     // CVXIF Compressed interface
     input logic [CVA6Cfg.XLEN-1:0] hart_id_i,
     input logic compressed_ready_i,
-    //JVT base 
-    input logic [CVA6Cfg.XLEN-6:0] jvt_base_i,
-    input logic [5:0] jvt_mode_i,
-    output logic is_zcmt_o,
+    //JVT  
+    input jvt_t jvt_i,
     input x_compressed_resp_t compressed_resp_i,
     output logic compressed_valid_o,
     output x_compressed_req_t compressed_req_o,
@@ -129,10 +128,6 @@ module id_stage #(
   logic               [CVA6Cfg.NrIssuePorts-1:0] is_zcmt_instr_i;
   branchpredict_sbe_t                            branch_predict;
   logic                                          is_zcmt;
-  logic is_zcmt_q, is_zcmt_n, is_zcmt_o2;
-
-  assign is_zcmt_n = is_zcmt_o2;
-  assign is_zcmt_o = is_zcmt_q;
 
   if (CVA6Cfg.RVC) begin
     // ---------------------------------------------------------
@@ -173,6 +168,7 @@ module id_stage #(
           .CVA6Cfg(CVA6Cfg),
           .dcache_req_i_t(dcache_req_i_t),
           .dcache_req_o_t(dcache_req_o_t),
+          .jvt_t(jvt_t),
           .branchpredict_sbe_t(branchpredict_sbe_t)
       ) zcmt_decoder_i (
           .instr_i        (compressed_instr[0]),
@@ -187,8 +183,7 @@ module id_stage #(
           .illegal_instr_o(is_illegal_cvxif_zcmt[0]),
           .is_compressed_o(is_compressed_cvxif_zcmt[0]),
           .fetch_stall_o  (stall_macro_deco_zcmt),
-          .jvt_base_i     (jvt_base_i),
-          .jvt_mode_i     (jvt_mode_i),
+          .jvt_i          (jvt_i),
           .is_zcmt_o      (is_zcmt),
           .req_port_i     (dcache_req_ports_i),
           .req_port_o     (dcache_req_ports_o)
@@ -287,7 +282,6 @@ module id_stage #(
         .is_compressed_i           (is_compressed_cmp[i]),
         .is_macro_instr_i          (is_macro_instr_i[i]),
         .is_zcmt_i                 (is_zcmt),
-        .is_zcmt_o                 (is_zcmt_o2),
         .is_last_macro_instr_i     (is_last_macro_instr_o),
         .is_double_rd_macro_instr_i(is_double_rd_macro_instr_o),
         .is_illegal_i              (is_illegal_cmp[i]),
@@ -392,11 +386,9 @@ module id_stage #(
   // -------------------------
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (~rst_ni) begin
-      issue_q   <= '0;
-      is_zcmt_q <= '0;
+      issue_q  <= '0;
     end else begin
-      issue_q   <= issue_n;
-      is_zcmt_q <= is_zcmt_n;
+      issue_q  <= issue_n;
     end
   end
 endmodule
