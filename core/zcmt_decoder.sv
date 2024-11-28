@@ -117,14 +117,14 @@ module zcmt_decoder #(
       end
       JUMP: begin
         jump_addr = $unsigned($signed(data_rdata_q) - $signed(pc_i));
-        if (zcmt_instr_type == JT) begin //- jal pc_offset, x0 for no return stack
+        if (zcmt_instr_type == JT) begin  //- jal pc_offset, x0 for no return stack
           instr_o = {
             jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h0, riscv::OpcodeJal
-          };  
-        end else if (zcmt_instr_type == JALT) begin //- jal pc_offset, x1 for return stack
+          };
+        end else if (zcmt_instr_type == JALT) begin  //- jal pc_offset, x1 for return stack
           instr_o = {
             jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h1, riscv::OpcodeJal
-          }; 
+          };
         end
         state_d = IDLE;
       end
