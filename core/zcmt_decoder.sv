@@ -36,12 +36,12 @@ module zcmt_decoder #(
     TABLE_FETCH,  // Check the valid data from jump table and record
     JUMP          // Calculate the offset for jump and create jal instruction
   }
-     state_d, state_q;
+      state_d, state_q;
 
   //zcmt instruction type
   enum logic {
-    JT,    // 0 cm.jt instruction
-    JALT   // 1: cm.jalt instruction
+    JT,   // 0 cm.jt instruction
+    JALT  // 1: cm.jalt instruction
   } zcmt_instr_type;
   
   // Temporary registers
@@ -118,11 +118,15 @@ module zcmt_decoder #(
       JUMP: begin
         jump_addr = $unsigned($signed(data_rdata_q) - $signed(pc_i));
         if (zcmt_instr_type == JT) begin //- jal pc_offset, x0 for no return stack
-          instr_o = {jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h0, riscv::OpcodeJal};  
+          instr_o = {
+            jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h0, riscv::OpcodeJal
+          };  
         end else if (zcmt_instr_type == JALT) begin //- jal pc_offset, x1 for return stack
-          instr_o = {jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h1, riscv::OpcodeJal}; 
+          instr_o = {
+            jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h1, riscv::OpcodeJal
+          }; 
         end
-        state_d   = IDLE;
+        state_d = IDLE;
       end
       default: begin
         state_d = IDLE;
