@@ -52,7 +52,6 @@ module branch_unit #(
 );
   logic [CVA6Cfg.VLEN-1:0] target_address;
   logic [CVA6Cfg.VLEN-1:0] next_pc;
-  logic is_zcmt_q;
 
   // here we handle the various possibilities of mis-predicts
   always_comb begin : mispredict_handler
@@ -83,14 +82,14 @@ module branch_unit #(
     // 2. Jumps to register addresses
     // 3. Zcmt instructions
     if (branch_valid_i) begin
+      // write target address which goes to PC Gen or select target address if zcmt
+      resolved_branch_o.target_address = (branch_comp_res_i) | is_zcmt_i ? target_address : next_pc;
+      resolved_branch_o.is_taken = is_zcmt_i ? 1'b1 : branch_comp_res_i;
       if (is_zcmt_i) begin
         // Unconditional jump handling
         resolved_branch_o.is_mispredict = 1'b1;  // miss prediction for ZCMT 
         resolved_branch_o.cf_type = ariane_pkg::Jump;
       end
-      // write target address which goes to PC Gen or select target address if zcmt
-      resolved_branch_o.target_address = (branch_comp_res_i) | is_zcmt_i ? target_address : next_pc;
-      resolved_branch_o.is_taken = is_zcmt_i ? 1'b1 : branch_comp_res_i;
       // check the outcome of the branch speculation
       if (ariane_pkg::op_is_branch(fu_data_i.operation)) begin
         // Set the `cf_type` of the output as `branch`, this will update the BHT.

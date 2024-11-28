@@ -185,7 +185,7 @@ module id_stage #(
           .is_compressed_o(is_compressed_cvxif_zcmt[0]),
           .fetch_stall_o  (stall_macro_deco_zcmt),
           .jvt_i          (jvt_i),
-          .is_zcmt_o      (is_zcmt),
+        //  .is_zcmt_o      (is_zcmt),
           .req_port_i     (dcache_req_ports_i),
           .req_port_o     (dcache_req_ports_o)
       );
@@ -282,7 +282,7 @@ module id_stage #(
         .pc_i                      (fetch_entry_i[i].address),
         .is_compressed_i           (is_compressed_cmp[i]),
         .is_macro_instr_i          (is_macro_instr_i[i]),
-        .is_zcmt_i                 (is_zcmt),
+        .is_zcmt_i                 (is_zcmt_instr_i[i]),
         .is_last_macro_instr_i     (is_last_macro_instr_o),
         .is_double_rd_macro_instr_i(is_double_rd_macro_instr_o),
         .is_illegal_i              (is_illegal_cmp[i]),
