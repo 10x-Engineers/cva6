@@ -184,7 +184,6 @@ module id_stage #(
           .is_compressed_o(is_compressed_cvxif_zcmt[0]),
           .fetch_stall_o  (stall_macro_deco_zcmt),
           .jvt_i          (jvt_i),
-        //  .is_zcmt_o      (is_zcmt),
           .req_port_i     (dcache_req_ports_i),
           .req_port_o     (dcache_req_ports_o)
       );
