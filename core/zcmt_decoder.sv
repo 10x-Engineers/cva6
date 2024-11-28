@@ -36,15 +36,13 @@ module zcmt_decoder #(
     TABLE_FETCH,  // Check the valid data from jump table and record
     JUMP          // Calculate the offset for jump and create jal instruction
   }
-    state_d, state_q;
+     state_d, state_q;
 
   //zcmt instruction type
   enum logic {
-    JT,        // 0 cm.jt instruction
-    JALT       // 1: cm.jalt instruction
-  } 
-    zcmt_instr_type;
-
+    JT,    // 0 cm.jt instruction
+    JALT   // 1: cm.jalt instruction
+  } zcmt_instr_type;
   
   // Temporary registers
   logic [7:0] index;  //index of instruction
@@ -54,11 +52,11 @@ module zcmt_decoder #(
   logic [20:0] jump_addr;  //jump address immidiate
 
   always_comb begin
-    state_d         = state_q;
-    data_rdata_d    = data_rdata_q;
-    illegal_instr_o = 1'b0;
-    is_compressed_o = is_zcmt_instr_i ? 1'b1 : is_compressed_i;
-    fetch_stall_o   = is_zcmt_instr_i ? 1'b1 : 0;
+    state_d               = state_q;
+    data_rdata_d          = data_rdata_q;
+    illegal_instr_o       = 1'b0;
+    is_compressed_o       = is_zcmt_instr_i ? 1'b1 : is_compressed_i;
+    fetch_stall_o         = is_zcmt_instr_i ? 1'b1 : 0;
 
     //cache request port
     req_port_o.data_wdata = 1'b0;
@@ -91,11 +89,10 @@ module zcmt_decoder #(
         //table_address = {2'b00,({jvt_i.base, jvt_i.mode} + (index << 3))};
         // will will completed in future( for 64 bit embedded core)
         illegal_instr_o = 1'b1;
-      end else 
-        illegal_instr_o = 1'b1;
+      end else illegal_instr_o = 1'b1;
     end else begin
       illegal_instr_o = illegal_instr_i;
-      instr_o     = instr_i;
+      instr_o         = instr_i;
     end
 
     unique case (state_q)
@@ -119,13 +116,13 @@ module zcmt_decoder #(
         end
       end
       JUMP: begin
-          jump_addr = $unsigned($signed(data_rdata_q) - $signed(pc_i));
-          if (zcmt_instr_type == JT) begin //- jal pc_offset, x0 for no return stack
-            instr_o = {jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h0, riscv::OpcodeJal};  
-          end else if (zcmt_instr_type == JALT) begin //- jal pc_offset, x1 for return stack
-            instr_o = {jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h1, riscv::OpcodeJal}; 
-          end
-          state_d   = IDLE;
+        jump_addr = $unsigned($signed(data_rdata_q) - $signed(pc_i));
+        if (zcmt_instr_type == JT) begin //- jal pc_offset, x0 for no return stack
+          instr_o = {jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h0, riscv::OpcodeJal};  
+        end else if (zcmt_instr_type == JALT) begin //- jal pc_offset, x1 for return stack
+          instr_o = {jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h1, riscv::OpcodeJal}; 
+        end
+        state_d   = IDLE;
       end
       default: begin
         state_d = IDLE;
