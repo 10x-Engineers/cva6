@@ -1278,8 +1278,7 @@ module cva6
   dcache_req_o_t [NumPorts-1:0] dcache_req_from_cache;
 
   // D$ request
-  // D$ request
-  if (CVA6Cfg.RVZCMT) begin
+  if (CVA6Cfg.RVZCMT & ~(CVA6Cfg.MmuPresent)) begin // MMU is not present in CV32a60x, Cache port 0 is ultilize in ZCMT (MMU should be off to enable the ZCMT)          
     assign dcache_req_to_cache[0] = dcache_req_ports_id_cache;
   end else begin
     assign dcache_req_to_cache[0] = dcache_req_ports_ex_cache[0];
@@ -1290,7 +1289,7 @@ module cva6
                                                                           dcache_req_ports_acc_cache[1];
 
   // D$ response
-  if (CVA6Cfg.RVZCMT) begin
+  if (CVA6Cfg.RVZCMT & ~(CVA6Cfg.MmuPresent)) begin// MMU is not present in CV32a60x, Cache port 0 is ultilize in ZCMT (MMU should be off to enable the ZCMT) 
     assign dcache_req_ports_cache_id = dcache_req_from_cache[0];
   end else begin
     assign dcache_req_ports_cache_ex[0] = dcache_req_from_cache[0];
