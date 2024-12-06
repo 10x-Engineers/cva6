@@ -30,11 +30,10 @@ module zcmt_decoder #(
 
   // FSM States
   enum logic {
-    IDLE,         // if ZCMT instruction then request sent to fetch the entry from jump table
+    IDLE,  // if ZCMT instruction then request sent to fetch the entry from jump table
     TABLE_JUMP  // Check the valid data from jump table and Calculate the offset for jump and create jal instruction
   }
-    state_d, state_q;
-  
+      state_d, state_q;
   // Temporary registers
   logic [7:0] index;  //index of instruction
   //Physical address: jvt + (index <<2)
@@ -72,13 +71,13 @@ module zcmt_decoder #(
         end else begin
           illegal_instr_o = illegal_instr_i;
           instr_o         = instr_i;
-          state_d = IDLE;
+          state_d         = IDLE;
         end
       end
       TABLE_JUMP: begin
         if (req_port_i.data_rvalid) begin
           jump_addr = $unsigned($signed(req_port_i.data_rdata) - $signed(pc_i));
-          if (instr_i[9:2] < 32)begin  //- jal pc_offset, x0 for no return stack
+          if (instr_i[9:2] < 32) begin  //- jal pc_offset, x0 for no return stack
             instr_o = {
               jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h0, riscv::OpcodeJal
             };
@@ -103,10 +102,10 @@ module zcmt_decoder #(
 
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (~rst_ni) begin
-      state_q      <= IDLE;
+      state_q <= IDLE;
 
     end else begin
-      state_q      <= state_d;
+      state_q <= state_d;
     end
   end
 endmodule
