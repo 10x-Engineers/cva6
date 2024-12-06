@@ -1407,7 +1407,6 @@ module decoder
           imm_select              = JIMM;
           instruction_o.rd        = instr.utype.rd;
           is_control_flow_instr_o = 1'b1;
-          instruction_o.is_zcmt   = is_zcmt_i;
         end
 
         riscv::OpcodeAuipc: begin
