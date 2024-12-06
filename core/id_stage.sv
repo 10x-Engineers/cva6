@@ -146,7 +146,7 @@ module id_stage #(
           .is_zcmt_instr_o (is_zcmt_instr_i[i])
       );
     end
-    if (CVA6Cfg.RVZCMP || CVA6Cfg.RVZCMT) begin
+    if (CVA6Cfg.RVZCMP || (CVA6Cfg.RVZCMT & ~CVA6Cfg.MmuPresent)) begin //MMU should be off when using ZCMT 
       //sequencial decoder
       macro_decoder #(
           .CVA6Cfg(CVA6Cfg)
@@ -180,7 +180,6 @@ module id_stage #(
           .instr_o        (instruction_cvxif_zcmt[0]),
           .illegal_instr_i(is_illegal[0]),
           .is_compressed_i(is_compressed[0]),
-          .issue_ack_i    (issue_instr_ack_i[0]),
           .illegal_instr_o(is_illegal_cvxif_zcmt[0]),
           .is_compressed_o(is_compressed_cvxif_zcmt[0]),
           .fetch_stall_o  (stall_macro_deco_zcmt),
