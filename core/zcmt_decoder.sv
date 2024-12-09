@@ -78,11 +78,21 @@ module zcmt_decoder #(
           jump_addr = $unsigned($signed(req_port_i.data_rdata) - $signed(pc_i));
           if (instr_i[9:2] < 32) begin  //- jal pc_offset, x0 for no return stack
             instr_o = {
-              jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h0, riscv::OpcodeJal
+              jump_addr[20],
+              jump_addr[10:1],
+              jump_addr[11],
+              jump_addr[19:12],
+              5'h0,
+              riscv::OpcodeJal
             };
           end else if ((instr_i[9:2] >= 32) & (instr_i[9:2] <= 255))  begin  //- jal pc_offset, x1 for return stack
             instr_o = {
-              jump_addr[20], jump_addr[10:1], jump_addr[11], jump_addr[19:12], 5'h1, riscv::OpcodeJal
+              jump_addr[20],
+              jump_addr[10:1],
+              jump_addr[11],
+              jump_addr[19:12],
+              5'h1,
+              riscv::OpcodeJal
             };
           end else begin
             illegal_instr_o = 1'b1;

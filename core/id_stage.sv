@@ -114,11 +114,11 @@ module id_stage #(
   logic [CVA6Cfg.NrIssuePorts-1:0] is_illegal_cvxif, is_illegal_cvxif_zcmp, is_illegal_cvxif_zcmt;
   logic [CVA6Cfg.NrIssuePorts-1:0][31:0] instruction;
   logic [CVA6Cfg.NrIssuePorts-1:0][31:0] compressed_instr;
-  logic [CVA6Cfg.NrIssuePorts-1:0][31:0] 
+  logic [CVA6Cfg.NrIssuePorts-1:0][31:0]
       instruction_cvxif, instruction_cvxif_zcmp, instruction_cvxif_zcmt;
   logic [CVA6Cfg.NrIssuePorts-1:0] is_compressed;
   logic [CVA6Cfg.NrIssuePorts-1:0] is_compressed_cmp;
-  logic [CVA6Cfg.NrIssuePorts-1:0] 
+  logic [CVA6Cfg.NrIssuePorts-1:0]
       is_compressed_cvxif, is_compressed_cvxif_zcmp, is_compressed_cvxif_zcmt;
 
   logic [CVA6Cfg.NrIssuePorts-1:0] is_macro_instr_i;
@@ -386,9 +386,9 @@ module id_stage #(
   // -------------------------
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (~rst_ni) begin
-      issue_q  <= '0;
+      issue_q   <= '0;
     end else begin
-      issue_q  <= issue_n;
+      issue_q   <= issue_n;
     end
   end
 endmodule
