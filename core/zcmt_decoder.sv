@@ -38,7 +38,6 @@ module zcmt_decoder #(
   logic [7:0] index;  //index of instruction
   //Physical address: jvt + (index <<2)
   logic [CVA6Cfg.XLEN+1:0] table_address;  //Virtual  address: {00,Physical address}
-  logic [CVA6Cfg.XLEN-1:0] data_rdata;  //data received from instruction memory
   logic [20:0] jump_addr;  //jump address immidiate
 
   always_comb begin
