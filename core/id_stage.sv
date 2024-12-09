@@ -386,9 +386,9 @@ module id_stage #(
   // -------------------------
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (~rst_ni) begin
-      issue_q   <= '0;
+      issue_q <= '0;
     end else begin
-      issue_q   <= issue_n;
+      issue_q <= issue_n;
     end
   end
 endmodule
