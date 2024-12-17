@@ -51,6 +51,9 @@ module alu
   logic lz_tz_empty, lz_tz_wempty;
   logic [CVA6Cfg.XLEN-1:0] orcbw_result, rev8w_result;
 
+  logic [CVA6Cfg.XLEN-1:0] xperm8_result;
+  logic [CVA6Cfg.XLEN-1:0] xperm4_result;
+
   // bit reverse operand_a for left shifts and bit counting
   generate
     genvar k;
@@ -263,6 +266,23 @@ module alu
     end
   end
 
+// ZBKX Block
+if (CVA6Cfg.ZKN && CVA6Cfg.RVB) begin : xperm_gen_block
+  genvar i, m;
+  for (i = 0; i < (CVA6Cfg.XLEN / 8); i++) begin : xperm8_gen
+    assign xperm8_result[i << 3 +: 8] = 
+      (fu_data_i.operand_b[i << 3 +: 8] < (CVA6Cfg.XLEN / 8)) 
+        ? fu_data_i.operand_a[fu_data_i.operand_b[i << 3 +: 8] << 3 +: 8] 
+        : 8'b0;
+  end
+  for (m = 0; m < (CVA6Cfg.XLEN / 4); m++) begin : xperm4_gen
+  assign xperm4_result[m * 4 +: 4] = 
+      (fu_data_i.operand_b[m * 4 +: 4] < (CVA6Cfg.XLEN / 4)) 
+      ? fu_data_i.operand_a[fu_data_i.operand_b[m * 4 +: 4] * 4 +: 4] 
+      : 4'b0;
+end
+end
+
   // -----------
   // Result MUX
   // -----------
@@ -356,6 +376,12 @@ module alu
         CZERO_NEZ:
         result_o = (|fu_data_i.operand_b) ? '0 : fu_data_i.operand_a; // move zero to rd if rs2 is nonzero else rs1
         default: ;  // default case to suppress unique warning
+      endcase
+    end
+    if (CVA6Cfg.ZKN && CVA6Cfg.RVB) begin
+      unique case (fu_data_i.operation)
+        XPERM8: result_o = xperm8_result;
+        XPERM4: result_o = xperm4_result;
       endcase
     end
   end

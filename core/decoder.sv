@@ -776,6 +776,8 @@ module decoder
                 // Bitwise Shifting
                 {7'b011_0000, 3'b001} : instruction_o.op = ariane_pkg::ROL;  // rol
                 {7'b011_0000, 3'b101} : instruction_o.op = ariane_pkg::ROR;  // ror
+                {7'b001_0100, 3'b100} : if (CVA6Cfg.ZKN) instruction_o.op = ariane_pkg::XPERM8; else illegal_instr_bm = 1'b1; // xperm8
+                {7'b001_0100, 3'b010} : if (CVA6Cfg.ZKN) instruction_o.op = ariane_pkg::XPERM4; else illegal_instr_bm = 1'b1; // xperm4
                 // Zero Extend Op RV32 encoding
                 {
                   7'b000_0100, 3'b100

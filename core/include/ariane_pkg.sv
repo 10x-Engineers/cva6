@@ -489,7 +489,9 @@ package ariane_pkg;
     ACCEL_OP_STORE,
     // Zicond instruction
     CZERO_EQZ,
-    CZERO_NEZ
+    CZERO_NEZ,
+    XPERM8,
+    XPERM4
   } fu_op;
 
   function automatic logic op_is_branch(input fu_op op);
