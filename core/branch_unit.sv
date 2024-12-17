@@ -31,7 +31,7 @@ module branch_unit #(
     input fu_data_t fu_data_i,
     // Instruction PC - ISSUE_STAGE
     input logic [CVA6Cfg.VLEN-1:0] pc_i,
-    // is zcmt instruction
+    // Is zcmt instruction - ISSUE_STAGE
     input logic is_zcmt_i,
     // Instruction is compressed - ISSUE_STAGE
     input logic is_compressed_instr_i,

@@ -48,6 +48,8 @@ module decoder
     input logic is_last_macro_instr_i,
     // Is mvsa01/mva01s macro instruction - macro_decoder
     input logic is_double_rd_macro_instr_i,
+    //zcmt instruction
+    input logic is_zcmt_i,
     // Is a branch predict instruction - FRONTEND
     input branchpredict_sbe_t branch_predict_i,
     // If an exception occured in fetch stage - FRONTEND
@@ -85,9 +87,7 @@ module decoder
     // Instruction - ISSUE_STAGE
     output logic [31:0] orig_instr_o,
     // Is a control flow instruction - ISSUE_STAGE
-    output logic is_control_flow_instr_o,
-    //zcmt instruction
-    input logic is_zcmt_i
+    output logic is_control_flow_instr_o
 );
   logic illegal_instr;
   logic illegal_instr_bm;
