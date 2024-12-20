@@ -276,9 +276,9 @@ if (CVA6Cfg.ZKN && CVA6Cfg.RVB) begin : xperm_gen_block
         : 8'b0;
   end
   for (m = 0; m < (CVA6Cfg.XLEN / 4); m++) begin : xperm4_gen
-  assign xperm4_result[m * 4 +: 4] = 
-      (fu_data_i.operand_b[m * 4 +: 4] < (CVA6Cfg.XLEN / 4)) 
-      ? fu_data_i.operand_a[fu_data_i.operand_b[m * 4 +: 4] * 4 +: 4] 
+  assign xperm4_result[m << 2 +: 4] = 
+      (fu_data_i.operand_b[m << 2 +: 4] < (CVA6Cfg.XLEN / 4)) 
+      ? fu_data_i.operand_a[{2'b0, fu_data_i.operand_b[m << 2 +: 4]} << 2 +: 4] 
       : 4'b0;
 end
 end
