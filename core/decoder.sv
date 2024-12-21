@@ -48,8 +48,10 @@ module decoder
     input logic is_last_macro_instr_i,
     // Is mvsa01/mva01s macro instruction - macro_decoder
     input logic is_double_rd_macro_instr_i,
-    //zcmt instruction
+    // Zcmt instruction - FRONTEND
     input logic is_zcmt_i,
+    // Jump address - zcmt_decoder
+    input logic [31:0] jump_address,
     // Is a branch predict instruction - FRONTEND
     input branchpredict_sbe_t branch_predict_i,
     // If an exception occured in fetch stage - FRONTEND
@@ -1474,13 +1476,17 @@ module decoder
     imm_u_type = {
       {CVA6Cfg.XLEN - 32{instruction_i[31]}}, instruction_i[31:12], 12'b0
     };  // JAL, AUIPC, sign extended to 64 bit
-    imm_uj_type = {
-      {CVA6Cfg.XLEN - 20{instruction_i[31]}},
-      instruction_i[19:12],
-      instruction_i[20],
-      instruction_i[30:21],
-      1'b0
-    };
+    if (CVA6Cfg.RVZCMT && is_zcmt_i) begin
+      imm_uj_type = jump_address;
+    end else begin
+      imm_uj_type = {
+        {CVA6Cfg.XLEN - 20{instruction_i[31]}},
+        instruction_i[19:12],
+        instruction_i[20],
+        instruction_i[30:21],
+        1'b0
+      };
+    end
 
     // NOIMM, IIMM, SIMM, SBIMM, UIMM, JIMM, RS3
     // select immediate

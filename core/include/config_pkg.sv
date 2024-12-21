@@ -376,7 +376,8 @@ package config_pkg;
     assert (Cfg.NrPMPEntries <= 64);
     assert (!(Cfg.SuperscalarEn && Cfg.RVF));
     assert (!(Cfg.SuperscalarEn && Cfg.RVZCMP));
-    assert (!(Cfg.SuperscalarEn && Cfg.RVZCMT && ~CVA6Cfg.MmuPresent));
+    assert (!(Cfg.SuperscalarEn && Cfg.RVZCMT));
+    assert (!(Cfg.RVZCMT && ~Cfg.MmuPresent));
 `endif
     // pragma translate_on
   endfunction

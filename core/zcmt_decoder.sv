@@ -11,21 +11,36 @@ module zcmt_decoder #(
     parameter type jvt_t = logic,
     parameter type branchpredict_sbe_t = logic
 ) (
-    input logic clk_i,  // Clock
-    input logic rst_ni,  // Synchronous reset
-    input logic [31:0] instr_i,  // instruction
-    input logic [CVA6Cfg.VLEN-1:0] pc_i,  // PC
-    input logic is_zcmt_instr_i,  // Intruction is of macro extension
-    input logic illegal_instr_i,  // From compressed decoder
-    input logic is_compressed_i,  // is compressed instruction
-    input jvt_t jvt_i,
-    input dcache_req_o_t req_port_i,  // Data cache request ouput - CACHE
-
-    output logic          [31:0] instr_o,          // Instruction out
-    output logic                 illegal_instr_o,  // Illegel instruction
-    output logic                 is_compressed_o,  // is compressed instruction
-    output logic                 fetch_stall_o,    // Wait while address fetched from table
-    output dcache_req_i_t        req_port_o        // Data cache request input - CACHE
+    // Subsystem Clock - SUBSYSTEM
+    input  logic                             clk_i,
+    // Asynchronous reset active low - SUBSYSTEM
+    input  logic                             rst_ni,
+    // Instruction input - compressed_decoder
+    input  logic          [            31:0] instr_i,
+    // current PC - FRONTEND
+    input  logic          [CVA6Cfg.VLEN-1:0] pc_i,
+    // Intruction is of ZCMT extension - compressed_decoder
+    input  logic                             is_zcmt_instr_i,
+    // Instruction is illegal - compressed_decoder
+    input  logic                             illegal_instr_i,
+    // Instruction is compressed - compressed_decoder
+    input  logic                             is_compressed_i,
+    // JVT struct input - CSR
+    input  jvt_t                             jvt_i,
+    // Data cache request output - CACHE
+    input  dcache_req_o_t                    req_port_i,
+    // Instruction out - cvxif_compressed_if_driver
+    output logic          [            31:0] instr_o,
+    // Instruction is illegal out - cvxif_compressed_if_driver     
+    output logic                             illegal_instr_o,
+    // Instruction is compressed out - cvxif_compressed_if_driver
+    output logic                             is_compressed_o,
+    // Fetch stall - cvxif_compressed_if_driver
+    output logic                             fetch_stall_o,
+    // Data cache request input - CACHE
+    output dcache_req_i_t                    req_port_o,
+    // jump_address
+    output logic          [            31:0] jump_address_o
 );
 
   // FSM States
@@ -38,6 +53,8 @@ module zcmt_decoder #(
   //Physical address: jvt + (index <<2)
   logic [CVA6Cfg.XLEN+1:0] table_address;  //Virtual  address: {00,Physical address}
   logic [31:0] jump_addr;  //jump address immidiate
+
+  assign jump_address_o = jump_addr;
 
   always_comb begin
     state_d               = state_q;
@@ -60,8 +77,7 @@ module zcmt_decoder #(
       IDLE: begin
         if (is_zcmt_instr_i) begin
           if (CVA6Cfg.XLEN == 32) begin  //It is only target for 32 bit targets in cva6 with No MMU
-            // table_address = {2'b00, ({jvt_i.base, instr_i[7:2], 2'b00})};
-            table_address = {2'b00, ({jvt_i.base, jvt_i.mode} + {24'h0, instr_i[7:2], 2'b00})};
+            table_address = {2'b00, ({jvt_i.base, jvt_i.mode}) + (instr_i[7:2] << 2)};
             req_port_o.address_index = table_address[9:0];
             req_port_o.address_tag = table_address[33:10];
             state_d = TABLE_JUMP;
