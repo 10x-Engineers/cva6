@@ -121,7 +121,8 @@ module issue_read_operands
     input logic [CVA6Cfg.NrCommitPorts-1:0] we_fpr_i,
 
     // Issue stall - PERF_COUNTERS
-    output logic stall_issue_o
+    output logic stall_issue_o,
+    output logic [5:0] orig_instr_aes_bits
 );
 
   localparam OPERANDS_PER_INSTR = CVA6Cfg.NrRgprPorts / CVA6Cfg.NrIssuePorts;
@@ -1145,6 +1146,9 @@ module issue_read_operands
       x_transaction_rejected_o <= 1'b0;
     end else begin
       fu_data_q <= fu_data_n;
+      if (CVA6Cfg.ZKN) begin
+          orig_instr_aes_bits <= {orig_instr_i[0][31:30], orig_instr_i[0][23:20]};
+      end
       if (CVA6Cfg.RVH) begin
         tinst_q <= tinst_n;
       end

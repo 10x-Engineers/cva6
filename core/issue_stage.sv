@@ -157,7 +157,8 @@ module issue_stage
     // Information dedicated to RVFI - RVFI
     output logic [CVA6Cfg.NrIssuePorts-1:0][CVA6Cfg.TRANS_ID_BITS-1:0] rvfi_issue_pointer_o,
     // Information dedicated to RVFI - RVFI
-    output logic [CVA6Cfg.NrCommitPorts-1:0][CVA6Cfg.TRANS_ID_BITS-1:0] rvfi_commit_pointer_o
+    output logic [CVA6Cfg.NrCommitPorts-1:0][CVA6Cfg.TRANS_ID_BITS-1:0] rvfi_commit_pointer_o,
+    output logic [5:0] orig_instr_aes_bits
 );
   // ---------------------------------------------------
   // Scoreboard (SB) <-> Issue and Read Operands (IRO)
@@ -299,7 +300,8 @@ module issue_stage
       .wdata_i,
       .we_gpr_i,
       .we_fpr_i,
-      .stall_issue_o
+      .stall_issue_o,
+      .orig_instr_aes_bits(orig_instr_aes_bits)
   );
 
 endmodule
