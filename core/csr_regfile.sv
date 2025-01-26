@@ -299,6 +299,7 @@ module csr_regfile
 
   riscv::fcsr_t fcsr_q, fcsr_d;
   riscv::jvt_t jvt_q, jvt_d;
+  //jvt_t jvt_q, jvt_d;
   // ----------------
   // Assignments
   // ----------------

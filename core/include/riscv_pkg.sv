@@ -863,7 +863,7 @@ package riscv;
     priv_lvl_t    prv;
   } dcsr_t;
 
-  //jvt struct
+    //jvt struct
   parameter JVT_ADDR_WIDTH = XLEN - 6;
   typedef struct packed {
     logic [JVT_ADDR_WIDTH-1:0] base;
