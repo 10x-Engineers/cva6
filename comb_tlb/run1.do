@@ -1,0 +1,2 @@
+vcs -sverilog -timescale=1ns/1ns -ntb_opts uvm-1.2 +incdir+/home/user101/docker/OpenHW/MMU_verif/comb_tlb/mmu_sv32/ +incdir+/home/user101/docker/OpenHW/MMU_verif/comb_tlb/shared_tlb/ +incdir+/home/user101/docker/OpenHW/MMU_verif/comb_tlb/tlb/ ./tb_top.sv
+./simv

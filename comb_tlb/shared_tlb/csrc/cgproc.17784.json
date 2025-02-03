@@ -1,0 +1,148 @@
+{
+    "Modules": {
+        "...MASTER...": {},
+        "ariane_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "_vcs_DPI_package": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "vcs_paramclassrepository": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "_vcs_unit__2820273989": {
+            "Compiled": "Yes",
+            "Compiled Times": 2
+        },
+        "_vcs_msglog": {
+            "Compiled": "Yes",
+            "Compiled Times": 2
+        },
+        "std": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "top": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "uvm_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "uvm_custom_install_recording": {
+            "Compiled": "Yes",
+            "Compiled Times": 2
+        },
+        "cva6_shared_tlb_sv32_0000": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "uvm_custom_install_verdi_recording": {
+            "Compiled": "Yes",
+            "Compiled Times": 2
+        },
+        "shared_tlb_if": {
+            "Compiled": "Yes",
+            "Compiled Times": 5
+        },
+        "cf_math_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "config_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "cva6_config_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "riscv": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        },
+        "tc_sram_wrapper": {
+            "Compiled": "Yes",
+            "Compiled Times": 63
+        }
+    },
+    "reusePaths": {
+        "EbjT3_d": {
+            "icPath": "csrc"
+        },
+        "zQBzV_d": {
+            "icPath": "csrc"
+        },
+        "SWIMm_d": {
+            "icPath": "csrc"
+        },
+        "amcQw_d": {
+            "icPath": "csrc"
+        },
+        "nhiwz_d": {
+            "icPath": "csrc"
+        },
+        "reYIK_d": {
+            "icPath": "csrc"
+        },
+        "QJsi0_d": {
+            "icPath": "csrc"
+        },
+        "hEeZs_d": {
+            "icPath": "csrc"
+        },
+        "uM9F1_d": {
+            "icPath": "csrc"
+        },
+        "eEMMZ_d": {
+            "icPath": "csrc"
+        },
+        "zr7M1_d": {
+            "icPath": "csrc"
+        },
+        "nUQt0_d": {
+            "icPath": "csrc"
+        },
+        "FtHG5_d": {
+            "icPath": "csrc"
+        },
+        "a0W5G_d": {
+            "icPath": "csrc"
+        },
+        "N2nk1_d": {
+            "icPath": "csrc"
+        },
+        "Bhhjs_d": {
+            "icPath": "csrc"
+        },
+        "Emx8S_d": {
+            "icPath": "csrc"
+        }
+    },
+    "CompUnits": {
+        "K6ikZ_d": {
+            "mod": "_vcs_unit__2820273989",
+            "out": "K6ikZ_d.o",
+            "bytes": 1201662,
+            "mode": 4,
+            "checksum": 0,
+            "archive": "archive.62/_17784_archive_1.a"
+        }
+    },
+    "ObjArchives": [
+        {
+            "size": 1201662,
+            "archive": "archive.62/_17784_archive_1.a",
+            "objects": [
+                [
+                    "K6ikZ_d.o",
+                    1201662
+                ]
+            ]
+        }
+    ]
+}

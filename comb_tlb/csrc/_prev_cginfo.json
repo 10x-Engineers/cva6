@@ -1,0 +1,416 @@
+{
+    "PEModules": [],
+    "PrevCompiledModules": {
+        "uvm_custom_install_recording": {
+            "nhiwz_d": {
+                "bytes": 26636,
+                "mod": "uvm_custom_install_recording",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "nhiwz_d.o"
+            }
+        },
+        "riscv": {
+            "FtHG5_d": {
+                "bytes": 75756,
+                "mod": "riscv",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "FtHG5_d.o"
+            }
+        },
+        "tlb_if": {
+            "T7FQ7_d": {
+                "bytes": 38871,
+                "mod": "tlb_if",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "T7FQ7_d.o"
+            }
+        },
+        "vcs_paramclassrepository": {
+            "hEeZs_d": {
+                "bytes": 7165505,
+                "mod": "vcs_paramclassrepository",
+                "out": "hEeZs_d.o",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_4079_archive_1.a"
+            }
+        },
+        "cva6_shared_tlb_sv32_0000": {
+            "a0W5G_d": {
+                "bytes": 154010,
+                "mod": "cva6_shared_tlb_sv32_0000",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "a0W5G_d.o"
+            }
+        },
+        "config_pkg": {
+            "nUQt0_d": {
+                "bytes": 41634,
+                "mod": "config_pkg",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "nUQt0_d.o"
+            }
+        },
+        "cf_math_pkg": {
+            "N2nk1_d": {
+                "bytes": 12354,
+                "mod": "cf_math_pkg",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "N2nk1_d.o"
+            }
+        },
+        "_vcs_DPI_package": {
+            "uM9F1_d": {
+                "bytes": 16325,
+                "mod": "_vcs_DPI_package",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "uM9F1_d.o"
+            }
+        },
+        "uvm_pkg": {
+            "zr7M1_d": {
+                "bytes": 6924922,
+                "mod": "uvm_pkg",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "zr7M1_d.o"
+            }
+        },
+        "_vcs_unit__2052839234": {
+            "R0N9w_d": {
+                "bytes": 1257197,
+                "mod": "_vcs_unit__2052839234",
+                "out": "R0N9w_d.o",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_4079_archive_1.a"
+            }
+        },
+        "top": {
+            "Emx8S_d": {
+                "bytes": 21385,
+                "mod": "top",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "Emx8S_d.o"
+            }
+        },
+        "uvm_custom_install_verdi_recording": {
+            "EbjT3_d": {
+                "bytes": 186465,
+                "mod": "uvm_custom_install_verdi_recording",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "EbjT3_d.o"
+            }
+        },
+        "shared_tlb_if": {
+            "SWIMm_d": {
+                "bytes": 53515,
+                "mod": "shared_tlb_if",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "SWIMm_d.o"
+            }
+        },
+        "std": {
+            "reYIK_d": {
+                "bytes": 42621,
+                "mod": "std",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "reYIK_d.o"
+            }
+        },
+        "_vcs_msglog": {
+            "zQBzV_d": {
+                "bytes": 10301,
+                "mod": "_vcs_msglog",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "zQBzV_d.o"
+            }
+        },
+        "cva6_config_pkg": {
+            "QJsi0_d": {
+                "bytes": 8174,
+                "mod": "cva6_config_pkg",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "QJsi0_d.o"
+            }
+        },
+        "tc_sram_wrapper": {
+            "Bhhjs_d": {
+                "bytes": 56381,
+                "mod": "tc_sram_wrapper",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "Bhhjs_d.o"
+            }
+        },
+        "...MASTER...": {
+            "amcQw_d": {
+                "bytes": 9656,
+                "mod": "...MASTER...",
+                "mode": 4,
+                "checksum": 0,
+                "out": "objs/amcQw_d.o"
+            }
+        },
+        "comb_tlb_if": {
+            "HR983_d": {
+                "bytes": 18717,
+                "mod": "comb_tlb_if",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "HR983_d.o"
+            }
+        },
+        "cva6_tlb_sv32": {
+            "bhirm_d": {
+                "bytes": 57954,
+                "mod": "cva6_tlb_sv32",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "bhirm_d.o"
+            }
+        },
+        "ariane_pkg": {
+            "eEMMZ_d": {
+                "bytes": 65693,
+                "mod": "ariane_pkg",
+                "mode": 4,
+                "checksum": 0,
+                "archive": "archive.98/_prev_archive_1.a",
+                "out": "eEMMZ_d.o"
+            }
+        }
+    },
+    "CurCompileModules": [
+        "...MASTER...",
+        "vcs_paramclassrepository",
+        "vcs_paramclassrepository",
+        "_vcs_DPI_package",
+        "_vcs_unit__2052839234",
+        "_vcs_unit__2052839234",
+        "std",
+        "uvm_pkg",
+        "_vcs_msglog",
+        "uvm_custom_install_recording",
+        "uvm_custom_install_verdi_recording",
+        "config_pkg",
+        "cva6_config_pkg",
+        "riscv",
+        "ariane_pkg",
+        "cf_math_pkg",
+        "tlb_if",
+        "shared_tlb_if",
+        "comb_tlb_if",
+        "cva6_tlb_sv32",
+        "tc_sram_wrapper",
+        "cva6_shared_tlb_sv32_0000",
+        "top"
+    ],
+    "MlibObjs": {},
+    "NameTable": {
+        "cf_math_pkg": [
+            "cf_math_pkg",
+            "N2nk1",
+            "module"
+        ],
+        "uvm_pkg": [
+            "uvm_pkg",
+            "zr7M1",
+            "module"
+        ],
+        "_vcs_DPI_package": [
+            "_vcs_DPI_package",
+            "uM9F1",
+            "module"
+        ],
+        "config_pkg": [
+            "config_pkg",
+            "nUQt0",
+            "module"
+        ],
+        "cva6_shared_tlb_sv32_0000": [
+            "cva6_shared_tlb_sv32_0000",
+            "a0W5G",
+            "module"
+        ],
+        "vcs_paramclassrepository": [
+            "vcs_paramclassrepository",
+            "hEeZs",
+            "module"
+        ],
+        "uvm_custom_install_verdi_recording": [
+            "uvm_custom_install_verdi_recording",
+            "EbjT3",
+            "module"
+        ],
+        "_vcs_unit__2052839234": [
+            "_vcs_unit__2052839234",
+            "R0N9w",
+            "module"
+        ],
+        "shared_tlb_if": [
+            "shared_tlb_if",
+            "SWIMm",
+            "module"
+        ],
+        "std": [
+            "std",
+            "reYIK",
+            "module"
+        ],
+        "_vcs_msglog": [
+            "_vcs_msglog",
+            "zQBzV",
+            "module"
+        ],
+        "riscv": [
+            "riscv",
+            "FtHG5",
+            "module"
+        ],
+        "tlb_if": [
+            "tlb_if",
+            "T7FQ7",
+            "module"
+        ],
+        "uvm_custom_install_recording": [
+            "uvm_custom_install_recording",
+            "nhiwz",
+            "module"
+        ],
+        "cva6_config_pkg": [
+            "cva6_config_pkg",
+            "QJsi0",
+            "module"
+        ],
+        "ariane_pkg": [
+            "ariane_pkg",
+            "eEMMZ",
+            "module"
+        ],
+        "comb_tlb_if": [
+            "comb_tlb_if",
+            "HR983",
+            "module"
+        ],
+        "cva6_tlb_sv32": [
+            "cva6_tlb_sv32",
+            "bhirm",
+            "module"
+        ],
+        "tc_sram_wrapper": [
+            "tc_sram_wrapper",
+            "Bhhjs",
+            "module"
+        ],
+        "top": [
+            "top",
+            "Emx8S",
+            "module"
+        ],
+        "...MASTER...": [
+            "SIM",
+            "amcQw",
+            "module"
+        ]
+    },
+    "Misc": {
+        "daidir_abs": "/home/user1/docker/OpenHW/cva6_work/MMU_verif/comb_tlb/simv.daidir",
+        "cwd": "/home/user1/docker/OpenHW/cva6_work/MMU_verif/comb_tlb",
+        "csrc": "csrc",
+        "archive_dir": "archive.98",
+        "csrc_abs": "/home/user1/docker/OpenHW/cva6_work/MMU_verif/comb_tlb/csrc",
+        "default_output_dir": "csrc",
+        "daidir": "simv.daidir"
+    },
+    "CompileStrategy": "fullobj",
+    "stat": {
+        "mop/quad": 3.0683353692153026,
+        "ru_self_cgstart": {
+            "ru_utime_sec": 3.3008679999999999,
+            "ru_stime_sec": 0.047896000000000001,
+            "ru_nvcsw": 26,
+            "ru_maxrss_kb": 165940,
+            "ru_minflt": 36389,
+            "ru_majflt": 0,
+            "ru_nivcsw": 33
+        },
+        "nQuads": 185014,
+        "ru_childs_cgstart": {
+            "ru_utime_sec": 0.0091959999999999993,
+            "ru_stime_sec": 0.0037750000000000001,
+            "ru_nvcsw": 4,
+            "ru_maxrss_kb": 65168,
+            "ru_minflt": 850,
+            "ru_majflt": 0,
+            "ru_nivcsw": 0
+        },
+        "nMops": 567685,
+        "ru_self_end": {
+            "ru_utime_sec": 5.3306380000000004,
+            "ru_stime_sec": 0.099899000000000002,
+            "ru_nvcsw": 27,
+            "ru_maxrss_kb": 172680,
+            "ru_minflt": 53142,
+            "ru_majflt": 0,
+            "ru_nivcsw": 41
+        },
+        "totalObjSize": 8835957,
+        "ru_childs_end": {
+            "ru_utime_sec": 0.0091959999999999993,
+            "ru_stime_sec": 0.0074349999999999998,
+            "ru_nvcsw": 5,
+            "ru_maxrss_kb": 85952,
+            "ru_minflt": 1091,
+            "ru_majflt": 0,
+            "ru_nivcsw": 0
+        },
+        "mopSpeed": 279679.47107307718,
+        "quadSpeed": 91150.228843662073,
+        "outputSizePerQuad": 47.0,
+        "Frontend(%)": 61.922569118368187,
+        "CodeGen(%)": 38.077430881631813
+    },
+    "CurCompileUdps": {},
+    "CompileProcesses": [
+        "cgproc.4079.json"
+    ],
+    "SIMBData": {
+        "out": "amcQwB.o",
+        "bytes": 412337
+    },
+    "CompileStatus": "Successful",
+    "LVLData": [
+        "SIM"
+    ]
+}

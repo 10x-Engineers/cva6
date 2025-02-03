@@ -1,0 +1,148 @@
+{
+    "Modules": {
+        "...MASTER...": {},
+        "uvm_custom_install_recording": {
+            "Compiled": "Yes",
+            "Compiled Times": 100
+        },
+        "vcs_paramclassrepository": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "top": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "_vcs_DPI_package": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "cf_math_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "tlb_if": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "_vcs_unit__3902653829": {
+            "Compiled": "Yes",
+            "Compiled Times": 100
+        },
+        "_vcs_msglog": {
+            "Compiled": "Yes",
+            "Compiled Times": 100
+        },
+        "uvm_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "tc_sram_wrapper": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "std": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "riscv": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "uvm_custom_install_verdi_recording": {
+            "Compiled": "Yes",
+            "Compiled Times": 100
+        },
+        "config_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "cva6_config_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "ariane_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        },
+        "cva6_shared_tlb_sv32_0000": {
+            "Compiled": "Yes",
+            "Compiled Times": 105
+        }
+    },
+    "CompUnits": {
+        "zr7M1_d": {
+            "out": "zr7M1_d.o",
+            "mod": "uvm_pkg",
+            "bytes": 6926584,
+            "mode": 4,
+            "checksum": 0,
+            "archive": "archive.104/_76310_archive_1.a"
+        }
+    },
+    "reusePaths": {
+        "EbjT3_d": {
+            "icPath": "csrc"
+        },
+        "amcQw_d": {
+            "icPath": "csrc"
+        },
+        "hEeZs_d": {
+            "icPath": "csrc"
+        },
+        "QJsi0_d": {
+            "icPath": "csrc"
+        },
+        "zQBzV_d": {
+            "icPath": "csrc"
+        },
+        "uM9F1_d": {
+            "icPath": "csrc"
+        },
+        "FtHG5_d": {
+            "icPath": "csrc"
+        },
+        "a0W5G_d": {
+            "icPath": "csrc"
+        },
+        "mDaMS_d": {
+            "icPath": "csrc"
+        },
+        "reYIK_d": {
+            "icPath": "csrc"
+        },
+        "nhiwz_d": {
+            "icPath": "csrc"
+        },
+        "nUQt0_d": {
+            "icPath": "csrc"
+        },
+        "eEMMZ_d": {
+            "icPath": "csrc"
+        },
+        "T7FQ7_d": {
+            "icPath": "csrc"
+        },
+        "N2nk1_d": {
+            "icPath": "csrc"
+        },
+        "Bhhjs_d": {
+            "icPath": "csrc"
+        },
+        "Emx8S_d": {
+            "icPath": "csrc"
+        }
+    },
+    "ObjArchives": [
+        {
+            "archive": "archive.104/_76310_archive_1.a",
+            "objects": [
+                [
+                    "zr7M1_d.o",
+                    6926584
+                ]
+            ],
+            "size": 6926584
+        }
+    ]
+}

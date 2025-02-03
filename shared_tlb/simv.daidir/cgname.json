@@ -1,0 +1,92 @@
+{
+    "top": [
+        "top",
+        "Emx8S",
+        "module"
+    ],
+    "_vcs_DPI_package": [
+        "_vcs_DPI_package",
+        "uM9F1",
+        "module"
+    ],
+    "cf_math_pkg": [
+        "cf_math_pkg",
+        "N2nk1",
+        "module"
+    ],
+    "uvm_custom_install_recording": [
+        "uvm_custom_install_recording",
+        "nhiwz",
+        "module"
+    ],
+    "vcs_paramclassrepository": [
+        "vcs_paramclassrepository",
+        "hEeZs",
+        "module"
+    ],
+    "tlb_if": [
+        "tlb_if",
+        "T7FQ7",
+        "module"
+    ],
+    "_vcs_unit__3902653829": [
+        "_vcs_unit__3902653829",
+        "mDaMS",
+        "module"
+    ],
+    "_vcs_msglog": [
+        "_vcs_msglog",
+        "zQBzV",
+        "module"
+    ],
+    "uvm_pkg": [
+        "uvm_pkg",
+        "zr7M1",
+        "module"
+    ],
+    "tc_sram_wrapper": [
+        "tc_sram_wrapper",
+        "Bhhjs",
+        "module"
+    ],
+    "std": [
+        "std",
+        "reYIK",
+        "module"
+    ],
+    "riscv": [
+        "riscv",
+        "FtHG5",
+        "module"
+    ],
+    "uvm_custom_install_verdi_recording": [
+        "uvm_custom_install_verdi_recording",
+        "EbjT3",
+        "module"
+    ],
+    "config_pkg": [
+        "config_pkg",
+        "nUQt0",
+        "module"
+    ],
+    "cva6_config_pkg": [
+        "cva6_config_pkg",
+        "QJsi0",
+        "module"
+    ],
+    "ariane_pkg": [
+        "ariane_pkg",
+        "eEMMZ",
+        "module"
+    ],
+    "cva6_shared_tlb_sv32_0000": [
+        "cva6_shared_tlb_sv32_0000",
+        "a0W5G",
+        "module"
+    ],
+    "...MASTER...": [
+        "SIM",
+        "amcQw",
+        "module"
+    ]
+}

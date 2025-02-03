@@ -1,0 +1,92 @@
+{
+    "riscv": [
+        "riscv",
+        "FtHG5",
+        "module"
+    ],
+    "uvm_custom_install_recording": [
+        "uvm_custom_install_recording",
+        "nhiwz",
+        "module"
+    ],
+    "_vcs_DPI_package": [
+        "_vcs_DPI_package",
+        "uM9F1",
+        "module"
+    ],
+    "vcs_paramclassrepository": [
+        "vcs_paramclassrepository",
+        "hEeZs",
+        "module"
+    ],
+    "uvm_pkg": [
+        "uvm_pkg",
+        "zr7M1",
+        "module"
+    ],
+    "_vcs_unit__962038255": [
+        "_vcs_unit__962038255",
+        "vu6hd",
+        "module"
+    ],
+    "uvm_custom_install_verdi_recording": [
+        "uvm_custom_install_verdi_recording",
+        "EbjT3",
+        "module"
+    ],
+    "std": [
+        "std",
+        "reYIK",
+        "module"
+    ],
+    "_vcs_msglog": [
+        "_vcs_msglog",
+        "zQBzV",
+        "module"
+    ],
+    "cf_math_pkg": [
+        "cf_math_pkg",
+        "N2nk1",
+        "module"
+    ],
+    "config_pkg": [
+        "config_pkg",
+        "nUQt0",
+        "module"
+    ],
+    "cva6_config_pkg": [
+        "cva6_config_pkg",
+        "QJsi0",
+        "module"
+    ],
+    "cva6_ptw_sv32": [
+        "cva6_ptw_sv32",
+        "xSmxu",
+        "module"
+    ],
+    "ariane_pkg": [
+        "ariane_pkg",
+        "eEMMZ",
+        "module"
+    ],
+    "pmp_entry": [
+        "pmp_entry",
+        "txmdp",
+        "module"
+    ],
+    "tlb_if": [
+        "tlb_if",
+        "T7FQ7",
+        "module"
+    ],
+    "top": [
+        "top",
+        "Emx8S",
+        "module"
+    ],
+    "...MASTER...": [
+        "SIM",
+        "amcQw",
+        "module"
+    ]
+}

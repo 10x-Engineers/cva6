@@ -1,0 +1,183 @@
+{
+    "Modules": {
+        "tc_sram_wrapper": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "...MASTER...": {},
+        "cva6_config_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "_vcs_msglog": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "_vcs_unit__2380028462": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "vcs_paramclassrepository": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "cf_math_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "_vcs_DPI_package": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "std": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "uvm_custom_install_recording": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "uvm_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "sram_0000": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "cva6_tlb_sv32": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "uvm_custom_install_verdi_recording": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "config_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "riscv": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "ariane_pkg": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "sram_0001": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "cva6_ptw_sv32": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "pmp_0000": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "cva6_mmu_sv32": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "mmu_if": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        },
+        "top": {
+            "Compiled": "Yes",
+            "Compiled Times": 4
+        }
+    },
+    "CompUnits": {
+        "hEeZs_d": {
+            "mod": "vcs_paramclassrepository",
+            "out": "hEeZs_d.o",
+            "archive": "archive.3/_16823_archive_1.a",
+            "bytes": 9539142,
+            "mode": 4,
+            "checksum": 0
+        }
+    },
+    "reusePaths": {
+        "bhirm_d": {
+            "icPath": "csrc"
+        },
+        "TB3sc_d": {
+            "icPath": "csrc"
+        },
+        "FtHG5_d": {
+            "icPath": "csrc"
+        },
+        "amcQw_d": {
+            "icPath": "csrc"
+        },
+        "GDkZ9_d": {
+            "icPath": "csrc"
+        },
+        "uM9F1_d": {
+            "icPath": "csrc"
+        },
+        "xSmxu_d": {
+            "icPath": "csrc"
+        },
+        "reYIK_d": {
+            "icPath": "csrc"
+        },
+        "zr7M1_d": {
+            "icPath": "csrc"
+        },
+        "eEMMZ_d": {
+            "icPath": "csrc"
+        },
+        "zQBzV_d": {
+            "icPath": "csrc"
+        },
+        "A9d3r_d": {
+            "icPath": "csrc"
+        },
+        "nUQt0_d": {
+            "icPath": "csrc"
+        },
+        "EbjT3_d": {
+            "icPath": "csrc"
+        },
+        "N2nk1_d": {
+            "icPath": "csrc"
+        },
+        "Hvdub_d": {
+            "icPath": "csrc"
+        },
+        "nhiwz_d": {
+            "icPath": "csrc"
+        },
+        "QJsi0_d": {
+            "icPath": "csrc"
+        },
+        "jJA5K_d": {
+            "icPath": "csrc"
+        },
+        "hIm27_d": {
+            "icPath": "csrc"
+        },
+        "Bhhjs_d": {
+            "icPath": "csrc"
+        },
+        "Emx8S_d": {
+            "icPath": "csrc"
+        }
+    },
+    "ObjArchives": [
+        {
+            "archive": "archive.3/_16823_archive_1.a",
+            "objects": [
+                [
+                    "hEeZs_d.o",
+                    9539142
+                ]
+            ],
+            "size": 9539142
+        }
+    ]
+}

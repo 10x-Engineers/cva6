@@ -1,3 +1,0 @@
-[[csrs]]
-
-include::csr/csr.adoc[]

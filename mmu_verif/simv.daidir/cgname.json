@@ -1,0 +1,117 @@
+{
+    "_vcs_DPI_package": [
+        "_vcs_DPI_package",
+        "uM9F1",
+        "module"
+    ],
+    "vcs_paramclassrepository": [
+        "vcs_paramclassrepository",
+        "hEeZs",
+        "module"
+    ],
+    "cf_math_pkg": [
+        "cf_math_pkg",
+        "N2nk1",
+        "module"
+    ],
+    "...MASTER...": [
+        "SIM",
+        "amcQw",
+        "module"
+    ],
+    "tc_sram_wrapper": [
+        "tc_sram_wrapper",
+        "Bhhjs",
+        "module"
+    ],
+    "cva6_config_pkg": [
+        "cva6_config_pkg",
+        "QJsi0",
+        "module"
+    ],
+    "_vcs_msglog": [
+        "_vcs_msglog",
+        "zQBzV",
+        "module"
+    ],
+    "_vcs_unit__2380028462": [
+        "_vcs_unit__2380028462",
+        "TB3sc",
+        "module"
+    ],
+    "std": [
+        "std",
+        "reYIK",
+        "module"
+    ],
+    "uvm_custom_install_recording": [
+        "uvm_custom_install_recording",
+        "nhiwz",
+        "module"
+    ],
+    "uvm_pkg": [
+        "uvm_pkg",
+        "zr7M1",
+        "module"
+    ],
+    "sram_0000": [
+        "sram_0000",
+        "jJA5K",
+        "module"
+    ],
+    "cva6_tlb_sv32": [
+        "cva6_tlb_sv32",
+        "bhirm",
+        "module"
+    ],
+    "uvm_custom_install_verdi_recording": [
+        "uvm_custom_install_verdi_recording",
+        "EbjT3",
+        "module"
+    ],
+    "config_pkg": [
+        "config_pkg",
+        "nUQt0",
+        "module"
+    ],
+    "sram_0001": [
+        "sram_0001",
+        "GDkZ9",
+        "module"
+    ],
+    "riscv": [
+        "riscv",
+        "FtHG5",
+        "module"
+    ],
+    "ariane_pkg": [
+        "ariane_pkg",
+        "eEMMZ",
+        "module"
+    ],
+    "cva6_ptw_sv32": [
+        "cva6_ptw_sv32",
+        "xSmxu",
+        "module"
+    ],
+    "pmp_0000": [
+        "pmp_0000",
+        "Hvdub",
+        "module"
+    ],
+    "cva6_mmu_sv32": [
+        "cva6_mmu_sv32",
+        "A9d3r",
+        "module"
+    ],
+    "mmu_if": [
+        "mmu_if",
+        "hIm27",
+        "module"
+    ],
+    "top": [
+        "top",
+        "Emx8S",
+        "module"
+    ]
+}

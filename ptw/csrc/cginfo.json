@@ -1,0 +1,366 @@
+{
+    "CompileStatus": "Successful",
+    "NameTable": {
+        "riscv": [
+            "riscv",
+            "FtHG5",
+            "module"
+        ],
+        "uvm_custom_install_recording": [
+            "uvm_custom_install_recording",
+            "nhiwz",
+            "module"
+        ],
+        "_vcs_DPI_package": [
+            "_vcs_DPI_package",
+            "uM9F1",
+            "module"
+        ],
+        "vcs_paramclassrepository": [
+            "vcs_paramclassrepository",
+            "hEeZs",
+            "module"
+        ],
+        "uvm_pkg": [
+            "uvm_pkg",
+            "zr7M1",
+            "module"
+        ],
+        "_vcs_unit__962038255": [
+            "_vcs_unit__962038255",
+            "vu6hd",
+            "module"
+        ],
+        "uvm_custom_install_verdi_recording": [
+            "uvm_custom_install_verdi_recording",
+            "EbjT3",
+            "module"
+        ],
+        "std": [
+            "std",
+            "reYIK",
+            "module"
+        ],
+        "_vcs_msglog": [
+            "_vcs_msglog",
+            "zQBzV",
+            "module"
+        ],
+        "cf_math_pkg": [
+            "cf_math_pkg",
+            "N2nk1",
+            "module"
+        ],
+        "config_pkg": [
+            "config_pkg",
+            "nUQt0",
+            "module"
+        ],
+        "cva6_config_pkg": [
+            "cva6_config_pkg",
+            "QJsi0",
+            "module"
+        ],
+        "cva6_ptw_sv32": [
+            "cva6_ptw_sv32",
+            "xSmxu",
+            "module"
+        ],
+        "ariane_pkg": [
+            "ariane_pkg",
+            "eEMMZ",
+            "module"
+        ],
+        "pmp_entry": [
+            "pmp_entry",
+            "txmdp",
+            "module"
+        ],
+        "tlb_if": [
+            "tlb_if",
+            "T7FQ7",
+            "module"
+        ],
+        "top": [
+            "top",
+            "Emx8S",
+            "module"
+        ],
+        "...MASTER...": [
+            "SIM",
+            "amcQw",
+            "module"
+        ]
+    },
+    "MlibObjs": {},
+    "CompileProcesses": [
+        "cgproc.736.json"
+    ],
+    "PrevCompiledModules": {
+        "config_pkg": {
+            "nUQt0_d": {
+                "bytes": 41570,
+                "mod": "config_pkg",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "nUQt0_d.o"
+            }
+        },
+        "pmp_entry": {
+            "txmdp_d": {
+                "bytes": 133381,
+                "mod": "pmp_entry",
+                "out": "txmdp_d.o",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4
+            }
+        },
+        "tlb_if": {
+            "T7FQ7_d": {
+                "bytes": 126913,
+                "mod": "tlb_if",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "T7FQ7_d.o"
+            }
+        },
+        "cf_math_pkg": {
+            "N2nk1_d": {
+                "bytes": 12346,
+                "mod": "cf_math_pkg",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "N2nk1_d.o"
+            }
+        },
+        "_vcs_msglog": {
+            "zQBzV_d": {
+                "bytes": 10293,
+                "mod": "_vcs_msglog",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "zQBzV_d.o"
+            }
+        },
+        "top": {
+            "Emx8S_d": {
+                "bytes": 17813,
+                "mod": "top",
+                "out": "Emx8S_d.o",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4
+            }
+        },
+        "uvm_pkg": {
+            "zr7M1_d": {
+                "bytes": 6924908,
+                "mod": "uvm_pkg",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "zr7M1_d.o"
+            }
+        },
+        "std": {
+            "reYIK_d": {
+                "bytes": 42613,
+                "mod": "std",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "reYIK_d.o"
+            }
+        },
+        "...MASTER...": {
+            "amcQw_d": {
+                "bytes": 9648,
+                "mod": "...MASTER...",
+                "out": "objs/amcQw_d.o",
+                "checksum": 0,
+                "mode": 4
+            }
+        },
+        "uvm_custom_install_verdi_recording": {
+            "EbjT3_d": {
+                "bytes": 186443,
+                "mod": "uvm_custom_install_verdi_recording",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "EbjT3_d.o"
+            }
+        },
+        "vcs_paramclassrepository": {
+            "hEeZs_d": {
+                "bytes": 6476773,
+                "mod": "vcs_paramclassrepository",
+                "out": "hEeZs_d.o",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4
+            }
+        },
+        "uvm_custom_install_recording": {
+            "nhiwz_d": {
+                "bytes": 26625,
+                "mod": "uvm_custom_install_recording",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "nhiwz_d.o"
+            }
+        },
+        "riscv": {
+            "FtHG5_d": {
+                "bytes": 75748,
+                "mod": "riscv",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "FtHG5_d.o"
+            }
+        },
+        "cva6_ptw_sv32": {
+            "xSmxu_d": {
+                "bytes": 74054,
+                "mod": "cva6_ptw_sv32",
+                "out": "xSmxu_d.o",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4
+            }
+        },
+        "cva6_config_pkg": {
+            "QJsi0_d": {
+                "bytes": 8166,
+                "mod": "cva6_config_pkg",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "QJsi0_d.o"
+            }
+        },
+        "_vcs_DPI_package": {
+            "uM9F1_d": {
+                "bytes": 16325,
+                "mod": "_vcs_DPI_package",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "uM9F1_d.o"
+            }
+        },
+        "_vcs_unit__962038255": {
+            "vu6hd_d": {
+                "bytes": 1180274,
+                "mod": "_vcs_unit__962038255",
+                "out": "vu6hd_d.o",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4
+            }
+        },
+        "ariane_pkg": {
+            "eEMMZ_d": {
+                "bytes": 65661,
+                "mod": "ariane_pkg",
+                "archive": "archive.73/_prev_archive_1.a",
+                "checksum": 0,
+                "mode": 4,
+                "out": "eEMMZ_d.o"
+            }
+        }
+    },
+    "CompileStrategy": "fullobj",
+    "PEModules": [],
+    "stat": {
+        "ru_self_cgstart": {
+            "ru_stime_sec": 0.13150999999999999,
+            "ru_utime_sec": 3.1562600000000001,
+            "ru_maxrss_kb": 161504,
+            "ru_majflt": 414,
+            "ru_minflt": 34874,
+            "ru_nvcsw": 560,
+            "ru_nivcsw": 101
+        },
+        "ru_childs_cgstart": {
+            "ru_stime_sec": 0.012775,
+            "ru_utime_sec": 0.0,
+            "ru_maxrss_kb": 62864,
+            "ru_majflt": 0,
+            "ru_minflt": 846,
+            "ru_nvcsw": 5,
+            "ru_nivcsw": 1
+        },
+        "nMops": 457607,
+        "mopSpeed": 600295.42058735201,
+        "CodeGen(%)": 19.453636447850901,
+        "mop/quad": 3.1267560402317698,
+        "nQuads": 146352,
+        "ru_childs_end": {
+            "ru_stime_sec": 0.012775,
+            "ru_utime_sec": 0.0041920000000000004,
+            "ru_maxrss_kb": 82248,
+            "ru_majflt": 7,
+            "ru_minflt": 1082,
+            "ru_nvcsw": 12,
+            "ru_nivcsw": 1
+        },
+        "totalObjSize": 377659,
+        "ru_self_end": {
+            "ru_stime_sec": 0.15961500000000001,
+            "ru_utime_sec": 3.9185629999999998,
+            "ru_maxrss_kb": 162768,
+            "ru_majflt": 497,
+            "ru_minflt": 49395,
+            "ru_nvcsw": 626,
+            "ru_nivcsw": 113
+        },
+        "quadSpeed": 191986.65097736733,
+        "outputSizePerQuad": 2.0,
+        "Frontend(%)": 80.546363552149103
+    },
+    "CurCompileUdps": {},
+    "SIMBData": {
+        "out": "amcQwB.o",
+        "bytes": 377659
+    },
+    "CurCompileModules": [
+        "...MASTER...",
+        "vcs_paramclassrepository",
+        "_vcs_DPI_package",
+        "_vcs_unit__962038255",
+        "std",
+        "uvm_pkg",
+        "_vcs_msglog",
+        "uvm_custom_install_recording",
+        "uvm_custom_install_verdi_recording",
+        "config_pkg",
+        "cva6_config_pkg",
+        "riscv",
+        "ariane_pkg",
+        "tlb_if",
+        "cf_math_pkg",
+        "pmp_entry",
+        "cva6_ptw_sv32",
+        "top"
+    ],
+    "LVLData": [
+        "SIM"
+    ],
+    "Misc": {
+        "daidir_abs": "/home/user1/docker/OpenHW/cva6_work/MMU_verif/ptw/simv.daidir",
+        "daidir": "simv.daidir",
+        "cwd": "/home/user1/docker/OpenHW/cva6_work/MMU_verif/ptw",
+        "csrc": "csrc",
+        "csrc_abs": "/home/user1/docker/OpenHW/cva6_work/MMU_verif/ptw/csrc",
+        "archive_dir": "archive.73",
+        "default_output_dir": "csrc"
+    }
+}
