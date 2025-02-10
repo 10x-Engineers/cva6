@@ -301,7 +301,7 @@ module issue_stage
       .we_gpr_i,
       .we_fpr_i,
       .stall_issue_o,
-      .orig_instr_aes_bits(orig_instr_aes_bits)
+      .orig_instr_aes_bits     (orig_instr_aes_bits)
   );
 
 endmodule
