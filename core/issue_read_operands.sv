@@ -62,6 +62,8 @@ module issue_read_operands
     input logic flu_ready_i,
     // ALU output is valid - EX_STAGE
     output logic [CVA6Cfg.NrIssuePorts-1:0] alu_valid_o,
+    // AES output is valid - EX_STAGE
+    output logic [CVA6Cfg.NrIssuePorts-1:0] aes_valid_o,
     // Branch unit is valid - EX_STAGE
     output logic [CVA6Cfg.NrIssuePorts-1:0] branch_valid_o,
     // Transformed trap instruction - EX_STAGE
@@ -121,7 +123,8 @@ module issue_read_operands
     input logic [CVA6Cfg.NrCommitPorts-1:0] we_fpr_i,
 
     // Issue stall - PERF_COUNTERS
-    output logic stall_issue_o
+    output logic stall_issue_o,
+    output logic [5:0] orig_instr_aes_bits
 );
 
   localparam OPERANDS_PER_INSTR = CVA6Cfg.NrRgprPorts / CVA6Cfg.NrIssuePorts;
@@ -147,6 +150,7 @@ module issue_read_operands
   logic               [CVA6Cfg.XLEN-1:0] imm_forward_rs3;
 
   logic [CVA6Cfg.NrIssuePorts-1:0] alu_valid_n, alu_valid_q;
+  logic [CVA6Cfg.NrIssuePorts-1:0] aes_valid_n, aes_valid_q;
   logic [CVA6Cfg.NrIssuePorts-1:0] mult_valid_n, mult_valid_q;
   logic [CVA6Cfg.NrIssuePorts-1:0] fpu_valid_n, fpu_valid_q;
   logic [1:0] fpu_fmt_n, fpu_fmt_q;
@@ -256,6 +260,7 @@ module issue_read_operands
 
   assign fu_data_o = fu_data_q;
   assign alu_valid_o = alu_valid_q;
+  assign aes_valid_o = aes_valid_q;
   assign branch_valid_o = branch_valid_q;
   assign lsu_valid_o = lsu_valid_q;
   assign csr_valid_o = csr_valid_q;
@@ -781,6 +786,7 @@ module issue_read_operands
 
   always_comb begin
     alu_valid_n    = '0;
+    aes_valid_n    = '0;
     lsu_valid_n    = '0;
     mult_valid_n   = '0;
     fpu_valid_n    = '0;
@@ -811,6 +817,9 @@ module issue_read_operands
           CSR: begin
             csr_valid_n[i] = 1'b1;
           end
+          AES: begin
+            aes_valid_n[i] = 1'b1;
+          end
           default: begin
             if (issue_instr_i[i].fu == FPU && CVA6Cfg.FpPresent) begin
               fpu_valid_n[i] = 1'b1;
@@ -829,6 +838,7 @@ module issue_read_operands
     // functional unit with the wrong inputs
     if (flush_i) begin
       alu_valid_n    = '0;
+      aes_valid_n    = '0;
       lsu_valid_n    = '0;
       mult_valid_n   = '0;
       fpu_valid_n    = '0;
@@ -842,6 +852,7 @@ module issue_read_operands
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       alu_valid_q    <= '0;
+      aes_valid_q    <= '0;
       lsu_valid_q    <= '0;
       mult_valid_q   <= '0;
       fpu_valid_q    <= '0;
@@ -852,6 +863,7 @@ module issue_read_operands
       branch_valid_q <= '0;
     end else begin
       alu_valid_q    <= alu_valid_n;
+      aes_valid_q    <= aes_valid_n;
       lsu_valid_q    <= lsu_valid_n;
       mult_valid_q   <= mult_valid_n;
       fpu_valid_q    <= fpu_valid_n;
@@ -1145,6 +1157,9 @@ module issue_read_operands
       x_transaction_rejected_o <= 1'b0;
     end else begin
       fu_data_q <= fu_data_n;
+      if (CVA6Cfg.ZKN) begin
+        orig_instr_aes_bits <= {orig_instr_i[0][31:30], orig_instr_i[0][23:20]};
+      end
       if (CVA6Cfg.RVH) begin
         tinst_q <= tinst_n;
       end

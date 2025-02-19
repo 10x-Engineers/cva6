@@ -425,6 +425,8 @@ module cva6
   exception_t flu_exception_ex_id;
   // ALU
   logic [CVA6Cfg.NrIssuePorts-1:0] alu_valid_id_ex;
+  logic [5:0] orig_instr_aes;
+  logic [CVA6Cfg.NrIssuePorts-1:0] aes_valid_id_ex;
   // Branches and Jumps
   logic [CVA6Cfg.NrIssuePorts-1:0] branch_valid_id_ex;
 
@@ -823,6 +825,7 @@ module cva6
       .flu_ready_i             (flu_ready_ex_id),
       // ALU
       .alu_valid_o             (alu_valid_id_ex),
+      .aes_valid_o             (aes_valid_id_ex),
       // Branches and Jumps
       .branch_valid_o          (branch_valid_id_ex),            // branch is valid
       .branch_predict_o        (branch_predict_id_ex),          // branch predict to ex
@@ -879,7 +882,8 @@ module cva6
       .stall_issue_o        (stall_issue),
       //RVFI
       .rvfi_issue_pointer_o (rvfi_issue_pointer),
-      .rvfi_commit_pointer_o(rvfi_commit_pointer)
+      .rvfi_commit_pointer_o(rvfi_commit_pointer),
+      .orig_instr_aes_bits  (orig_instr_aes)
   );
 
   // ---------
@@ -918,6 +922,8 @@ module cva6
       .flu_ready_o(flu_ready_ex_id),
       // ALU
       .alu_valid_i(alu_valid_id_ex),
+      .orig_instr_aes_i(orig_instr_aes),
+      .aes_valid_i(aes_valid_id_ex),
       // Branches and Jumps
       .branch_valid_i(branch_valid_id_ex),
       .branch_predict_i(branch_predict_id_ex),  // branch predict to ex
