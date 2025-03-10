@@ -862,7 +862,25 @@ package riscv;
     logic         step;
     priv_lvl_t    prv;
   } dcsr_t;
-
+   // ------------
+ // Triggrt type
+ // ------------
+  typedef enum logic  [3:0] { 
+    none         = 4'h1,
+    icount       = 4'h3,
+    itrigger     = 4'h4,
+    etrigger     = 4'h5,
+    mcontrol6    = 4'h6,
+    disabletrig  = 4'hF
+ } trig_type;
+ ///// mask for warl work for 64/32 bits
+localparam logic [XLEN-1:0] mcontrol6_mask   = {4'b1111,1'b1,{XLEN-6-26{1'b0}},1'b1,1'b1,1'b1,1'b1,1'b1,1'b1,2'b00,3'b111,4'b1111,1'b1,4'b1111,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1,1'b1};
+localparam logic [XLEN-1:0] none_mask        = '0;
+localparam logic [XLEN-1:0] icount_mask      = {5'b11111,{ic_n{1'b0}},'1};
+localparam logic [XLEN-1:0] itrigger_mask    = {6'b111111,{XLEN-7-12{1'b0}},4'b1111,1'b0,{8{1'b1}}};
+localparam logic [XLEN-1:0] etrigger_mask    = {6'b11111,{XLEN-7-12{1'b0}},2'b11,1'b0,1'b1,1'b0,{8{1'b1}}}; 
+localparam logic [XLEN-1:0] disabletrig_mask = {5'b11111,{XLEN-5{1'b0}}};
+localparam logic [XLEN-1:0] tinfo_conts      = {{XLEN-16{1'b0}},16'b1};
   // Instruction Generation *incomplete*
   function automatic logic [31:0] jal(logic [4:0] rd, logic [20:0] imm);
     // OpCode Jal

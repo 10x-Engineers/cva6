@@ -225,6 +225,13 @@ module csr_regfile
   // privilege level register
   riscv::priv_lvl_t priv_lvl_d, priv_lvl_q;
   logic v_q, v_d;  // virtualization mode
+  // Adding sdtrig csrs
+  logic [CVA6Cfg.XLEN-1:0] tselect_d,tselect_q;
+  logic [trigger_n-1:0] [CVA6Cfg.XLEN-1:0] tdata1_q,tdata1_d;
+  logic [trigger_n-1:0] [CVA6Cfg.XLEN-1:0] tdata2_q ,tdata2_d;
+  logic [trigger_n-1:0] [CVA6Cfg.XLEN-1:0] tdata3_q,tdata3_d;
+  logic [trigger_n-1:0] [CVA6Cfg.XLEN-1:0] tinfo_q,tinfo_d;
+  riscv::trig_type  trig_type;
   // we are in debug
   logic debug_mode_q, debug_mode_d;
   logic mtvec_rst_load_q;  // used to determine whether we came out of reset
@@ -383,10 +390,21 @@ module csr_regfile
         if (CVA6Cfg.DebugEn) csr_rdata = dscratch1_q;
         else read_access_exception = 1'b1;
         // trigger module registers
-        riscv::CSR_TSELECT: read_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA1: read_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA2: read_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA3: read_access_exception = 1'b1;  // not implemented
+        riscv::CSR_TSELECT:             
+        if  (CVA6Cfg.SDTRIG) csr_rdata= tselect_q;
+        else  read_access_exception = 1'b1;
+        riscv::CSR_TDATA1:
+        if  (CVA6Cfg.SDTRIG) csr_rdata= tdata1_q[tselect_q[$clog2(trigger_n)-1:0]] ;
+        else read_access_exception = 1'b1;
+        riscv::CSR_TDATA2:  
+        if  (CVA6Cfg.SDTRIG)csr_rdata = tdata2_q[tselect_q[$clog2(trigger_n)-1:0]];
+        else  read_access_exception = 1'b1;  
+        riscv::CSR_TDATA3:
+        if  (CVA6Cfg.SDTRIG) csr_rdata = tdata3_q[tselect_q[$clog2(trigger_n)-1:0]];
+        else read_access_exception = 1'b1;
+        riscv::CSR_TINFO:   
+        if  (CVA6Cfg.SDTRIG) csr_rdata= tinfo_q[tselect_q[$clog2(trigger_n)-1:0]];
+        else read_access_exception = 1'b1; 
         riscv::CSR_VSSTATUS:
         if (CVA6Cfg.RVH) csr_rdata = vsstatus_extended;
         else read_access_exception = 1'b1;
@@ -941,7 +959,13 @@ module csr_regfile
       hstatus_d  = hstatus_q;
       vsstatus_d = vsstatus_q;
     end
-
+    if  (CVA6Cfg.SDTRIG) begin
+    tselect_d = tselect_q;
+    tdata1_d  = tdata1_q;
+    tdata2_d  = tdata2_q; 
+    tdata3_d  = tdata3_q;
+    tinfo_d   = tinfo_q;
+    end
     // check whether we come out of reset
     // this is a workaround. some tools have issues
     // having boot_addr_i in the asynchronous
@@ -1084,10 +1108,50 @@ module csr_regfile
           end
         end
         // trigger module CSRs
-        riscv::CSR_TSELECT: update_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA1: update_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA2: update_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA3: update_access_exception = 1'b1;  // not implemented
+          // trigger module CSRs
+        riscv::CSR_TSELECT:  begin
+          if  (CVA6Cfg.SDTRIG) begin
+            mask = ~(({64{1'b1}}<<($clog2(trigger_n)))  & {64{1'b1}})  ;
+            if (csr_wdata[$clog2(trigger_n)]<(trigger_n+1)) tselect_d = mask & csr_wdata;
+            end else begin
+            update_access_exception = 1'b1;
+            end 
+          end
+        riscv::CSR_TDATA1: begin 
+            if  (CVA6Cfg.SDTRIG) begin
+              unique case (csr_wdata[CVA6Cfg.XLEN-1:CVA6Cfg.XLEN-4]) 
+                riscv::none:        mask = riscv::none_mask;   
+                riscv::icount:      mask = riscv::icount_mask;
+                riscv::itrigger:    mask = riscv::itrigger_mask;
+                riscv::etrigger:    mask = riscv::etrigger_mask;
+                riscv::mcontrol6:   mask = riscv::mcontrol6_mask;
+                riscv::disabletrig: mask = riscv::disabletrig_mask;
+              endcase
+             if((tdata1_q[CVA6Cfg.XLEN-5] & debug_mode_q | !tdata1_q[CVA6Cfg.XLEN-5] )  &&  csr_wdata[CVA6Cfg.XLEN-1:CVA6Cfg.XLEN-4]     inside{riscv::none,riscv::icount,riscv::itrigger,riscv::etrigger,riscv::mcontrol6 ,riscv::disabletrig}   ) begin 
+              tdata1_d[tselect_q[$clog2(trigger_n)-1:0]] = mask & csr_wdata;
+              end
+            end else begin
+              update_access_exception = 1'b1;
+            end
+        end 
+        riscv::CSR_TDATA2: begin
+           if  (CVA6Cfg.SDTRIG) begin
+            if((tdata1_q[CVA6Cfg.XLEN-5] & debug_mode_q | !tdata1_q[CVA6Cfg.XLEN-5] )) begin
+            tdata2_d = csr_wdata;
+            end 
+           end else begin
+            update_access_exception = 1'b1;
+           end
+        end
+        riscv::CSR_TDATA3: 
+        if  (CVA6Cfg.SDTRIG) begin  
+            if((tdata1_q[CVA6Cfg.XLEN-5] & debug_mode_q | !tdata1_q[CVA6Cfg.XLEN-5] )) begin
+            tdata3_d = csr_wdata; // it is used for hypervisor machine , i will add its support after trigger for vs
+            end 
+        end else  update_access_exception = 1'b1; 
+        riscv::CSR_TINFO:  
+        if  (CVA6Cfg.SDTRIG) tinfo_d=tinfo_q;
+        else update_access_exception = 1'b1;
         // virtual supervisor registers
         riscv::CSR_VSSTATUS: begin
           if (CVA6Cfg.RVH) begin
@@ -2318,6 +2382,10 @@ module csr_regfile
         if ((!CVA6Cfg.DebugEn && csr_addr_i[11:4] == 8'h7b) || (CVA6Cfg.DebugEn && csr_addr_i[11:4] == 8'h7b && !debug_mode_q)) begin
           privilege_violation = 1'b1;
         end
+        /// check the access to the trigger  registers
+        if(csr_addr_i[11:4] == 8'h7a && (priv_lvl_o !=riscv::PRIV_LVL_M )) begin 
+        privilege_violation = 1'b1; 
+        end
         // check counter-enabled counter CSR accesses
         // counter address range is C00 to C1F
         if (CVA6Cfg.RVZihpm) begin
@@ -2552,6 +2620,13 @@ module csr_regfile
         dscratch0_q  <= {CVA6Cfg.XLEN{1'b0}};
         dscratch1_q  <= {CVA6Cfg.XLEN{1'b0}};
       end
+      if  (CVA6Cfg.SDTRIG) begin
+        tselect_q    <= '0;
+        tdata1_q     <= '0;
+        tdata2_q     <= '0;
+        tdata3_q     <= '0;
+        tinfo_q      <= '0;
+      end
       // machine mode registers
       mstatus_q        <= 64'b0;
       // set to boot address + direct mode + 4 byte offset which is the initial trap
@@ -2635,6 +2710,13 @@ module csr_regfile
         dpc_q        <= dpc_d;
         dscratch0_q  <= dscratch0_d;
         dscratch1_q  <= dscratch1_d;
+      end
+      if  (CVA6Cfg.SDTRIG) begin
+        tselect_q    <= tselect_d;
+        tdata1_q     <= tdata1_d;
+        tdata2_q     <= tdata2_d;
+        tdata3_q     <= tdata3_d;
+        tinfo_q      <=  riscv::tinfo_conts;
       end
       // machine mode registers
       mstatus_q        <= mstatus_d;
