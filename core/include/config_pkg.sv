@@ -82,6 +82,7 @@ package config_pkg;
     bit                          RVZCMP;
     // Zcmt RISC-V extension
     bit                          RVZCMT;
+    bit                          SDTRIG;
     // Zicond RISC-V extension
     bit                          RVZiCond;
     // Zicntr RISC-V extension
@@ -279,6 +280,7 @@ package config_pkg;
     bit          RVZCB;
     bit          RVZCMP;
     bit          RVZCMT;
+    bit          SDTRIG;
     bit          XFVec;
     bit          CvxifEn;
     copro_type_t CoproType;

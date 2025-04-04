@@ -862,6 +862,137 @@ package riscv;
     logic         step;
     priv_lvl_t    prv;
   } dcsr_t;
+  
+    // ------------
+ // Triggrt type
+ // ------------
+  typedef enum logic  [3:0] { 
+    ICOUNT       = 4'h3,
+    ITRIGGER     = 4'h4,
+    ETRIGGER     = 4'h5,
+    MCONTROL6    = 4'h6,
+    DISABLE      = 4'hF
+ } trig_type;
+ typedef enum logic  [1:0] { 
+
+    MCONTROL6_INDX    = 2'h0,
+    ICOUNT_INDX       = 2'h1,
+    ITRIGGER_INDX     = 2'h2,
+    ETRIGGER_INDX     = 2'h3
+
+ } trig_index;
+
+  typedef struct packed {
+    logic [3:0]   type_t;     // Bits XLEN-1:XLEN-4
+    logic         dmode;    // Bit XLEN-5
+    logic         vs;       // Bit 2.6
+    logic         vu;       // Bit 2.5
+    logic         hit;      // Bit 2.4
+    logic [13:0]  count;    // Bits 23:10
+    logic         m;        // Bit 9
+    logic         pending;  // Bit 8
+    logic         s;        // Bit 7
+    logic         u;        // Bit 6
+    logic [5:0]   action;   // Bits 5:0
+  } icount_t;
+  typedef struct packed {
+    logic [3:0]   type_t;     // Bits XLEN-1:XLEN-4
+    logic         dmode;    // Bit XLEN-5
+    logic [31:0]  unused;   
+    logic         vs;       // Bit 2.6
+    logic         vu;       // Bit 2.5
+    logic         hit;      // Bit 2.4
+    logic [13:0]  count;    // Bits 23:10
+    logic         m;        // Bit 9
+    logic         pending;  // Bit 8
+    logic         s;        // Bit 7
+    logic         u;        // Bit 6
+    logic [5:0]   action;   // Bits 5:0
+  } icount_64t;
+typedef struct packed {
+    // Upper half (XLEN-1 to 16)
+    logic [3:0]        type_t;        // Bits XLEN-1 : XLEN-4
+    logic              dmode;       // Bit XLEN-5
+    logic             uncertain;   // Bit 2.6
+    logic             hit1;        // Bit 2.5
+    logic             vu;          // Bit 2.4
+    logic             vs;          // Bit 2.3
+    logic             hit0;        // Bit 22
+    logic             select;      // Bits 21:20
+    logic [1:0]       reserved2;   // Bit 19 (always 0)
+    logic [2:0]       size;        // Bits 18:16
+
+    // Lower half (15 to 0)
+    logic [3:0]   action;      // Bits 15:12
+    logic         chain;       // Bit 11
+    logic [3:0]   match;       // Bits 10:7
+    logic         m;           // Bit 6
+    logic         uncertainen; // Bit 5
+    logic         s;           // Bit 4
+    logic         u;           // Bit 3
+    logic         execute;     // Bit 2
+    logic         store;       // Bit 1
+    logic         load;        // Bit 0
+} mcontrol6_t;
+
+typedef struct packed {
+    // Upper half (XLEN-1 to 16)
+    logic [3:0]        type_t;        // Bits XLEN-1 : XLEN-4
+    logic              dmode;       // Bit XLEN-5
+    logic [31:0]      unused;
+    logic             uncertain;   // Bit 2.6
+    logic             hit1;        // Bit 2.5
+    logic             vu;          // Bit 2.4
+    logic             vs;          // Bit 2.3
+    logic             hit0;        // Bit 22
+    logic             select;      // Bits 21:20
+    logic [1:0]       reserved2;   // Bit 19 (always 0)
+    logic [2:0]       size;        // Bits 18:16
+
+    // Lower half (15 to 0)
+    logic [3:0]   action;      // Bits 15:12
+    logic         chain;       // Bit 11
+    logic [3:0]   match;       // Bits 10:7
+    logic         m;           // Bit 6
+    logic         uncertainen; // Bit 5
+    logic         s;           // Bit 4
+    logic         u;           // Bit 3
+    logic         execute;     // Bit 2
+    logic         store;       // Bit 1
+    logic         load;        // Bit 0
+} mcontrol6_64t;
+
+typedef struct packed {
+    // Upper part (XLEN-1 to XLEN-7)
+    logic [3:0] type_t;      // Bits XLEN-1 : XLEN-4
+    logic       dmode;     // Bit XLEN-5
+    logic       hit;       // Bit XLEN-6
+    logic [ XLEN-6-13-1:0]   reserved;  // Bit XLEN-7 (always 0)
+
+    // Lower part (12 to 0)
+    logic       vs;        // Bit 13
+    logic       vu;        // Bit 12
+    logic       nmi;       // Bit 11
+    logic       m;         // Bit 10
+    logic       reserved2; // Bit 9 (always 0)
+    logic       s;         // Bit 8
+    logic       u;         // Bit 7
+    logic [5:0] action;    // Bits 5:0
+} itrigger_t;
+typedef struct packed {
+    logic [3:0] type_t;     // Bits [XLEN-1 : XLEN-4] (MSB)
+    logic dmode;          // Bit [XLEN-5]
+    logic hit;            // Bit [XLEN-6]
+    logic [ XLEN-6-13-1:0]          unused1;        // Bit [XLEN-7], reserved as 0
+    logic vs;             // Bit 12
+    logic vu;             // Bit 11
+    logic unused2;        // Bit 10, reserved as 0
+    logic m;              // Bit 9
+    logic s;              // Bit 8
+    logic u;              // Bit 7
+    logic [5:0] action;   // Bits [6:0] (LSB)
+} etrigger_t;
+
 
   // Instruction Generation *incomplete*
   function automatic logic [31:0] jal(logic [4:0] rd, logic [20:0] imm);

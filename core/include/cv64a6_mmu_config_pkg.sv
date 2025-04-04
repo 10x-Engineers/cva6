@@ -53,6 +53,7 @@ package cva6_config_pkg;
       RVZCB: bit'(1),
       RVZCMP: bit'(0),
       RVZCMT: bit'(0),
+      SDTRIG:bit'(0),
       XFVec: bit'(0),
       CvxifEn: bit'(1),
       CoproType: config_pkg::COPRO_NONE,

@@ -23,6 +23,7 @@ module csr_regfile
     parameter type                   scoreboard_entry_t = logic,
     parameter type                   rvfi_probes_csr_t  = logic,
     parameter int                    VmidWidth          = 1,
+    parameter                        trigger_n          = 4,
     parameter int unsigned           MHPMCounterNum     = 6
 ) (
     // Subsystem Clock - SUBSYSTEM
@@ -228,6 +229,19 @@ module csr_regfile
   // we are in debug
   logic debug_mode_q, debug_mode_d;
   logic mtvec_rst_load_q;  // used to determine whether we came out of reset
+  // sdtrig csr
+  logic [CVA6Cfg.XLEN-1:0] tselect_d,tselect_q;
+  riscv::mcontrol6_64t  mcontrol6_q ,mcontrol6_d;  
+  riscv::icount_64t icount_d,icount_q;
+  riscv::itrigger_t itrigger_d,itrigger_q;
+  riscv::etrigger_t etrigger_d ,etrigger_q;
+  logic [trigger_n-1:0] [CVA6Cfg.XLEN-1:0] tdata2_q, tdata2_d;
+  logic [trigger_n-1:0] [CVA6Cfg.XLEN-1:0] tdata3_q, tdata3_d;
+  logic [CVA6Cfg.XLEN-1:0] tinfom6_q;
+  logic [CVA6Cfg.XLEN-1:0] tinfoit_q;
+  logic [CVA6Cfg.XLEN-1:0] tinfoet_q;
+  logic [CVA6Cfg.XLEN-1:0] tinfoic_q;
+  riscv::trig_type  trig_type;
 
   logic [CVA6Cfg.XLEN-1:0] dpc_q, dpc_d;
   logic [CVA6Cfg.XLEN-1:0] dscratch0_q, dscratch0_d;
@@ -299,7 +313,7 @@ module csr_regfile
 
   riscv::fcsr_t fcsr_q, fcsr_d;
   jvt_t jvt_q, jvt_d;
-  logic test;
+  
   // ----------------
   // Assignments
   // ----------------
@@ -384,10 +398,32 @@ module csr_regfile
         if (CVA6Cfg.DebugEn) csr_rdata = dscratch1_q;
         else read_access_exception = 1'b1;
         // trigger module registers
-        riscv::CSR_TSELECT: read_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA1: read_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA2: read_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA3: read_access_exception = 1'b1;  // not implemented
+        riscv::CSR_TSELECT:             
+        if  (CVA6Cfg.SDTRIG) csr_rdata = tselect_q;
+        else  read_access_exception = 1'b1;                
+        riscv::CSR_TDATA1: 
+                if  (CVA6Cfg.SDTRIG) begin
+          case (tselect_q[$clog2(trigger_n)-1:0])
+          riscv::MCONTROL6_INDX : csr_rdata = mcontrol6_q;
+          riscv::ICOUNT_INDX    : csr_rdata = icount_q;
+          riscv::ITRIGGER_INDX  : csr_rdata = itrigger_q;
+          riscv::ETRIGGER_INDX  : csr_rdata = etrigger_q;
+          endcase
+        end
+        else read_access_exception = 1'b1;
+        riscv::CSR_TDATA2:  if  (CVA6Cfg.SDTRIG)csr_rdata = tdata2_q[tselect_q[$clog2(trigger_n)-1:0]];
+        else  read_access_exception = 1'b1;
+        riscv::CSR_TDATA3: if  (CVA6Cfg.SDTRIG) csr_rdata = tdata3_q[tselect_q[$clog2(trigger_n)-1:0]];
+        else read_access_exception = 1'b1;
+        riscv::CSR_TINFO:  if  (CVA6Cfg.SDTRIG) begin
+          case (tselect_q[$clog2(trigger_n)-1:0])
+          riscv::MCONTROL6_INDX : csr_rdata = tinfom6_q;
+          riscv::ICOUNT_INDX    : csr_rdata = tinfoic_q;
+          riscv::ITRIGGER_INDX  : csr_rdata = tinfoit_q;
+          riscv::ETRIGGER_INDX  : csr_rdata = tinfoet_q;
+          endcase
+        end
+        else read_access_exception = 1'b1;
         riscv::CSR_VSSTATUS:
         if (CVA6Cfg.RVH) csr_rdata = vsstatus_extended;
         else read_access_exception = 1'b1;
@@ -1008,6 +1044,15 @@ module csr_regfile
 
     pmpcfg_d               = pmpcfg_q;
     pmpaddr_d              = pmpaddr_q;
+    if(CVA6Cfg.SDTRIG) begin
+    tselect_d   = tselect_q;
+    mcontrol6_d = mcontrol6_q; // This remains unchanged because the LHS and RHS are the same.
+    icount_d    = icount_q;
+    itrigger_d  = itrigger_q;
+    etrigger_d  = etrigger_q;
+    tdata2_d    = tdata2_q;
+    tdata3_d    = tdata3_q;
+    end
 
     // check for correct access rights and that we are writing
     if (csr_we) begin
@@ -1085,10 +1130,105 @@ module csr_regfile
           end
         end
         // trigger module CSRs
-        riscv::CSR_TSELECT: update_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA1: update_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA2: update_access_exception = 1'b1;  // not implemented
-        riscv::CSR_TDATA3: update_access_exception = 1'b1;  // not implemented
+        riscv::CSR_TSELECT:  begin
+          if  (CVA6Cfg.SDTRIG) begin
+            mask = ~(({CVA6Cfg.XLEN{1'b1}}<<($clog2(trigger_n)))  & {CVA6Cfg.XLEN{1'b1}})  ;
+            if (csr_wdata[$clog2(trigger_n)]<(trigger_n+1)) tselect_d = mask & csr_wdata;
+            end else begin
+            update_access_exception = 1'b1;
+            end 
+          end
+        riscv::CSR_TDATA1: begin 
+            if  (CVA6Cfg.SDTRIG) begin
+             
+              case (tselect_q[$clog2(trigger_n)-1:0]) 
+              riscv::MCONTROL6_INDX: begin
+              riscv:: mcontrol6_64t csr_wdata_m6;
+               csr_wdata_m6 = riscv:: mcontrol6_64t'( csr_wdata );
+               if (mcontrol6_q.dmode & debug_mode_q | !mcontrol6_q.dmode && !(csr_wdata_m6.dmode =0 && csr_wdata_m6.action ==1 ) ) begin
+               if(csr_wdata_m6.type_t == riscv::MCONTROL6 ||  riscv::DISABLE )    mcontrol6_q.type_t = csr_wdata_m6.type_t;
+               if(csr_wdata_m6.match < 14) mcontrol6_d.match = csr_wdata_m6.match;
+               if(csr_wdata_m6.action < 2) mcontrol6_d.action = csr_wdata_m6.action;
+               mcontrol6_d.dmode                    = csr_wdata_m6.dmode;
+               mcontrol6_d.hit0                     = csr_wdata_m6.hit0;
+               mcontrol6_d.hit1                     = csr_wdata_m6.hit1;
+               mcontrol6_d.vs                       = csr_wdata_m6.vs;
+               mcontrol6_d.vu                       = csr_wdata_m6.vu;
+               mcontrol6_d.select                   = csr_wdata_m6.select ;
+               mcontrol6_d.chain                    = csr_wdata_m6.chain ;
+               mcontrol6_d.m                        = csr_wdata_m6.m ;
+               mcontrol6_d.uncertain                = csr_wdata_m6.uncertain ;
+               mcontrol6_d.s                        = csr_wdata_m6.s ;
+               mcontrol6_d.u                        = csr_wdata_m6.u;
+               mcontrol6_d.execute                  = csr_wdata_m6.execute ;
+               mcontrol6_d.store                    = csr_wdata_m6.store ;
+               mcontrol6_d.load                     = csr_wdata_m6.load;
+              end 
+              end
+              riscv::ICOUNT_INDX: begin
+              riscv::icount_64t csr_wdata_ic;
+              csr_wdata_ic = riscv::icount_64t'(csr_wdata);
+              if ((icount_q.dmode & debug_mode_q | !icount_q.dmode) && !(csr_wdata_ic.dmode =0 && csr_wdata_ic.action ==1 ) ) begin
+              if(    csr_wdata_ic.type_t == (riscv::ICOUNT || riscv::DISABLE)      ) icount_d.type_t = csr_wdata_ic.type_t;
+              if (  csr_wdata_ic.action < 2          )                               icount_d.action = csr_wdata_ic.action;
+              icount_d.dmode                                                                      = csr_wdata_ic.dmode;
+              icount_d.vs                                                                         = csr_wdata_ic.vs;
+              icount_d.vu                                                                         = csr_wdata_ic.vu;
+              icount_d.hit                                                                        = csr_wdata_ic.hit;
+              icount_d.count                                                                      = csr_wdata_ic.count;
+              icount_d.m                                                                          = csr_wdata_ic.m;
+              icount_d.pending                                                                    = csr_wdata_ic.pending;
+              icount_d.s                                                                          = csr_wdata_ic.s;
+              icount_d.u                                                                          = csr_wdata_ic.u;
+              end
+            end
+             riscv::ITRIGGER_INDX: begin
+             riscv::itrigger_t csr_wdata_it;
+             csr_wdata_it = riscv::itrigger_t'(csr_wdata);
+             if ((itrigger_q.dmode & debug_mode_q | !itrigger_q.dmode) && !(csr_wdata_it.dmode = 0 && csr_wdata_it.action ==1 ) ) begin
+             if(csr_wdata_it.type_t == (riscv::ITRIGGER || riscv::DISABLE) ) itrigger_d.type_t = csr_wdata_it.type_t;
+             if(csr_wdata_it.action < 2   )                             itrigger_d.action = csr_wdata_it.action;
+             itrigger_d.dmode                                                        = csr_wdata_it.dmode;
+             itrigger_d.hit                                                          = csr_wdata_it.hit;
+             itrigger_d.vs                                                           = csr_wdata_it.vs;
+             itrigger_d.vu                                                           = csr_wdata_it.vu;
+             itrigger_d.nmi                                                          = csr_wdata_it.nmi;
+             itrigger_d.m                                                            = csr_wdata_it.m;
+             itrigger_d.s                                                            = csr_wdata_it.s;
+             itrigger_d.u                                                            = csr_wdata_it.u;
+             end
+            end
+            riscv::ETRIGGER_INDX: begin
+            riscv::etrigger_t csr_wdata_et;
+            csr_wdata_et = riscv::etrigger_t'(csr_wdata);
+            if ((etrigger_q.dmode & debug_mode_q | !etrigger_q.dmode) && !(csr_wdata_et.dmode = 0 && csr_wdata_et.action ==1 ) ) begin
+            if (csr_wdata_et.type_t == (riscv::ETRIGGER || riscv::DISABLE) )  etrigger_d.type_t = csr_wdata_et.type_t;
+            if( csr_wdata_et.action < 2 )                                           etrigger_d.action = csr_wdata_et.action;
+            etrigger_d.dmode                                                                 = csr_wdata_et.dmode;
+            etrigger_d.hit                                                                   = csr_wdata_et.hit;
+            etrigger_d.vs                                                                    = csr_wdata_et.vs;
+            etrigger_d.vu                                                                    = csr_wdata_et.vu;
+            etrigger_d.m                                                                     = csr_wdata_et.m;
+            etrigger_d.s                                                                     = csr_wdata_et.u;
+            etrigger_d.u                                                                     = csr_wdata_et.s;
+            end
+            end
+              endcase
+            end else begin
+              update_access_exception = 1'b1;
+            end
+        end 
+        riscv::CSR_TDATA2: begin
+           if  (CVA6Cfg.SDTRIG) begin
+             
+            tdata2_d = csr_wdata;
+             
+           end else begin
+            update_access_exception = 1'b1;
+           end
+        end
+        riscv::CSR_TDATA3: if  (CVA6Cfg.SDTRIG) tdata3_d = csr_wdata; // it is used for hypervisor machine , i will add its support after trigger for vs
+           else  update_access_exception = 1'b1;
         // virtual supervisor registers
         riscv::CSR_VSSTATUS: begin
           if (CVA6Cfg.RVH) begin
@@ -2265,6 +2405,7 @@ module csr_regfile
         if ((!CVA6Cfg.DebugEn && csr_addr_i[11:4] == 8'h7b) || (CVA6Cfg.DebugEn && csr_addr_i[11:4] == 8'h7b && !debug_mode_q)) begin
           privilege_violation = 1'b1;
         end
+
         // check counter-enabled counter CSR accesses
         // counter address range is C00 to C1F
         if (CVA6Cfg.RVZihpm) begin
@@ -2318,6 +2459,9 @@ module csr_regfile
         // check access to debug mode only CSRs
         if ((!CVA6Cfg.DebugEn && csr_addr_i[11:4] == 8'h7b) || (CVA6Cfg.DebugEn && csr_addr_i[11:4] == 8'h7b && !debug_mode_q)) begin
           privilege_violation = 1'b1;
+        end
+         if(csr_addr_i[11:4] == 8'h7a && (priv_lvl_o !=riscv::PRIV_LVL_M )) begin 
+        privilege_violation = 1'b1; 
         end
         // check counter-enabled counter CSR accesses
         // counter address range is C00 to C1F
@@ -2553,6 +2697,22 @@ module csr_regfile
         dscratch0_q  <= {CVA6Cfg.XLEN{1'b0}};
         dscratch1_q  <= {CVA6Cfg.XLEN{1'b0}};
       end
+ if  (CVA6Cfg.SDTRIG) begin
+       tselect_q   <= '0;
+       mcontrol6_q <= '0;
+       icount_q    <= '0;    
+       itrigger_q  <= '0;
+       etrigger_q  <= '0;   
+       tdata2_q    <= '0;
+       tdata3_q    <= '0;
+       tinfom6_q   <= '0;
+       tinfoit_q   <= '0;
+       tinfoet_q   <= '0;
+       tinfoic_q   <= '0;
+      end
+    
+
+
       // machine mode registers
       mstatus_q        <= 64'b0;
       // set to boot address + direct mode + 4 byte offset which is the initial trap
@@ -2636,6 +2796,19 @@ module csr_regfile
         dpc_q        <= dpc_d;
         dscratch0_q  <= dscratch0_d;
         dscratch1_q  <= dscratch1_d;
+      end
+      if  (CVA6Cfg.SDTRIG) begin
+       tselect_q   <= tselect_d;
+       mcontrol6_q <= mcontrol6_d;
+       icount_q    <= icount_d;    
+       itrigger_q  <= itrigger_d;
+       etrigger_q  <= etrigger_d;   
+       tdata2_q    <= tdata2_d;
+       tdata3_q    <= tdata3_d;
+       tinfom6_q   <= {{CVA6Cfg.XLEN-16{1'b0}},16'h1006};
+       tinfoit_q   <= {{CVA6Cfg.XLEN-16{1'b0}},16'h1004};
+       tinfoet_q   <= {{CVA6Cfg.XLEN-16{1'b0}},16'h1005};
+       tinfoic_q   <= {{CVA6Cfg.XLEN-16{1'b0}},16'h1003};
       end
       // machine mode registers
       mstatus_q        <= mstatus_d;
