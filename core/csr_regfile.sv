@@ -1146,7 +1146,7 @@ module csr_regfile
               riscv:: mcontrol6_64t csr_wdata_m6;
                csr_wdata_m6 = riscv:: mcontrol6_64t'( csr_wdata );
                if (mcontrol6_q.dmode & debug_mode_q | !mcontrol6_q.dmode && !(csr_wdata_m6.dmode =0 && csr_wdata_m6.action ==1 ) ) begin
-               if(csr_wdata_m6.type_t == riscv::MCONTROL6 ||  riscv::DISABLE )    mcontrol6_q.type_t = csr_wdata_m6.type_t;
+               if(csr_wdata_m6.type_t == riscv::MCONTROL6 || csr_wdata_m6.type_t ==  riscv::DISABLE )    mcontrol6_q.type_t = csr_wdata_m6.type_t;
                if(csr_wdata_m6.match < 14) mcontrol6_d.match = csr_wdata_m6.match;
                if(csr_wdata_m6.action < 2) mcontrol6_d.action = csr_wdata_m6.action;
                mcontrol6_d.dmode                    = csr_wdata_m6.dmode;
@@ -1168,8 +1168,8 @@ module csr_regfile
               riscv::ICOUNT_INDX: begin
               riscv::icount_64t csr_wdata_ic;
               csr_wdata_ic = riscv::icount_64t'(csr_wdata);
-              if ((icount_q.dmode & debug_mode_q | !icount_q.dmode) && !(csr_wdata_ic.dmode =0 && csr_wdata_ic.action ==1 ) ) begin
-              if(    csr_wdata_ic.type_t == (riscv::ICOUNT || riscv::DISABLE)      ) icount_d.type_t = csr_wdata_ic.type_t;
+              if ((icount_q.dmode & debug_mode_q | !icount_q.dmode) && !(csr_wdata_ic.dmode = 0 && csr_wdata_ic.action ==1 ) ) begin
+              if(    csr_wdata_ic.type_t == riscv::ICOUNT || csr_wdata_ic.type_t ==  riscv::DISABLE)       icount_d.type_t = csr_wdata_ic.type_t;
               if (  csr_wdata_ic.action < 2          )                               icount_d.action = csr_wdata_ic.action;
               icount_d.dmode                                                                      = csr_wdata_ic.dmode;
               icount_d.vs                                                                         = csr_wdata_ic.vs;
@@ -1185,8 +1185,8 @@ module csr_regfile
              riscv::ITRIGGER_INDX: begin
              riscv::itrigger_t csr_wdata_it;
              csr_wdata_it = riscv::itrigger_t'(csr_wdata);
-             if ((itrigger_q.dmode & debug_mode_q | !itrigger_q.dmode) && !(csr_wdata_it.dmode = 0 && csr_wdata_it.action ==1 ) ) begin
-             if(csr_wdata_it.type_t == (riscv::ITRIGGER || riscv::DISABLE) ) itrigger_d.type_t = csr_wdata_it.type_t;
+             if ((itrigger_q.dmode & debug_mode_q | !itrigger_q.dmode) && !(csr_wdata_it.dmode = 0 && csr_wdata_it.action == 1 ) ) begin
+             if(csr_wdata_it.type_t == riscv::ITRIGGER || csr_wdata_it.type_t ==  riscv::DISABLE) itrigger_d.type_t = csr_wdata_it.type_t;
              if(csr_wdata_it.action < 2   )                             itrigger_d.action = csr_wdata_it.action;
              itrigger_d.dmode                                                        = csr_wdata_it.dmode;
              itrigger_d.hit                                                          = csr_wdata_it.hit;
@@ -1201,8 +1201,8 @@ module csr_regfile
             riscv::ETRIGGER_INDX: begin
             riscv::etrigger_t csr_wdata_et;
             csr_wdata_et = riscv::etrigger_t'(csr_wdata);
-            if ((etrigger_q.dmode & debug_mode_q | !etrigger_q.dmode) && !(csr_wdata_et.dmode = 0 && csr_wdata_et.action ==1 ) ) begin
-            if (csr_wdata_et.type_t == (riscv::ETRIGGER || riscv::DISABLE) )  etrigger_d.type_t = csr_wdata_et.type_t;
+            if ((etrigger_q.dmode & debug_mode_q | !etrigger_q.dmode) && !(csr_wdata_et.dmode = 0 && csr_wdata_et.action == 1 ) ) begin
+            if (csr_wdata_et.type_t == riscv::ETRIGGER || csr_wdata_et.type_t ==  riscv::DISABLE)   etrigger_d.type_t = csr_wdata_et.type_t;
             if( csr_wdata_et.action < 2 )                                           etrigger_d.action = csr_wdata_et.action;
             etrigger_d.dmode                                                                 = csr_wdata_et.dmode;
             etrigger_d.hit                                                                   = csr_wdata_et.hit;
