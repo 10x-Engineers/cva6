@@ -571,6 +571,7 @@ module macro_decoder #(
       end
 
       MOVE: begin
+        fetch_stall_o = 1;
         case (macro_instr_type)
           MVSA01: begin
             if (issue_ack_i) begin

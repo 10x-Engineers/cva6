@@ -87,8 +87,8 @@ cflags=(
 isa="rv32imc_zba_zbb_zbc_zbs"
 
 python3 cva6.py \
-        --target hwconfig \
-        --hwconfig_opts="$DV_HWCONFIG_OPTS" \
+        --target cv32a65x \
+        --isa_extension="zcb,zcmp" \
         --iss="$DV_SIMULATORS" \
         --iss_yaml=cva6.yaml \
         --c_tests "$src0" \
