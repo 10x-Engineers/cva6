@@ -589,6 +589,8 @@ module cva6
   logic [31:0] mcountinhibit_csr_perf;
   //jvt
   jvt_t jvt;
+  // trigger module
+  logic breakpoint_from_tigger_module;
   // ----------------------------
   // Performance Counters <-> *
   // ----------------------------
@@ -751,6 +753,7 @@ module cva6
       .compressed_valid_o(x_compressed_valid),
       .compressed_req_o  (x_compressed_req),
       .jvt_i             (jvt),
+      .breakpoint_from_tigger_module_i (breakpoint_from_tigger_module),
       // DCACHE interfaces
       .dcache_req_ports_i(dcache_req_ports_cache_id),
       .dcache_req_ports_o(dcache_req_ports_id_cache)
@@ -1207,6 +1210,7 @@ module cva6
       .pmpaddr_o               (pmpaddr),
       .mcountinhibit_o         (mcountinhibit_csr_perf),
       .jvt_o                   (jvt),
+      .breakpoint_from_tigger_module_o (breakpoint_from_tigger_module),
       //RVFI
       .rvfi_csr_o              (rvfi_csr)
   );
