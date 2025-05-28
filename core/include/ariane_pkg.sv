@@ -859,4 +859,101 @@ package ariane_pkg;
     return (n < 0) ? 0 : n;
   endfunction : avoid_neg
 
+  // Triggers
+  typedef struct packed {
+    logic [31:28] t_type;   // type 3 for icount
+    logic         dmode;
+    logic         vs;
+    logic         vu;
+    logic         hit;
+    logic [23:10] count;
+    logic         m;
+    logic         pending;
+    logic         s;
+    logic         u;
+    logic [5:0]   action;
+  } icount32_tdata1_t;
+
+  typedef struct packed {
+    logic [31:26] mhvalue;
+    logic [25:23] mhselect;
+    logic [22:20] zeroes;
+    logic [19:18] sbytemask;
+    logic [17:2]  svalue;
+    logic [1:0]   sselect;
+  } textra32_tdata3_t;
+
+  typedef struct packed {
+    logic [63:51] mhvalue;
+    logic [50:48] mhselect;
+    logic [47:40] zeroes;
+    logic [39:36] sbytemask;
+    logic [35:34] zero_field;
+    logic [33:2]  svalue;
+    logic [1:0]   sselect;
+  } textra64_tdata3_t;
+
+  // typedef struct packed {
+  //   logic [63:60] type;        // type 3 for icount
+  //   logic dmode;
+  //   logic [58:27] reserved0;
+  //   logic vs;
+  //   logic vu;
+  //   logic hit;
+  //   logic [23:10] count;
+  //   logic m;
+  //   logic pending;
+  //   logic s;
+  //   logic u;
+  //   logic [5:0] action;
+  // } icount64_tdata1_t;
+
+  typedef struct packed {
+    logic [31:28] t_type;  // type 6 for mcontrol6
+    logic dmode;
+    logic uncertain;
+    logic hit1;
+    logic vs;
+    logic vu;
+    logic hit0;
+    logic select;
+    logic [20:19] zeroes;
+    logic [18:16] size;
+    logic [15:12] action;
+    logic chain;
+    logic [10:7] match;
+    logic m;
+    logic uncertainen;
+    logic s;
+    logic u;
+    logic execute;
+    logic store;
+    logic load;
+  } mcontrol6_32_tdata1_t;
+
+  // typedef struct packed {
+  //   logic hit;
+  //   logic [XLEN-7:13] zeroed;
+  //   logic vs;
+  //   logic vu;
+  //   logic nmi;
+  //   logic m;
+  //   logic zero;
+  //   logic s;
+  //   logic u;
+  //   logic [5:0] action;
+  // } itrigger_tdata1_t;
+
+  // typedef struct packed {
+  //   logic hit;
+  //   logic [XLEN-7:13] zeroed;
+  //   logic vs;
+  //   logic vu;
+  //   logic zeroed;
+  //   logic m;
+  //   logic zero;
+  //   logic s;
+  //   logic u;
+  //   logic [5:0] action;
+  // } etrigger_tdata1_t;
 endpackage
