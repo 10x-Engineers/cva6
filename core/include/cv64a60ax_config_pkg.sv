@@ -94,6 +94,7 @@ localparam config_pkg::cva6_user_cfg_t cva6_cfg = '{
    // FIXME
    MaxOutstandingStores: unsigned'(7),
    DebugEn: bit'(1),
+   SDTRIG: bit'(0),
    AxiBurstWriteEn: bit'(0),
    IcacheByteSize: unsigned'(32768),
    IcacheSetAssoc: unsigned'(8),
