@@ -589,6 +589,8 @@ module cva6
   logic [31:0] mcountinhibit_csr_perf;
   //jvt
   jvt_t jvt;
+  // trigger module
+  logic debug_from_trigger;
   // ----------------------------
   // Performance Counters <-> *
   // ----------------------------
@@ -731,29 +733,30 @@ module cva6
 
       .rvfi_is_compressed_o(rvfi_is_compressed),
 
-      .priv_lvl_i        (priv_lvl),
-      .v_i               (v),
-      .fs_i              (fs),
-      .vfs_i             (vfs),
-      .frm_i             (frm_csr_id_issue_ex),
-      .vs_i              (vs),
-      .irq_i             (irq_i),
-      .irq_ctrl_i        (irq_ctrl_csr_id),
-      .debug_mode_i      (debug_mode),
-      .tvm_i             (tvm_csr_id),
-      .tw_i              (tw_csr_id),
-      .vtw_i             (vtw_csr_id),
-      .tsr_i             (tsr_csr_id),
-      .hu_i              (hu),
-      .hart_id_i         (hart_id_i),
-      .compressed_ready_i(x_compressed_ready),
-      .compressed_resp_i (x_compressed_resp),
-      .compressed_valid_o(x_compressed_valid),
-      .compressed_req_o  (x_compressed_req),
-      .jvt_i             (jvt),
+      .priv_lvl_i          (priv_lvl),
+      .v_i                 (v),
+      .fs_i                (fs),
+      .vfs_i               (vfs),
+      .frm_i               (frm_csr_id_issue_ex),
+      .vs_i                (vs),
+      .irq_i               (irq_i),
+      .irq_ctrl_i          (irq_ctrl_csr_id),
+      .debug_mode_i        (debug_mode),
+      .tvm_i               (tvm_csr_id),
+      .tw_i                (tw_csr_id),
+      .vtw_i               (vtw_csr_id),
+      .tsr_i               (tsr_csr_id),
+      .hu_i                (hu),
+      .hart_id_i           (hart_id_i),
+      .compressed_ready_i  (x_compressed_ready),
+      .compressed_resp_i   (x_compressed_resp),
+      .compressed_valid_o  (x_compressed_valid),
+      .compressed_req_o    (x_compressed_req),
+      .jvt_i               (jvt),
+      .debug_from_trigger_i(debug_from_trigger),
       // DCACHE interfaces
-      .dcache_req_ports_i(dcache_req_ports_cache_id),
-      .dcache_req_ports_o(dcache_req_ports_id_cache)
+      .dcache_req_ports_i  (dcache_req_ports_cache_id),
+      .dcache_req_ports_o  (dcache_req_ports_id_cache)
   );
 
   logic [CVA6Cfg.NrWbPorts-1:0][CVA6Cfg.TRANS_ID_BITS-1:0] trans_id_ex_id;
@@ -1208,7 +1211,12 @@ module cva6
       .mcountinhibit_o         (mcountinhibit_csr_perf),
       .jvt_o                   (jvt),
       //RVFI
-      .rvfi_csr_o              (rvfi_csr)
+      .rvfi_csr_o              (rvfi_csr),
+      // Trigger Outputs
+      .debug_from_trigger_o    (debug_from_trigger),
+      .vaddr_from_lsu_i        (rvfi_lsu_ctrl.vaddr),
+      .orig_instr_i            (orig_instr_id_issue),
+      .store_result_i          (store_result_ex_id)
   );
 
   // ------------------------
