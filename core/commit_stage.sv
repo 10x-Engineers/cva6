@@ -87,7 +87,9 @@ module commit_stage
     // TO_BE_COMPLETED - CONTROLLER
     output logic hfence_vvma_o,
     // TO_BE_COMPLETED - CONTROLLER
-    output logic hfence_gvma_o
+    output logic hfence_gvma_o,
+    input logic break_from_trigger_i,
+    input logic e_matched_i
 );
 
   // ila_0 i_ila_commit (
@@ -156,10 +158,10 @@ module commit_stage
 
     // we do not commit the instruction yet if we requested a halt
     if (commit_instr_i[0].valid && !halt_i) begin
-      // we will not commit the instruction if we took an exception
-      if (commit_instr_i[0].ex.valid) begin
+      // we will not commit the instruction if we took an exception || break_from_trigger_i
+      if (commit_instr_i[0].ex.valid || (break_from_trigger_i && CVA6Cfg.Icount)) begin
         // However we can drop it (with its exception)
-        if (commit_drop_i[0]) begin
+        if (commit_drop_i[0] || (e_matched_i && CVA6Cfg.DebugEn)) begin
           commit_ack_o[0] = 1'b1;
         end
       end else begin
@@ -395,14 +397,20 @@ module commit_stage
       // ------------------------
       // but we give precedence to exceptions which happened earlier e.g.: instruction page
       // faults for example
-      if (commit_instr_i[0].ex.valid) begin
+      if (commit_instr_i[0].ex.valid || (commit_instr_i[0].ex.valid && break_from_trigger_i && (CVA6Cfg.Etrigger || CVA6Cfg.Itrigger))) begin
         exception_o = commit_instr_i[0].ex;
+        exception_o.cause = 32'h00000003;
       end
     end
     // Don't take any exceptions iff:
     // - If we halted the processor
-    if (halt_i) begin
+    if (halt_i || (e_matched_i && CVA6Cfg.DebugEn)) begin
       exception_o.valid = 1'b0;
+    end
+
+    if (CVA6Cfg.SDTRIG && !CVA6Cfg.DebugEn && break_from_trigger_i && CVA6Cfg.Icount) begin
+      exception_o.valid = 1'b1;
+      exception_o.cause = 32'h00000003;
     end
   end
 endmodule
