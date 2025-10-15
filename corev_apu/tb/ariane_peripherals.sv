@@ -10,6 +10,7 @@
 
 `include "register_interface/assign.svh"
 `include "register_interface/typedef.svh"
+import ahb_lite_pkg::*;
 
 // Xilinx Peripherals
 module ariane_peripherals #(
@@ -30,6 +31,9 @@ module ariane_peripherals #(
     AXI_BUS.Slave      spi             ,
     AXI_BUS.Slave      ethernet        ,
     AXI_BUS.Slave      timer           ,
+    AXI_BUS.Slave      iopmp_cfg       ,
+    AXI_BUS.Master     iopmp_ip        ,
+    AXI_BUS.Slave      iopmp_dma       ,
     output logic [1:0] irq_o           ,
     // UART
     input  logic       rx_i            ,
@@ -53,6 +57,248 @@ module ariane_peripherals #(
     input  logic       spi_miso        ,
     output logic       spi_ss
 );
+
+    ahb_lite_pkg::ahb_req_t         ahb_req;
+    ahb_lite_pkg::ahb_resp_t        ahb_resp;
+    logic [63:0]		ahb_hwdata;
+    logic [63:0]		ahb_hrdata;
+    logic addr2to2_n, addr2to2;
+
+    assign ahb_req.hwdata = ahb_req.haddr[2] ? ahb_hwdata[63:32] : ahb_hwdata[31:0];
+    assign ahb_hrdata = addr2to2 ? {ahb_resp.hrdata, 32'h0} : {32'h0, ahb_resp.hrdata};
+    assign ahb_req.hsel = 1'b1;
+    assign ahb_req.hprot = 4'b0011;
+    assign ahb_req.hready = ahb_resp.hreadyout;
+
+    axi2ahb_bridge_top u_axi2ahb_bridge_top (
+    .aclk(clk_i),
+    .aresetn(rst_ni),
+    .axi_awid(iopmp_cfg.aw_id),
+    .axi_awaddr(iopmp_cfg.aw_addr),
+    .axi_awlen(iopmp_cfg.aw_len),
+    .axi_awsize(iopmp_cfg.aw_size),
+    .axi_awburst(iopmp_cfg.aw_burst),
+    .axi_awvalid(iopmp_cfg.aw_valid),
+    .axi_awready(iopmp_cfg.aw_ready),
+    .axi_wdata(iopmp_cfg.w_data),
+    .axi_wstrb(iopmp_cfg.w_strb),
+    .axi_wlast(iopmp_cfg.w_last),
+    .axi_wvalid(iopmp_cfg.w_valid),
+    .axi_wready(iopmp_cfg.w_ready),
+    .axi_bid(iopmp_cfg.b_id),
+    .axi_bresp(iopmp_cfg.b_resp),
+    .axi_bvalid(iopmp_cfg.b_valid),
+    .axi_bready(iopmp_cfg.b_ready),
+    .axi_arid(iopmp_cfg.ar_id),
+    .axi_araddr(iopmp_cfg.ar_addr),
+    .axi_arlen(iopmp_cfg.ar_len),
+    .axi_arsize(iopmp_cfg.ar_size),
+    .axi_arburst(iopmp_cfg.ar_burst),
+    .axi_arvalid(iopmp_cfg.ar_valid),
+    .axi_arready(iopmp_cfg.ar_ready),
+    .axi_rid(iopmp_cfg.r_id),
+    .axi_rdata(iopmp_cfg.r_data),
+    .axi_rresp(iopmp_cfg.r_resp),
+    .axi_rlast(iopmp_cfg.r_last),
+    .axi_rvalid(iopmp_cfg.r_valid),
+    .axi_rready(iopmp_cfg.r_ready),
+    .haddr(ahb_req.haddr),
+    .htrans(ahb_req.htrans),
+    .hwrite(ahb_req.hwrite),
+    .hsize(ahb_req.hsize),
+    .hwdata(ahb_hwdata),
+    .hrdata(ahb_hrdata),
+    .hready(ahb_resp.hreadyout),
+    .hresp(ahb_resp.hresp)
+  );
+
+    always_comb addr2to2_n = (ahb_req.htrans == 'h2) ? ahb_req.haddr[2] : addr2to2;
+    always_ff @(posedge clk_i or negedge rst_ni) begin
+        if (~rst_ni) begin
+            addr2to2 <= '0;
+        end else begin
+            addr2to2 <= addr2to2_n;
+        end
+    end
+
+    logic iArValid, eArReady, eRValid, iRReady;
+    logic iAwValid, eAwReady, iWrValid, eWrReady, eBValid, iBReady;
+    iopmp_axi_pkg::r_channel_t eRChannel, iRChannel;
+    iopmp_axi_pkg::ar_channel_t iArChannel, eArChannel;
+    iopmp_axi_pkg::b_channel_t eBChannel;
+    iopmp_axi_pkg::slv_b_channel_t iBChannel;
+    iopmp_axi_pkg::slv_aw_channel_t eAwChannel;
+    iopmp_axi_pkg::aw_channel_t iAwChannel;
+    iopmp_axi_pkg::w_channel_t eWrChannel, iWrChannel;
+
+
+    assign iopmp_ip.ar_id = eArChannel.ar_id;
+    assign iopmp_ip.ar_addr = eArChannel.ar_addr;
+    assign iopmp_ip.ar_len = eArChannel.ar_len;
+    assign iopmp_ip.ar_size = eArChannel.ar_size;
+    assign iopmp_ip.ar_burst = eArChannel.ar_burst;
+    assign iopmp_ip.ar_lock = eArChannel.ar_lock;
+    assign iopmp_ip.ar_cache = eArChannel.ar_cache;
+    assign iopmp_ip.ar_prot = eArChannel.ar_prot;
+    assign iopmp_ip.ar_qos = eArChannel.ar_qos;
+    assign iopmp_ip.ar_region = eArChannel.ar_region;
+    assign iopmp_ip.ar_user = eArChannel.ar_user;
+
+    assign iopmp_ip.aw_id = eAwChannel.aw_id;       // 6 {MSI_Request,ID}
+    assign iopmp_ip.aw_addr = eAwChannel.aw_addr;     // 64
+    assign iopmp_ip.aw_len = eAwChannel.aw_len;      // 8
+    assign iopmp_ip.aw_size = eAwChannel.aw_size;     // 3
+    assign iopmp_ip.aw_burst = eAwChannel.aw_burst;
+    assign iopmp_ip.aw_lock = eAwChannel.aw_lock;
+    assign iopmp_ip.aw_cache = eAwChannel.aw_cache;
+    assign iopmp_ip.aw_prot = eAwChannel.aw_prot;
+    assign iopmp_ip.aw_qos = eAwChannel.aw_qos;
+    assign iopmp_ip.aw_region = eAwChannel.aw_region;
+    assign iopmp_ip.aw_user = eAwChannel.aw_user;     // 11
+
+    assign iopmp_ip.w_data = eWrChannel.w_data;
+    assign iopmp_ip.w_strb = eWrChannel.w_strb;
+    assign iopmp_ip.w_last = eWrChannel.w_last;
+    assign iopmp_ip.w_user = eWrChannel.w_user;
+
+
+    assign iRChannel = '{
+        r_id   : iopmp_ip.r_id,
+        r_data : iopmp_ip.r_data,
+        r_resp : iopmp_ip.r_resp,
+        r_last : iopmp_ip.r_last,
+        r_user : iopmp_ip.r_user
+    };
+
+    assign iBChannel = '{
+        b_id   : iopmp_ip.b_id,          // 5
+        b_resp : iopmp_ip.b_resp,        // 2
+        b_user : iopmp_ip.b_user      // 6
+    };
+
+    iopmp #(.CFG(config_iopmp_pkg::iopmp_cfg_default)) iopmp_dut (
+        .clk                (clk_i),
+        .rst_n              (rst_ni),
+        // Address Write Channel
+        .iAwValid           (iAwValid),
+        .iAwChannel         (iAwChannel),
+        .eAwReady           (eAwReady),
+        // Data Write channel
+        .iWrValid            (iWrValid),
+        .iWrChannel          (iWrChannel),
+        .eWrReady            (eWrReady),
+        // Address Read Channel
+        .iArValid           (iArValid),
+        .iArChannel         (iArChannel),
+        .eArReady           (eArReady),
+        // Write Response Channel
+        .eBValid            (eBValid),
+        .iBReady            (iBReady),
+        .eBChannel          (eBChannel),
+        // Read Response Channel
+        .eRValid            (eRValid),
+        .iRReady            (iRReady),
+        .eRChannel          (eRChannel),
+        // Slave Address Write Channel
+        .iAwReady           (iopmp_ip.aw_ready),
+        .eAwValid           (iopmp_ip.aw_valid),
+        .eAwChannel         (eAwChannel),
+        // Slave Address Read Channel
+        .iArReady           (iopmp_ip.ar_ready),
+        .eArValid           (iopmp_ip.ar_valid),
+        .eArChannel         (eArChannel),
+        // Slave Write Channel
+        .iWrReady           (iopmp_ip.w_ready),
+        .eWrValid           (iopmp_ip.w_valid),
+        .eWrChannel         (eWrChannel),
+        // Slave Read Response Channel
+        .eRReady            (iopmp_ip.r_ready),
+        .iRValid            (iopmp_ip.r_valid),
+        .iRChannel          (iRChannel),
+        // Slave Write Response Channel
+        .eBReady            (iopmp_ip.b_ready),
+        .iBValid            (iopmp_ip.b_valid),
+        .iBChannel          (iBChannel),
+        //AHB REQ Channel
+        .ahb_req            (ahb_req),
+        //AHB RESP Channel
+        .ahb_resp           (ahb_resp),
+        .wsi                ()
+    );
+
+      // DUT instance
+  axi4_dma_engine #(
+    .ADDR_WIDTH(52),
+    .DATA_WIDTH(64),
+    .ID_WIDTH(AxiIdWidth),
+    .MAX_BURST(16)
+  ) dut_axi4_dma_engine (
+    .clk(clk_i),
+    .rst_n(rst_ni),
+    .s_axi_awid(iopmp_dma.aw_id),
+    .s_axi_awaddr(iopmp_dma.aw_addr),
+    .s_axi_awvalid(iopmp_dma.aw_valid),
+    .s_axi_awready(iopmp_dma.aw_ready),
+    .s_axi_wdata(iopmp_dma.w_data),
+    .s_axi_wstrb(iopmp_dma.w_strb),
+    .s_axi_wvalid(iopmp_dma.w_valid),
+    .s_axi_wready(iopmp_dma.w_ready),
+    .s_axi_bid(iopmp_dma.b_id),
+    .s_axi_bresp(iopmp_dma.b_resp),
+    .s_axi_bvalid(iopmp_dma.b_valid),
+    .s_axi_bready(iopmp_dma.b_ready),
+    .s_axi_arid(iopmp_dma.ar_id),
+    .s_axi_araddr(iopmp_dma.ar_addr),
+    .s_axi_arvalid(iopmp_dma.ar_valid),
+    .s_axi_arready(iopmp_dma.ar_ready),
+    .s_axi_rid(iopmp_dma.r_id),
+    .s_axi_rdata(iopmp_dma.r_data),
+    .s_axi_rresp(iopmp_dma.r_resp),
+    .s_axi_rlast(iopmp_dma.r_last),
+    .s_axi_rvalid(iopmp_dma.r_valid),
+    .s_axi_rready(iopmp_dma.r_ready),
+
+    .m_axi_awid(iAwChannel.aw_id),
+    .m_axi_awaddr(iAwChannel.aw_addr),
+    .m_axi_awlen(iAwChannel.aw_len),
+    .m_axi_awsize(iAwChannel.aw_size),
+    .m_axi_awburst(iAwChannel.aw_burst),
+    .m_axi_awlock(iAwChannel.aw_lock),
+    .m_axi_awcache(iAwChannel.aw_cache),
+    .m_axi_awprot(iAwChannel.aw_prot),
+    .m_axi_awqos(iAwChannel.aw_qos),
+    .m_axi_awregion(iAwChannel.aw_region),
+    .m_axi_awuser(iAwChannel.aw_user),
+    .m_axi_awvalid(iAwValid),
+    .m_axi_awready(eAwReady),
+    .m_axi_wdata(iWrChannel.w_data),
+    .m_axi_wstrb(iWrChannel.w_strb),
+    .m_axi_wlast(iWrChannel.w_last),
+    .m_axi_wvalid(iWrValid),
+    .m_axi_wready(eWrReady),
+    .m_axi_bid(eBChannel.b_id),
+    .m_axi_bresp(eBChannel.b_resp),
+    .m_axi_bvalid(eBValid),
+    .m_axi_bready(iBReady),
+    .m_axi_arid(iArChannel.ar_id),
+    .m_axi_araddr(iArChannel.ar_addr),
+    .m_axi_arlen(iArChannel.ar_len),
+    .m_axi_arsize(iArChannel.ar_size),
+    .m_axi_arburst(iArChannel.ar_burst),
+    .m_axi_ar_cache(iArChannel.ar_cache),
+    .m_axi_ar_prot(iArChannel.ar_prot),
+    .m_axi_ar_qos(iArChannel.ar_qos),
+    .m_axi_ar_region(iArChannel.ar_region),
+    .m_axi_ar_user(iArChannel.ar_user),    // 6
+    .m_axi_arvalid(iArValid),
+    .m_axi_arready(eArReady),
+    .m_axi_rid(eRChannel.r_id),
+    .m_axi_rdata(eRChannel.r_data),
+    .m_axi_rresp(eRChannel.r_resp),
+    .m_axi_rlast(eRChannel.r_last),
+    .m_axi_rvalid(eRValid),
+    .m_axi_rready(iRReady)
+  );
 
     // ---------------
     // 1. PLIC

@@ -32,6 +32,8 @@ verilator             ?= verilator
 target-options ?=
 # additional defines
 defines        ?=
+defines += +CFG_IOPMP_SRCMD_FMT_0
+defines += +CFG_IOPMP_MDCFG_FMT_0
 # test name for torture runs (binary name)
 test-location  ?= output/test
 # set to either nothing or -log
@@ -123,6 +125,11 @@ ariane_pkg := \
               corev_apu/register_interface/src/reg_intf.sv           \
               corev_apu/tb/ariane_soc_pkg.sv                         \
               corev_apu/riscv-dbg/src/dm_pkg.sv                      \
+			  corev_apu/riscv-iopmp/verif/iopmp_top/vlib/config_iopmp_pkg.sv   \
+              corev_apu/riscv-iopmp/design/include/rfm_pkg.sv \
+              corev_apu/riscv-iopmp/design/include/ahb_lite_pkg.sv \
+              corev_apu/riscv-iopmp/design/include/iopmp_axi_pkg.sv  \
+              corev_apu/riscv-iopmp/design/include/execution_pipeline_pkg.sv \
               corev_apu/tb/ariane_axi_soc_pkg.sv
 ariane_pkg := $(addprefix $(root-dir), $(ariane_pkg))
 
@@ -202,6 +209,52 @@ src :=  $(if $(spike-tandem),verif/tb/core/uvma_core_cntrl_pkg.sv)              
         vendor/pulp-platform/tech_cells_generic/src/deprecated/pulp_clk_cells.sv     \
         vendor/pulp-platform/tech_cells_generic/src/rtl/tc_clk.sv                    \
 		core/include/iti_pkg.sv														 \
+		corev_apu/DMA/dma_engine.sv								\
+		corev_apu/axi2ahb_bridge/axi2ahb_bridge_top.sv		\
+		corev_apu/riscv-iopmp/design/common/iopmp_fifo.sv \
+		corev_apu/riscv-iopmp/design/common/iopmp_lzc.sv \
+		corev_apu/riscv-iopmp/design/common/lzc_1.sv \
+		corev_apu/riscv-iopmp/design/common/mem_1r1w.sv \
+		corev_apu/riscv-iopmp/design/common/vld_array.sv \
+		corev_apu/riscv-iopmp/design/common/tag_gen.sv \
+		corev_apu/riscv-iopmp/design/common/arb_rr.v \
+		corev_apu/riscv-iopmp/design/common/rr_arbiter.sv \
+ 		corev_apu/riscv-iopmp/design/rtl/register_file_manager/address_check.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/regfield.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/regfield_arb.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/base_registers/info_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/base_registers/prog_prot_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/base_registers/config_prot_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/base_registers/err_rpt_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/base_registers/error_record_windows.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/base_registers/base_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/mdcfg_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/srcmd_fmt_0_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/srcmd_fmt_2_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/entry_array_regs.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/read_register.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/regmap.sv \
+		corev_apu/riscv-iopmp/design/rtl/register_file_manager/register_file_manager.sv \
+		corev_apu/riscv-iopmp/design/rtl/master_request_manager/master_request_manager.sv \
+		corev_apu/riscv-iopmp/design/rtl/slave_request_manager/axi_write_chnl_controller.sv \
+		corev_apu/riscv-iopmp/design/rtl/slave_request_manager/slave_request_manager.sv \
+		corev_apu/riscv-iopmp/design/rtl/master_response_manager/master_response_manager.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/ttu_checks.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/srcmd_table_traversal.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/mdcfg_fmt_2.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/mds_traversal_fmt_2.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/mdcfg_fmt_1.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/mds_traversal_fmt_1.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/mdcfg_fmt_0.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/mdcfg_table_traversal.sv \
+		corev_apu/riscv-iopmp/design/rtl/table_traversal_unit/table_traversal_unit.sv \
+		corev_apu/riscv-iopmp/design/rtl/rule_analyzer_pipeline/rule_analyzer_pipeline.sv \
+		corev_apu/riscv-iopmp/design/rtl/rule_analyzer_pipeline/response_generator.sv \
+		corev_apu/riscv-iopmp/design/rtl/rule_analyzer_pipeline/encoder.sv \
+		corev_apu/riscv-iopmp/design/rtl/rule_analyzer_pipeline/match_8_entry.sv \
+		corev_apu/riscv-iopmp/design/rtl/rule_analyzer_pipeline/match_entry.sv \
+		corev_apu/riscv-iopmp/design/rtl/eic_block/eic_block.sv \
+		corev_apu/riscv-iopmp/design/rtl/iopmp.sv \
         corev_apu/tb/ariane_testharness.sv                                           \
         corev_apu/tb/ariane_peripherals.sv                                           \
         corev_apu/tb/rvfi_tracer.sv                                                  \
@@ -275,12 +328,12 @@ altera_filter := corev_apu/tb/ariane_testharness.sv \
 								corev_apu/riscv-dbg/src/dmi_jtag_tap.sv \
 								corev_apu/riscv-dbg/src/dmi_jtag.sv \
 								corev_apu/fpga/src/apb_uart/src/reg_uart_wrap.sv
-								
+
 altera_filter := $(addprefix $(root-dir), $(altera_filter))
 xil_debug_filter = $(addprefix $(root-dir), corev_apu/riscv-dbg/src/dm_obi_top.sv)
 xil_debug_filter += $(addprefix $(root-dir), corev_apu/riscv-dbg/src/dm_pkg.sv)
 xil_debug_filter += $(addprefix $(root-dir), corev_apu/riscv-dbg/src/dmi_vjtag_tap.sv)
-xil_debug_filter += $(addprefix $(root-dir), corev_apu/riscv-dbg/src/dmi_vjtag.sv)						
+xil_debug_filter += $(addprefix $(root-dir), corev_apu/riscv-dbg/src/dmi_vjtag.sv)
 src := $(filter-out $(xil_debug_filter), $(src))
 
 fpga_src += corev_apu/fpga/src/bootrom/bootrom_$(XLEN).sv
@@ -651,6 +704,8 @@ verilate_command := $(verilator) --no-timing verilator_config.vlt               
                     $(filter-out %.vhd, $(ariane_pkg))                                                           \
                     $(filter-out core/fpu_wrap.sv, $(filter-out %.vhd, $(filter-out %_config_pkg.sv, $(src))))   \
                     +define+$(defines)$(if $(TRACE_FAST),+VM_TRACE)$(if $(TRACE_COMPACT),+VM_TRACE+VM_TRACE_FST) \
+                    +define+CFG_IOPMP_SRCMD_FMT_0                                                               \
+                    +define+CFG_IOPMP_MDCFG_FMT_0                                                               \
                     corev_apu/tb/common/mock_uart.sv                                                             \
                     +incdir+corev_apu/axi_node                                                                   \
                     $(if $(verilator_threads), --threads $(verilator_threads))                                   \
