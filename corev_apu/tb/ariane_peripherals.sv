@@ -58,7 +58,7 @@ module ariane_peripherals #(
     output logic       spi_ss
 );
 
-    ahb_lite_pkg::ahb_req_t         ahb_req;
+    ahb_lite_pkg::ahb_req_i_t       ahb_req;
     ahb_lite_pkg::ahb_resp_t        ahb_resp;
     logic [63:0]		ahb_hwdata;
     logic [63:0]		ahb_hrdata;
@@ -68,7 +68,6 @@ module ariane_peripherals #(
     assign ahb_hrdata = addr2to2 ? {ahb_resp.hrdata, 32'h0} : {32'h0, ahb_resp.hrdata};
     assign ahb_req.hsel = 1'b1;
     assign ahb_req.hprot = 4'b0011;
-    assign ahb_req.hready = ahb_resp.hreadyout;
 
     axi2ahb_bridge_top u_axi2ahb_bridge_top (
     .aclk(clk_i),
@@ -274,6 +273,7 @@ module ariane_peripherals #(
     .m_axi_wdata(iWrChannel.w_data),
     .m_axi_wstrb(iWrChannel.w_strb),
     .m_axi_wlast(iWrChannel.w_last),
+    .m_axi_wuser(iWrChannel.w_user),
     .m_axi_wvalid(iWrValid),
     .m_axi_wready(eWrReady),
     .m_axi_bid(eBChannel.b_id),

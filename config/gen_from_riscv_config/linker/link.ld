@@ -29,7 +29,7 @@ SECTIONS
   .text : { *(.text) }
   . = ALIGN(0x1000);
   .text.startup : { *(.text.startup) }
-  . = ALIGN(0x1000); 
+  . = ALIGN(0x1000);
   _end_text = .;
   . = ALIGN(0x1000);
   .rodata : { *(.rodata*)}

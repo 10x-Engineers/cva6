@@ -63,6 +63,7 @@ module axi4_dma_engine #(
   output logic [DATA_WIDTH-1:0]    m_axi_wdata,
   output logic [(DATA_WIDTH/8)-1:0] m_axi_wstrb,
   output logic                     m_axi_wlast,
+  output logic [5:0]               m_axi_wuser,
   output logic                     m_axi_wvalid,
   input  logic                     m_axi_wready,
 
@@ -230,7 +231,7 @@ module axi4_dma_engine #(
       READ_ADDR:  if (m_axi_arready) next_state = READ_DATA;
       READ_DATA:  if (m_axi_rvalid && m_axi_rlast) next_state = COMPLETE;
 
-      WRITE_ADDR: if (m_axi_awready) next_state = WRITE_DATA;
+      WRITE_ADDR: if (m_axi_awready & m_axi_wready && m_axi_wlast) next_state = WAIT_RESP;
       WRITE_DATA: if (m_axi_wvalid && m_axi_wlast) next_state = WAIT_RESP;
       WAIT_RESP:  if (m_axi_bvalid) next_state = COMPLETE;
       COMPLETE:   next_state = IDLE;
@@ -253,7 +254,8 @@ module axi4_dma_engine #(
   assign m_axi_wdata    = data_buf[src_addr_reg[10:0]]; // In real DMA, loop through buffer
   assign m_axi_wstrb    = '1;
   assign m_axi_wlast    = 1'b1;
-  assign m_axi_wvalid   = (state == WRITE_DATA);
+  assign m_axi_wuser    = 6'h2;
+  assign m_axi_wvalid   = (state == WRITE_ADDR);
   assign m_axi_bready   = 1'b1;
 
   assign m_axi_arid     = '0;
@@ -266,7 +268,7 @@ module axi4_dma_engine #(
   assign m_axi_arprot   = '0;
   assign m_axi_arqos    = '0;
   assign m_axi_arregion = '0;
-  assign m_axi_aruser   = 6'h2;
+  assign m_axi_ar_user  = 6'h2;
   assign m_axi_arvalid  = (state == READ_ADDR);
   assign m_axi_rready   = 1'b1;
 

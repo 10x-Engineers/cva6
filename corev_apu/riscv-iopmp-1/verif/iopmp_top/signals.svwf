@@ -1,0 +1,1459 @@
+
+#
+# Mnemonic Maps
+#
+mmap new  -reuse -name {Boolean as Logic} -radix %b -contents {{%c=FALSE -edgepriority 1 -shape low}
+{%c=TRUE -edgepriority 1 -shape high}}
+mmap new  -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor orange -label REG:%x -linecolor yellow -shape bus}
+{%x=1F -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=2C -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=* -label %x -linecolor gray -shape bus}}
+
+array unset createdGroup
+array set createdGroup {}
+#
+# Groups
+#
+if {[catch {group get -using [list {Muxing}]}]} {
+set createdGroup([list {Muxing}]) 1
+catch {group new -name Muxing -overlay 0}
+}
+if {[catch {group get -using [list {Invalid_Signals}]}]} {
+set createdGroup([list {Invalid_Signals}]) 1
+catch {group new -name Invalid_Signals -overlay 0}
+}
+if {[catch {group get -using [list {SW_Write_Data}]}]} {
+set createdGroup([list {SW_Write_Data}]) 1
+catch {group new -name SW_Write_Data -overlay 0}
+}
+if {[catch {group get -using [list {Mux_Read_data_Signals}]}]} {
+set createdGroup([list {Mux_Read_data_Signals}]) 1
+catch {group new -name Mux_Read_data_Signals -overlay 0}
+}
+if {[catch {group get -using [list {RFM}]}]} {
+set createdGroup([list {RFM}]) 1
+catch {group new -name RFM -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Tans_Manager}]}]} {
+set createdGroup([list {AXI_Tans_Manager}]) 1
+catch {group new -name AXI_Tans_Manager -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Read_Trans}]}]} {
+set createdGroup([list {AXI_Read_Trans}]) 1
+catch {group new -name AXI_Read_Trans -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Read_Resp}]}]} {
+set createdGroup([list {AXI_Read_Resp}]) 1
+catch {group new -name AXI_Read_Resp -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Write_Trans}]}]} {
+set createdGroup([list {AXI_Write_Trans}]) 1
+catch {group new -name AXI_Write_Trans -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Write_Resp}]}]} {
+set createdGroup([list {AXI_Write_Resp}]) 1
+catch {group new -name AXI_Write_Resp -overlay 0}
+}
+if {[catch {group get -using [list {Table_Traversal_Unit}]}]} {
+set createdGroup([list {Table_Traversal_Unit}]) 1
+catch {group new -name Table_Traversal_Unit -overlay 0}
+}
+if {[catch {group get -using [list {Entry_0_7}]}]} {
+set createdGroup([list {Entry_0_7}]) 1
+catch {group new -name Entry_0_7 -overlay 0}
+}
+if {[catch {group get -using [list {Stage_1}]}]} {
+set createdGroup([list {Stage_1}]) 1
+catch {group new -name Stage_1 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_0}]}]} {
+set createdGroup([list {Entry_0}]) 1
+catch {group new -name Entry_0 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_1}]}]} {
+set createdGroup([list {Entry_1}]) 1
+catch {group new -name Entry_1 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_2}]}]} {
+set createdGroup([list {Entry_2}]) 1
+catch {group new -name Entry_2 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_3}]}]} {
+set createdGroup([list {Entry_3}]) 1
+catch {group new -name Entry_3 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_4}]}]} {
+set createdGroup([list {Entry_4}]) 1
+catch {group new -name Entry_4 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_5}]}]} {
+set createdGroup([list {Entry_5}]) 1
+catch {group new -name Entry_5 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_6}]}]} {
+set createdGroup([list {Entry_6}]) 1
+catch {group new -name Entry_6 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_7}]}]} {
+set createdGroup([list {Entry_7}]) 1
+catch {group new -name Entry_7 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_8_15}]}]} {
+set createdGroup([list {Entry_8_15}]) 1
+catch {group new -name Entry_8_15 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_8}]}]} {
+set createdGroup([list {Entry_8}]) 1
+catch {group new -name Entry_8 -overlay 0}
+}
+if {[catch {group get -using [list {Rule_Analyzer_Pipeline}]}]} {
+set createdGroup([list {Rule_Analyzer_Pipeline}]) 1
+catch {group new -name Rule_Analyzer_Pipeline -overlay 0}
+}
+if {[catch {group get -using [list {Stage_2}]}]} {
+set createdGroup([list {Stage_2}]) 1
+catch {group new -name Stage_2 -overlay 0}
+}
+if {[catch {group get -using [list {Stage_3}]}]} {
+set createdGroup([list {Stage_3}]) 1
+catch {group new -name Stage_3 -overlay 0}
+}
+if {[catch {group get -using [list {Stage_4}]}]} {
+set createdGroup([list {Stage_4}]) 1
+catch {group new -name Stage_4 -overlay 0}
+}
+if {[catch {group get -using [list {SW_Write_EN}]}]} {
+set createdGroup([list {SW_Write_EN}]) 1
+catch {group new -name SW_Write_EN -overlay 0}
+}
+if {[catch {group get -using [list {Error_Control_Block}]}]} {
+set createdGroup([list {Error_Control_Block}]) 1
+catch {group new -name Error_Control_Block -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Stall_Read_Trans}]}]} {
+set createdGroup([list {AXI_Stall_Read_Trans}]) 1
+catch {group new -name AXI_Stall_Read_Trans -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Stall_Write_Trans}]}]} {
+set createdGroup([list {AXI_Stall_Write_Trans}]) 1
+catch {group new -name AXI_Stall_Write_Trans -overlay 0}
+}
+if {[catch {group get -using [list {AXI_Trans_Manager}]}]} {
+set createdGroup([list {AXI_Trans_Manager}]) 1
+catch {group new -name AXI_Trans_Manager -overlay 0}
+}
+if {[catch {group get -using [list {Entry_9}]}]} {
+set createdGroup([list {Entry_9}]) 1
+catch {group new -name Entry_9 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_10}]}]} {
+set createdGroup([list {Entry_10}]) 1
+catch {group new -name Entry_10 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_11}]}]} {
+set createdGroup([list {Entry_11}]) 1
+catch {group new -name Entry_11 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_12}]}]} {
+set createdGroup([list {Entry_12}]) 1
+catch {group new -name Entry_12 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_13}]}]} {
+set createdGroup([list {Entry_13}]) 1
+catch {group new -name Entry_13 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_14}]}]} {
+set createdGroup([list {Entry_14}]) 1
+catch {group new -name Entry_14 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_15}]}]} {
+set createdGroup([list {Entry_15}]) 1
+catch {group new -name Entry_15 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_16_23}]}]} {
+set createdGroup([list {Entry_16_23}]) 1
+catch {group new -name Entry_16_23 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_16}]}]} {
+set createdGroup([list {Entry_16}]) 1
+catch {group new -name Entry_16 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_17}]}]} {
+set createdGroup([list {Entry_17}]) 1
+catch {group new -name Entry_17 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_18}]}]} {
+set createdGroup([list {Entry_18}]) 1
+catch {group new -name Entry_18 -overlay 0}
+}
+if {[catch {group get -using [list {Entry_19}]}]} {
+set createdGroup([list {Entry_19}]) 1
+catch {group new -name Entry_19 -overlay 0}
+}
+if {[catch {group get -using [list {ERR_MFR_READ}]}]} {
+set createdGroup([list {ERR_MFR_READ}]) 1
+catch {group new -name ERR_MFR_READ -overlay 0}
+}
+if {[info exists createdGroup([list {Muxing}])]} {
+group using Muxing
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.active_mux_n[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.decode_mux0_sel_n[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.decode_mux1_sel_n[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.decode_mux2_sel_n[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.active_mux_q[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.decode_mux0_sel_q[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.decode_mux1_sel_q[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.decode_mux2_sel_q[2:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Invalid_Signals}])]} {
+group using Invalid_Signals
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.addr_misalign}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.illegal_address}]} ]
+}
+
+if {[info exists createdGroup([list {SW_Write_Data}])]} {
+group using SW_Write_Data
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg0_prient_prog_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg0_rrid_transl_prog_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg2_rrid_transl_swdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg2_prio_entry_swdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfglck_f_swdata[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfglck_l_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entrylck_l_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entrylck_f_swdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstall_exempt_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstall_md_swdata[30:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstallh_mdh_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rridscp_op_swdata[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rridscp_rrid_swdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_ie_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_l_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_msi_en_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_msidata_swdata[10:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_info_msi_werr_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_info_v_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svi_swdata[11:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_msiaddr_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_msiaddrh_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfg_t_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_en_l_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_en_md_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_enh_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_r_md_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_rh_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_w_md_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_wh_swdata[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_addr_swdata[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_a_swdata[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_r_swdata[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_sire_swdata[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_siwe_swdata[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_sixe_swdata[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_w_swdata[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_x_swdata[0:127]}]} ]
+}
+
+if {[info exists createdGroup([list {Mux_Read_data_Signals}])]} {
+group using Mux_Read_data_Signals
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mux0_mux3_data[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mux2_mux3_data[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mux1_mux3_data[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_rdata[31:0]}]} ]
+}
+
+if {[info exists createdGroup([list {RFM}])]} {
+group using RFM
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hready_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hsel_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_req_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_req_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hsel_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hready_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.valid_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.valid_req_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hw2rfm}]} ] \
+    Muxing \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.valid_req_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.write_valid_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_hwdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_4_byte_access}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_only_zero}]} ] \
+    ERR_MFR_READ \
+    Invalid_Signals \
+    SW_Write_EN \
+    SW_Write_Data \
+    Mux_Read_data_Signals \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.start_counter}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstall_is_stalled_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstall_is_stalled_hwdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rridscp_stat_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rrid_stall[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rridscp_stat_hwdata[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.response_state_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.response_state_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_resp_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_resp_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_resp}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rfm2ttu}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rfm2rap}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rfm2eic}]} ]
+}
+
+if {[info exists createdGroup([list {AXI_Tans_Manager}])]} {
+group using AXI_Tans_Manager
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+
+}
+
+if {[info exists createdGroup([list {AXI_Read_Trans}])]} {
+group using AXI_Read_Trans
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_channel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_ready_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_ready_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_valid_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_valid_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_buf_w_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_r_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_r_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_buf_rd_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_v[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_ready[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arb_req[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ttu_axi_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_rap_rd_buf_ready}]} ]
+}
+
+if {[info exists createdGroup([list {AXI_Read_Resp}])]} {
+group using AXI_Read_Resp
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_resp_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_resp_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_rap_rd_buf_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rap_axi_rd_trans_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rap_axi_transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_trans_resp_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.r_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.r_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.r_channel}]} ]
+}
+
+if {[info exists createdGroup([list {AXI_Write_Trans}])]} {
+group using AXI_Write_Trans
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_channel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_ready_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_ready_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_valid_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_valid_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_ready_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_ready_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_valid_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_valid_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_channel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_buf_w_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_w_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_w_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_buf_rd_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_buf_v}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_ready[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_v[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arb_req[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ttu_axi_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_rap_wr_buf_ready}]} ]
+}
+
+if {[info exists createdGroup([list {AXI_Write_Resp}])]} {
+group using AXI_Write_Resp
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_rap_wr_buf_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rap_axi_wr_trans_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_resp_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_resp_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rap_axi_transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_trans_resp_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.b_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.b_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.b_channel}]} ]
+}
+
+if {[info exists createdGroup([list {Table_Traversal_Unit}])]} {
+group using Table_Traversal_Unit
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.ttu.axi_ttu_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.axi_ttu_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_axi_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.rfm2ttu}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.no_instr_fetch_access}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.no_write_access}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.MDPRESENT[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.perm_w[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.perm_r[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.lwr_entry[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.upr_entry[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_rap_trans_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.mask_ENTRYPRESENT[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.mask_MDRWPERM[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_rap_trans_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_rap_trans}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_0_7}])]} {
+group using Entry_0_7
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.entry_data[0:7]}]} ] \
+    Entry_0 \
+    Entry_1 \
+    Entry_2 \
+    Entry_3 \
+    Entry_4 \
+    Entry_5 \
+    Entry_6 \
+    Entry_7 \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.check_entry[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.prio_entry[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.entry_operation[0:7]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.entry_err_info[0:7]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.error}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.match}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.record_index[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.err_info[4:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.err_entry_index[6:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.transaction_o}]} ]
+}
+
+if {[info exists createdGroup([list {Stage_1}])]} {
+group using Stage_1
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.transaction_i}]} ] \
+    Entry_0_7 \
+    Entry_8_15 \
+    Entry_16_23 \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.transaction[0:4]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_0}])]} {
+group using Entry_0
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[0].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_1}])]} {
+group using Entry_1
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[1].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_2}])]} {
+group using Entry_2
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[2].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_3}])]} {
+group using Entry_3
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[3].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_4}])]} {
+group using Entry_4
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[4].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_5}])]} {
+group using Entry_5
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[5].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_6}])]} {
+group using Entry_6
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[6].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_7}])]} {
+group using Entry_7
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[0].match_8_entry_inst.gen_match_entry[7].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_8_15}])]} {
+group using Entry_8_15
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.entry_data[0:7]}]} ] \
+    Entry_8 \
+    Entry_9 \
+    Entry_10 \
+    Entry_11 \
+    Entry_12 \
+    Entry_13 \
+    Entry_14 \
+    Entry_15 \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.check_entry[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.prio_entry[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.entry_operation[0:7]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.err_entry_index[6:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.match}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.error}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.record_index[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.err_info[4:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.entry_err_info[0:7]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.transaction_o}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_8}])]} {
+group using Entry_8
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[8].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Rule_Analyzer_Pipeline}])]} {
+group using Rule_Analyzer_Pipeline
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.ttu_rap_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rfm2rap}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.transaction[0:4]}]} ] \
+    Stage_1 \
+    Stage_2 \
+    Stage_3 \
+    Stage_4 \
+    [subst  {[format {tb_top.iopmp_dut.rap.axi_rap_rd_buf_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.axi_rap_wr_buf_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rap_axi_rd_trans_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rap_axi_wr_trans_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rap_axi_transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rap_eic_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rap_eic_operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rap_eic_error_info}]} ]
+}
+
+if {[info exists createdGroup([list {Stage_2}])]} {
+group using Stage_2
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[1].match_32_entry_inst.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[1].match_32_entry_inst.transaction[0:4]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[1].match_32_entry_inst.transaction_o}]} ]
+}
+
+if {[info exists createdGroup([list {Stage_3}])]} {
+group using Stage_3
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[2].match_32_entry_inst.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[2].match_32_entry_inst.transaction[0:4]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[2].match_32_entry_inst.transaction_o}]} ]
+}
+
+if {[info exists createdGroup([list {Stage_4}])]} {
+group using Stage_4
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[3].match_32_entry_inst.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[3].match_32_entry_inst.transaction[0:4]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[3].match_32_entry_inst.transaction_o}]} ]
+}
+
+if {[info exists createdGroup([list {SW_Write_EN}])]} {
+group using SW_Write_EN
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.reg_wr_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.addr_q[13:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg0_prient_prog_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg0_rrid_transl_prog_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg2_rrid_transl_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.hwcfg2_prio_entry_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfglck_l_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfglck_f_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entrylck_l_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entrylck_f_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstall_exempt_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstall_md_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdstallh_mdh_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rridscp_op_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rridscp_rrid_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_ie_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_l_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_msi_en_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_cfg_msidata_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_info_msi_werr_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_info_v_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svi_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_msiaddr_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_msiaddrh_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfg_t_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_en_l_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_en_md_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_enh_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_r_md_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_rh_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_w_md_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_wh_swen[0:62]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_addr_swen[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_a_swen[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_r_swen[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_sire_swen[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_siwe_swen[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_sixe_swen[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_w_swen[0:127]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_cfg_x_swen[0:127]}]} ]
+}
+
+if {[info exists createdGroup([list {Error_Control_Block}])]} {
+group using Error_Control_Block
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap_eic_operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap_eic_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap_eic_error_info_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.erb_eic_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.error_interrupt_control.err_rec_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.error_interrupt_control.intr_o}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.error_interrupt_control.msi_intr_o}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap_eic_error_info_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.hw2rfm}]} ]
+}
+
+if {[info exists createdGroup([list {AXI_Stall_Read_Trans}])]} {
+group using AXI_Stall_Read_Trans
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_channel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_ready_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_ready_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_valid_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ar_valid_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_stall_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_stall_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_stall_buf_w_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_stall_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_r_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_r_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rd_stall_buf_rd_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arb_req[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_ready[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_v[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ttu_axi_ready}]} ]
+}
+
+if {[info exists createdGroup([list {AXI_Stall_Write_Trans}])]} {
+group using AXI_Stall_Write_Trans
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_channel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_ready_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_ready_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_valid_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.aw_valid_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_ready_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_ready_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_valid_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_valid_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.w_channel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_stall_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_stall_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_stall_buf_w_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_stall_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_w_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.transaction_w_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.wr_stall_buf_rd_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_v[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arbiter_ready[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.arb_req[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.axi_ttu_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.ttu_axi_ready}]} ]
+}
+
+if {[info exists createdGroup([list {AXI_Trans_Manager}])]} {
+group using AXI_Trans_Manager
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.axi_trans_mgr.rrid_stall[62:0]}]} ] \
+    AXI_Read_Trans \
+    AXI_Read_Resp \
+    AXI_Write_Trans \
+    AXI_Write_Resp \
+    AXI_Stall_Read_Trans \
+    AXI_Stall_Write_Trans
+}
+
+if {[info exists createdGroup([list {Entry_9}])]} {
+group using Entry_9
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[9].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_10}])]} {
+group using Entry_10
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[10].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_11}])]} {
+group using Entry_11
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[11].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_12}])]} {
+group using Entry_12
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[12].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_13}])]} {
+group using Entry_13
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[13].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_14}])]} {
+group using Entry_14
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[14].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_15}])]} {
+group using Entry_15
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.addr_chk_1}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.addr_chk_2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[8].match_8_entry_inst.gen_match_entry[15].match_entry_inst.err_info[4:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_16_23}])]} {
+group using Entry_16_23
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.entry_data[0:7]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.entry_operation[0:7]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.entry_err_info[0:7]}]} ] \
+    Entry_16 \
+    Entry_17 \
+    Entry_18 \
+    Entry_19 \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.prio_entry[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.match}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.error}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.record_index[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.transaction_o}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_16}])]} {
+group using Entry_16
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[16].match_entry_inst.operation[1:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_17}])]} {
+group using Entry_17
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[17].match_entry_inst.operation[1:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_18}])]} {
+group using Entry_18
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[18].match_entry_inst.operation[1:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Entry_19}])]} {
+group using Entry_19
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.ENTRY_INDEX}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.entry_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.trans_end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.entry_cfg}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.prev_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.curr_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.rd_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.ex_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.wr_allowed}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.napot_mask[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.start_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.end_addr[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.valid_range}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.gen_match_entry[0].match_32_entry_inst.gen_match_entry[16].match_8_entry_inst.gen_match_entry[19].match_entry_inst.operation[1:0]}]} ]
+}
+
+if {[info exists createdGroup([list {ERR_MFR_READ}])]} {
+group using ERR_MFR_READ
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.found}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svw_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svs_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svi_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svs_hwdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svi_hwdata[11:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_svw_hwdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.eic_rfm_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.eic_rfm_err_rrid[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.rfm_eic_ready}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.svw_array[3:0]}]} ]
+}
+
+set id [waveform add -signals [subst  {
+	{[format {tb_top.clk}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {tb_top.reset}]}
+	} ]]
+
+set groupId0 [waveform add -groups RFM]
+
+set groupId1 [waveform find -name Muxing]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name ERR_MFR_READ]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name Invalid_Signals]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name SW_Write_EN]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name SW_Write_Data]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name Mux_Read_data_Signals]
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups AXI_Trans_Manager]
+
+set groupId1 [waveform find -name AXI_Read_Trans]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name AXI_Read_Resp]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name AXI_Write_Trans]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name AXI_Write_Resp]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name AXI_Stall_Read_Trans]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name AXI_Stall_Write_Trans]
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups Table_Traversal_Unit]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups Rule_Analyzer_Pipeline]
+
+set groupId1 [waveform find -name Stage_1]
+
+set groupId2 [waveform find -name Entry_0_7]
+
+set groupId3 [waveform find -name Entry_0]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_1]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_2]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_3]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_4]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_5]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_6]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_7]
+waveform hierarchy collapse $groupId3
+
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name Entry_8_15]
+
+set groupId3 [waveform find -name Entry_8]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_9]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_10]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_11]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_12]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_13]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_14]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_15]
+waveform hierarchy collapse $groupId3
+
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name Entry_16_23]
+
+set groupId3 [waveform find -name Entry_16]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_17]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_18]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name Entry_19]
+waveform hierarchy collapse $groupId3
+
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name Stage_2]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name Stage_3]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name Stage_4]
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups Error_Control_Block]
+waveform hierarchy collapse $groupId0
+
+
+waveform xview limits 0 2000ps

@@ -1,0 +1,8 @@
+[submodule "iopmp_ref"]
+	path = iopmp_ref
+	url = git@github.com:10x-Engineers/riscv-iopmp.git
+	branch = iopmp_models
+[submodule "RISCV-IOPMP/verif/iopmp_ref"]
+	path = RISCV-IOPMP/verif/iopmp_ref
+	url = git@github.com:10x-Engineers/riscv-iopmp.git
+	branch = iopmp_models

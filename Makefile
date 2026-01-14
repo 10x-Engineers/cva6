@@ -71,6 +71,8 @@ spike-tandem ?= $(SPIKE_TANDEM)
 
 SPIKE_INSTALL_DIR     ?= $(root-dir)/tools/spike
 
+iopmp_simulation_only ?= 0
+
 # setting additional xilinx board parameters for the selected board
 ifeq ($(BOARD), genesys2)
 	XILINX_PART              := xc7k325tffg900-2
@@ -126,11 +128,21 @@ ariane_pkg := \
               corev_apu/tb/ariane_soc_pkg.sv                         \
               corev_apu/riscv-dbg/src/dm_pkg.sv                      \
 			  corev_apu/riscv-iopmp/verif/iopmp_top/vlib/config_iopmp_pkg.sv   \
-              corev_apu/riscv-iopmp/design/include/rfm_pkg.sv \
-              corev_apu/riscv-iopmp/design/include/ahb_lite_pkg.sv \
-              corev_apu/riscv-iopmp/design/include/iopmp_axi_pkg.sv  \
-              corev_apu/riscv-iopmp/design/include/execution_pipeline_pkg.sv \
+			  corev_apu/riscv-iopmp/design/include/ahb_lite_pkg.sv   			 \
+			  corev_apu/riscv-iopmp/design/include/iopmp_axi_pkg.sv  			 \
+			  corev_apu/riscv-iopmp/design/include/rfm_pkg.sv 	   			 \
+			  corev_apu/riscv-iopmp/design/include/execution_pipeline_pkg.sv \
               corev_apu/tb/ariane_axi_soc_pkg.sv
+
+ifeq ($(iopmp_simulation_only),1)
+	ariane_pkg += \
+		 corev_apu/cycle_accurate_iopmp_model/include/fifo_pkg.sv  \
+		 corev_apu/cycle_accurate_iopmp_model/include/config_cycle_acc_pkg.sv		\
+		 corev_apu/cycle_accurate_iopmp_model/include/c_model_pkg.sv				\
+		 corev_apu/cycle_accurate_iopmp_model/include/ahb_lite_c_pkg.sv			\
+		 corev_apu/cycle_accurate_iopmp_model/include/axi_c_pkg.sv
+endif
+
 ariane_pkg := $(addprefix $(root-dir), $(ariane_pkg))
 
 # Test packages
@@ -209,16 +221,28 @@ src :=  $(if $(spike-tandem),verif/tb/core/uvma_core_cntrl_pkg.sv)              
         vendor/pulp-platform/tech_cells_generic/src/deprecated/pulp_clk_cells.sv     \
         vendor/pulp-platform/tech_cells_generic/src/rtl/tc_clk.sv                    \
 		core/include/iti_pkg.sv														 \
-		corev_apu/DMA/dma_engine.sv								\
+		corev_apu/DMA/dma_engine.sv							\
 		corev_apu/axi2ahb_bridge/axi2ahb_bridge_top.sv		\
+        corev_apu/tb/ariane_testharness.sv                                           \
+        corev_apu/tb/ariane_peripherals.sv                                           \
+        corev_apu/tb/rvfi_tracer.sv                                                  \
+        corev_apu/tb/common/uart.sv                                                  \
+        corev_apu/tb/common/SimDTM.sv                                                \
+        corev_apu/tb/common/SimJTAG.sv                                               \
+        core/cva6_iti/instr_to_trace.sv                                              \
+        core/cva6_iti/iti.sv                                                         \
+        core/cva6_iti/itype_detector.sv
+
+ifeq ($(iopmp_simulation_only),0)
+src += \
 		corev_apu/riscv-iopmp/design/common/iopmp_fifo.sv \
 		corev_apu/riscv-iopmp/design/common/iopmp_lzc.sv \
-		corev_apu/riscv-iopmp/design/common/lzc_1.sv \
-		corev_apu/riscv-iopmp/design/common/mem_1r1w.sv \
+		corev_apu/riscv-iopmp/design/common/mem1r1w.sv \
 		corev_apu/riscv-iopmp/design/common/vld_array.sv \
 		corev_apu/riscv-iopmp/design/common/tag_gen.sv \
 		corev_apu/riscv-iopmp/design/common/arb_rr.v \
 		corev_apu/riscv-iopmp/design/common/rr_arbiter.sv \
+		corev_apu/riscv-iopmp/design/common/iopmp_common_macros.svh \
  		corev_apu/riscv-iopmp/design/rtl/register_file_manager/address_check.sv \
 		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/regfield.sv \
 		corev_apu/riscv-iopmp/design/rtl/register_file_manager/rfm_regmap/regfield_arb.sv \
@@ -254,16 +278,15 @@ src :=  $(if $(spike-tandem),verif/tb/core/uvma_core_cntrl_pkg.sv)              
 		corev_apu/riscv-iopmp/design/rtl/rule_analyzer_pipeline/match_8_entry.sv \
 		corev_apu/riscv-iopmp/design/rtl/rule_analyzer_pipeline/match_entry.sv \
 		corev_apu/riscv-iopmp/design/rtl/eic_block/eic_block.sv \
-		corev_apu/riscv-iopmp/design/rtl/iopmp.sv \
-        corev_apu/tb/ariane_testharness.sv                                           \
-        corev_apu/tb/ariane_peripherals.sv                                           \
-        corev_apu/tb/rvfi_tracer.sv                                                  \
-        corev_apu/tb/common/uart.sv                                                  \
-        corev_apu/tb/common/SimDTM.sv                                                \
-        corev_apu/tb/common/SimJTAG.sv                                               \
-        core/cva6_iti/instr_to_trace.sv                                              \
-        core/cva6_iti/iti.sv                                                         \
-        core/cva6_iti/itype_detector.sv
+		corev_apu/riscv-iopmp/design/rtl/iopmp.sv
+endif
+
+ifeq ($(iopmp_simulation_only),1)
+src += \
+		corev_apu/cycle_accurate_iopmp_model/common/common_macros.svh	\
+		corev_apu/cycle_accurate_iopmp_model/common/fifo_queue.sv		\
+		corev_apu/cycle_accurate_iopmp_model/iopmp_c_model.sv
+endif
 
 src := $(addprefix $(root-dir), $(src))
 
@@ -565,6 +588,7 @@ XRUN_RUN_LOG       ?= xrun_run.log
 CVA6_HOME	   ?= $(realpath -s $(root-dir))
 
 XRUN_INCDIR :=+incdir+$(CVA6_HOME)/core/include 			\
+	+incdir+$(CVA6_HOME)/corev_apu/riscv-iopmp/design/common \
 	+incdir+$(CVA6_HOME)/vendor/pulp-platform/axi/include/		\
 	+incdir+$(CVA6_HOME)/corev_apu/register_interface/include
 
@@ -592,6 +616,7 @@ XRUN_COMP = $(XRUN_COMP_FLAGS)		\
 	$(XRUN_INCDIR)		      	\
 	-f ../core/Flist.cva6    	\
 	$(filter %.sv, $(ariane_pkg)) 	\
+	$(filter %.v, $(src))	      	\
 	$(filter %.sv, $(src))	      	\
 	$(filter %.vhd, $(uart_src))  	\
 	$(filter %.sv, $(XRUN_TB))
@@ -610,6 +635,8 @@ xrun_comp: $(dpi-library)/xrun_ariane_dpi.so
 	cd $(XRUN_RESULTS_DIR) && $(XRUN)   \
 		+permissive		    \
 		$(XRUN_COMP)                \
+		+define+CFG_IOPMP_SRCMD_FMT_0 \
+		+define+CFG_IOPMP_MDCFG_FMT_0 \
 		-l $(XRUN_COMPL_LOG)        \
 		+permissive-off		    \
 		-elaborate
@@ -696,6 +723,12 @@ xrun-check-benchmarks:
 	ci/check-tests.sh $(XRUN_RESULTS_DIR)/benchmarks/ $(shell wc -l $(riscv-benchmarks-list) | awk -F " " '{ print $1 }')
 
 xrun-ci: xrun-asm-tests xrun-amo-tests xrun-mul-tests xrun-fp-tests xrun-benchmarks
+
+# verilator-specific
+// TODO: Add at line#745
+# +incdir+corev_apu/cycle_accurate_iopmp_model/iopmp_ref_model/include					     
+// TODO: Add at line#773
+# corev_apu/cycle_accurate_iopmp_model/iopmp_ref_model/src/*.c
 
 # verilator-specific
 verilate_command := $(verilator) --no-timing verilator_config.vlt                                                \

@@ -1,0 +1,46 @@
+.vscode/*
+*simv*
+*simv.daidir/
+*.vdb/
+*.vcd
+
+# Object files
+*.o
+
+# Libraries
+*.a
+
+# Executables
+*.exe
+*.out
+
+# Coverage Files
+*.gcno
+*.gcda
+
+# Xrun Files
+*.d
+*.history
+*.log
+
+# Binary Files
+verif/iopmp_ref_model/lib/
+verif/iopmp_ref_model/bin/
+
+# Xrun results
+verif/iopmp_top/xrun_results/
+
+# IMP important files for backup
+verif/iopmp_top/test/IMP/
+
+# Files for script output
+verif/iopmp_top/SIMFILE.sv
+verif/iopmp_top/SVHFILE.sv
+
+# Synthesis files
+synth/*.log*
+synth/*.cmd*
+synth/fv
+synth/Synthesis_reports
+synth/.*
+synth/*
