@@ -1,0 +1,33 @@
+####################################
+#tcl file for imc command
+
+# # Load all coverage databases
+# set db_list [list \
+#   ./sim1/coverage/merged.ucd \
+#   ./sim2/coverage/merged.ucd \
+#   ./sim3/coverage/merged.ucd \
+# ]
+
+# # Merge them into one
+# merge_coverage -out ./coverage/final_merged.ucd -in $db_list
+
+# Directory where xrun stores regression results
+set root_dir "./xrun_results"
+
+# Find all .ucd files inside subdirectories (test_0/test_1/...)
+set db_list [glob -nocomplain $root_dir/*/cov_work/scope/test]
+
+# Check if any .ucd files were found
+if {[llength $db_list] == 0} {
+    puts "No .ucd files found in subdirectories of $root_dir"
+    return
+}
+
+# puts "Found the following .ucd files:"
+foreach db $db_list {
+    puts "  $db"
+}
+
+# merge $db_list -out cov_merge.ucd
+file mkdir $root_dir/test_merg
+merge $db_list -out "$root_dir/test_merg/merged.ucd"

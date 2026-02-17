@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<refinement-file-root>
+  <information comment-version="1" creation-time="جمعرات 09 اكتوبر 2025 14:49:28 PKT" creator="m_faayez" csCheck="false" save-ref-method="seq" tool-version="Cadence vManager21.09" rules-signature-c="be2555b70e7f27ac5c1aef96c4b5">
+    <ucm-files>
+      <ucm-file domain="icc" modelCheckSum="1421028470" path="/work/faayez-iopmp/riscv-iopmp/verif/iopmp_top/xrun_results/test_merg/merged.ucd/icc_54b32c76_468a770d.ucm"></ucm-file>
+    </ucm-files>
+    <ccf-files></ccf-files>
+  </information>
+  <rules>
+    <rule ccType="inst" domain="icc" entityName="tb_top/iopmp_cp_sva/eic_block/gen_error_capture_enable_cover/eic_cover_error_unknown_rrid" entityType="assertion" excTime="1759999064" name="exclude" reviewer="unknown" user="0" vscope="default"></rule>
+    <rule ccType="inst" domain="icc" entityName="tb_top/iopmp_cp_sva/ttu/source_enforcement_disabled_cover" entityType="inst" excTime="1759999119" name="exclude" recursiveMetrics="overall" reviewer="unknown" user="0" vscope="default"></rule>
+    <rule ccType="inst" domain="icc" entityName="tb_top/iopmp_cp_sva/ttu/ttu_cover_match_operation_corner_case" entityType="assertion" excTime="1759999469" name="exclude" reviewer="unknown" user="0" vscope="default"></rule>
+  </rules>
+  <cache-map>
+    <cache-entry key="0" value="m_faayez"></cache-entry>
+  </cache-map>
+</refinement-file-root>

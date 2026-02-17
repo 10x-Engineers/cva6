@@ -1,0 +1,1771 @@
+addrmap iopmp_reg {
+    name = "I/O Physical Memory Protection";
+    desc = "I/O Physical Memory Protection";
+
+    default accesswidth = 32;
+    addressing = regalign;
+    rsvdset = false;
+
+    reg {
+        name = "VERSION";
+        desc = "INFO registers are use to indicate the IOPMP instance configuration info.";
+        regwidth=32;
+
+        field {
+            name = "vendor";
+            desc = "The JEDEC manufacturer ID.";
+            hw   = r;
+            sw   = r;
+        } vendor[23:0] = 0x0;
+
+        field {
+            name = "specver";
+            desc = "The specification version";
+            hw   = r;
+            sw   = r;
+        } specver[31:24] = 0x0;
+
+    } version @ 0x0;
+
+    reg {
+        name = "IMPLEMENTATION";
+        desc = "";
+        regwidth = 32;
+
+        field {
+            name = "impid";
+            desc = "";
+            hw   = r;
+            sw   = r;
+        } impid[31:0] = 0x0;
+
+    } implementation @ 0x4;
+
+    reg {
+        name = "HWCFG0";
+        desc = "";
+        regwidth=32;
+
+        field {
+            name = "mdcfg_fmt";
+            desc = "";
+            hw   = rw;
+            sw   = r;
+        } mdcfg_fmt[1:0] = 0x0;
+
+        field {
+            name = "srcmd_fmt";
+            desc = "";
+            hw   = rw;
+            sw   = r;
+        } srcmd_fmt[3:2] = 0x0;
+
+        field {
+            name = "tor_en";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } tor_en[4:4] = 0x1;
+
+        field {
+            name = "sps_en";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } sps_en[5:5] = 0x1;
+
+        field {
+            name = "user_cfg_en";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } user_cfg_en[6:6] = 0x0;
+
+        field {
+            name = "prient_prog";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = rw;
+            we;
+            onwrite = woclr;
+        } prient_prog[7:7] = 0x1;
+
+        field {
+            name = "rrid_transl_en";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } rrid_transl_en[8:8] = 0x0;
+
+        field {
+            name = "rrid_transl_prog";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = rw;
+            we;
+            onwrite = woclr;
+        } rrid_transl_prog[9:9] = 0x0;
+
+        field {
+            name = "chk_x";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } chk_x[10:10] = 0x1;
+
+        field {
+            name = "no_x";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } no_x[11:11] = 0x0;
+
+        field {
+            name = "no_w";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } no_w[12:12] = 0x0;
+
+        field {
+            name = "stall_en";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } stall_en[13:13] = 0x1;
+
+        field {
+            name = "peis";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } peis[14:14] = 0x1;
+
+        field {
+            name = "pees";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } pees[15:15] = 0x0;
+
+        field {
+            name = "mfr_en";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } mfr_en[16:16] = 0x1;
+
+        field {
+            name = "md_entry_num";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = rw;
+        } md_entry_num[23:17] = 0x0;
+
+        field {
+            name = "md_num";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } md_num[29:24] = 0x3F;
+
+        field {
+            name = "addrh_en";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = r;
+        } addrh_en[30:30] = 0x1;
+
+        field {
+            name = "enable";
+            desc = "The specification version";
+            hw   = rw;
+            sw   = rw;
+            onwrite = woset;
+        } enable[31:31] = 0x0;
+
+    } hwcfg0 @ 0x8;
+
+    reg {
+        name = "Device-Directory-Table Pointer";
+        desc = "This register contains the PPN of root Device Directory Table and the mode of IOMMU";
+        regwidth = 32;
+
+        field {
+            name = "rrid_num";
+            desc = "Mode of IOMMU is configured in this field (OFF, Bare, 1LVL, 2LVL, 3LVL)";
+            hw   = rw;
+            sw   = r;
+        } rrid_num[15:0] = 0x10;
+
+        field {
+            name = "entry_num";
+            desc = "When a write is observed by the ddtp, the
+                    busy bit is set to 1. When the busy bit is 1, the write
+                    to the register is ignored";
+            hw   = rw;
+            sw   = r;
+        } entry_num[31:16] = 0x0;
+
+    } hwcfg1 @ 0x0C;
+
+    reg {
+        name = "Device-Directory-Table Pointer";
+        desc = "This register contains the PPN of root Device Directory Table and the mode of IOMMU";
+        regwidth = 32;
+
+        field {
+            name = "prio_entry";
+            desc = "Mode of IOMMU is configured in this field (OFF, Bare, 1LVL, 2LVL, 3LVL)";
+            hw   = rw;
+            sw   = rw;
+        } prio_entry[15:0] = 0x30;
+
+        field {
+            name = "rrid_transl";
+            desc = "When a write is observed by the ddtp, the
+                    busy bit is set to 1. When the busy bit is 1, the write
+                    to the register is ignored";
+            hw   = rw;
+            sw   = rw;
+        } rrid_transl[31:16] = 0x0;
+
+    } hwcfg2 @ 0x10;
+
+    reg {
+        name = "Device-Directory-Table Pointer";
+        desc = "This register contains the PPN of root Device Directory Table and the mode of IOMMU";
+        regwidth = 32;
+
+        field {
+            name = "offset";
+            desc = "When a write is observed by the ddtp, the
+                    busy bit is set to 1. When the busy bit is 1, the write
+                    to the register is ignored";
+            hw   = rw;
+            sw   = r;
+        } offset[31:0] = 0x0;
+
+    } entryoffset @ 0x14;
+
+    reg {
+        name = "Device-Directory-Table Pointer";
+        desc = "This register contains the PPN of root Device Directory Table and the mode of IOMMU";
+        regwidth = 32;
+
+        field {
+            name = "offset";
+            desc = "When a write is observed by the ddtp, the
+                    busy bit is set to 1. When the busy bit is 1, the write
+                    to the register is ignored";
+            hw   = rw;
+            sw   = r;
+        } base[31:0] = 0x80000000;
+
+    } baseaddr @ 0x18;
+
+    reg {
+        name = "MDSTALL";
+        desc = "This register contains the PPN of root Device Directory Table and the mode of IOMMU";
+        regwidth = 32;
+
+        field {
+            name = "exempt";
+            desc = "When a write is observed by the ddtp, the
+                    busy bit is set to 1. When the busy bit is 1, the write
+                    to the register is ignored";
+            hw   = rw;
+            sw   = r;
+        } is_stalled[0:0] = 0x0;
+
+        field {
+            name = "md";
+            desc = "When a write is observed by the ddtp, the
+                    busy bit is set to 1. When the busy bit is 1, the write
+                    to the register is ignored";
+            hw   = r;
+            sw   = rw;
+        } md[31:1] = 0x0;
+
+    } mdstall @ 0x30;
+
+    reg {
+        name = "Device-Directory-Table Pointer";
+        desc = "This register contains the PPN of root Device Directory Table and the mode of IOMMU";
+        regwidth = 32;
+
+        field {
+            name = "offset";
+            desc = "When a write is observed by the ddtp, the
+                    busy bit is set to 1. When the busy bit is 1, the write
+                    to the register is ignored";
+            hw   = r;
+            sw   = rw;
+        } mdh[31:0] = 0x0;
+
+    } mdstallh @ 0x34;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+        } rrid[15:0] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = r;
+        } rsv[29:16] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = r;
+        } stat[31:30] = 0x0;
+
+    } rridscp @ 0x38;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+            onwrite=woset;
+        } l[0:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } md[31:1] = 0x0;
+
+    } mdlck @ 0x40;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } mdh[31:0] = 0x0;
+
+    } mdlckh @ 0x44;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+            onwrite = woset;
+        } l[0:0] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+        } f[6:1] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[31:7] = 0x0;
+
+    } mdcfglck @ 0x48;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+            onwrite = woset;
+        } l[0:0] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+        } f[16:1] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[31:17] = 0x0;
+
+    } entrylck @ 0x4C;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+            onwrite = woset;
+        } l[0:0] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = rw;
+            sw   = rw;
+        } ie[1:1] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+        } rs[2:2] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+        } msi_en[3:3] = 0x1;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+        } stall_violation_en[4:4] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = r;
+        } rsv1[7:5] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = r;
+            sw   = rw;
+        } msidata[18:8] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv2[31:19] = 0x0;
+
+    } err_cfg @ 0x60;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = rw;
+            sw   = rw;
+            we;
+            onwrite = woclr;
+        } v[0:0] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = rw;
+            sw   = r;
+        } ttype[2:1] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = rw;
+            sw   = rw;
+            we;
+            onwrite = woclr;
+        } msi_werr[3:3] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = rw;
+            sw   = r;
+        } etype[7:4] = 0x0;
+
+        field {
+            name = "LOG2SZ - 1";
+            desc = "The LOG2SZ-1 field holds the number of entries in command-
+                    queue as a log to base 2 minus 1.";
+            hw   = rw;
+            sw   = r;
+        } svc[8:8] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[31:9] = 0x0;
+
+    } err_info @ 0x64;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = r;
+        } addr[31:0] = 0x0;
+
+    } err_reqaddr @ 0x68;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = r;
+        } addrh[31:0] = 0x0;
+
+    } err_reqaddrh @ 0x6C;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = r;
+        } rrid[15:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = r;
+        } eid[31:16] = 0x0;
+
+    } err_reqid @ 0x70;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = r;
+        } svw[15:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = rw;
+        } svi[27:16] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[30:28] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = r;
+        } svs[31:31] = 0x0;
+
+    } err_mfr @ 0x74;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } msiaddr[31:0] = 0x0;
+
+    } err_msiaddr @ 0x78;
+
+    reg {
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } msiaddrh[31:0] = 0x0;
+
+    } err_msiaddrh @ 0x7C;
+
+
+    reg mdcfg{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } t[15:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[31:16] = 0x0;
+
+    };
+
+    mdcfg mdcfg_0 @ 0x0800;
+    mdcfg mdcfg_1;
+    mdcfg mdcfg_2;
+    mdcfg mdcfg_3;
+    mdcfg mdcfg_4;
+    mdcfg mdcfg_5;
+    mdcfg mdcfg_6;
+    mdcfg mdcfg_7;
+    mdcfg mdcfg_8;
+    mdcfg mdcfg_9;
+    mdcfg mdcfg_10;
+    mdcfg mdcfg_11;
+    mdcfg mdcfg_12;
+    mdcfg mdcfg_13;
+    mdcfg mdcfg_14;
+    mdcfg mdcfg_15;
+    mdcfg mdcfg_16;
+    mdcfg mdcfg_17;
+    mdcfg mdcfg_18;
+    mdcfg mdcfg_19;
+    mdcfg mdcfg_20;
+    mdcfg mdcfg_21;
+    mdcfg mdcfg_22;
+    mdcfg mdcfg_23;
+    mdcfg mdcfg_24;
+    mdcfg mdcfg_25;
+    mdcfg mdcfg_26;
+    mdcfg mdcfg_27;
+    mdcfg mdcfg_28;
+    mdcfg mdcfg_29;
+    mdcfg mdcfg_30;
+    mdcfg mdcfg_31;
+    mdcfg mdcfg_32;
+    mdcfg mdcfg_33;
+    mdcfg mdcfg_34;
+    mdcfg mdcfg_35;
+    mdcfg mdcfg_36;
+    mdcfg mdcfg_37;
+    mdcfg mdcfg_38;
+    mdcfg mdcfg_39;
+    mdcfg mdcfg_40;
+    mdcfg mdcfg_41;
+    mdcfg mdcfg_42;
+    mdcfg mdcfg_43;
+    mdcfg mdcfg_44;
+    mdcfg mdcfg_45;
+    mdcfg mdcfg_46;
+    mdcfg mdcfg_47;
+    mdcfg mdcfg_48;
+    mdcfg mdcfg_49;
+    mdcfg mdcfg_50;
+    mdcfg mdcfg_51;
+    mdcfg mdcfg_52;
+    mdcfg mdcfg_53;
+    mdcfg mdcfg_54;
+    mdcfg mdcfg_55;
+    mdcfg mdcfg_56;
+    mdcfg mdcfg_57;
+    mdcfg mdcfg_58;
+    mdcfg mdcfg_59;
+    mdcfg mdcfg_60;
+    mdcfg mdcfg_61;
+    mdcfg mdcfg_62;
+
+    reg srcmd_en{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+            onwrite = woset;
+        } l[0:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } md[31:1] = 0x0;
+
+    };
+
+    reg srcmd_enh{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } mdh[31:0] = 0x0;
+
+    };
+
+    reg srcmd_r{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[0:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } md[31:1] = 0x0;
+    };
+
+    reg srcmd_rh{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } mdh[31:0] = 0x0;
+
+    };
+
+    reg srcmd_w{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[0:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } md[31:1] = 0x0;
+    };
+
+    reg srcmd_wh{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } mdh[31:0] = 0x0;
+
+    };
+
+    srcmd_en   srcmd_en_0 @ 0x1000;
+    srcmd_enh  srcmd_enh_0;
+    srcmd_r    srcmd_r_0;
+    srcmd_rh   srcmd_rh_0;
+    srcmd_w    srcmd_w_0;
+    srcmd_wh   srcmd_wh_0;
+    srcmd_en   srcmd_en_1 @ 0x1020;
+    srcmd_enh  srcmd_enh_1;
+    srcmd_r    srcmd_r_1;
+    srcmd_rh   srcmd_rh_1;
+    srcmd_w    srcmd_w_1;
+    srcmd_wh   srcmd_wh_1;
+    srcmd_en   srcmd_en_2 @ 0x1040;
+    srcmd_enh  srcmd_enh_2;
+    srcmd_r    srcmd_r_2;
+    srcmd_rh   srcmd_rh_2;
+    srcmd_w    srcmd_w_2;
+    srcmd_wh   srcmd_wh_2;
+    srcmd_en   srcmd_en_3 @ 0x1060;
+    srcmd_enh  srcmd_enh_3;
+    srcmd_r    srcmd_r_3;
+    srcmd_rh   srcmd_rh_3;
+    srcmd_w    srcmd_w_3;
+    srcmd_wh   srcmd_wh_3;
+    srcmd_en   srcmd_en_4 @ 0x1080;
+    srcmd_enh  srcmd_enh_4;
+    srcmd_r    srcmd_r_4;
+    srcmd_rh   srcmd_rh_4;
+    srcmd_w    srcmd_w_4;
+    srcmd_wh   srcmd_wh_4;
+    srcmd_en   srcmd_en_5 @ 0x10a0;
+    srcmd_enh  srcmd_enh_5;
+    srcmd_r    srcmd_r_5;
+    srcmd_rh   srcmd_rh_5;
+    srcmd_w    srcmd_w_5;
+    srcmd_wh   srcmd_wh_5;
+    srcmd_en   srcmd_en_6 @ 0x10c0;
+    srcmd_enh  srcmd_enh_6;
+    srcmd_r    srcmd_r_6;
+    srcmd_rh   srcmd_rh_6;
+    srcmd_w    srcmd_w_6;
+    srcmd_wh   srcmd_wh_6;
+    srcmd_en   srcmd_en_7 @ 0x10e0;
+    srcmd_enh  srcmd_enh_7;
+    srcmd_r    srcmd_r_7;
+    srcmd_rh   srcmd_rh_7;
+    srcmd_w    srcmd_w_7;
+    srcmd_wh   srcmd_wh_7;
+    srcmd_en   srcmd_en_8 @ 0x1100;
+    srcmd_enh  srcmd_enh_8;
+    srcmd_r    srcmd_r_8;
+    srcmd_rh   srcmd_rh_8;
+    srcmd_w    srcmd_w_8;
+    srcmd_wh   srcmd_wh_8;
+    srcmd_en   srcmd_en_9 @ 0x1120;
+    srcmd_enh  srcmd_enh_9;
+    srcmd_r    srcmd_r_9;
+    srcmd_rh   srcmd_rh_9;
+    srcmd_w    srcmd_w_9;
+    srcmd_wh   srcmd_wh_9;
+    srcmd_en   srcmd_en_10 @ 0x1140;
+    srcmd_enh  srcmd_enh_10;
+    srcmd_r    srcmd_r_10;
+    srcmd_rh   srcmd_rh_10;
+    srcmd_w    srcmd_w_10;
+    srcmd_wh   srcmd_wh_10;
+    srcmd_en   srcmd_en_11 @ 0x1160;
+    srcmd_enh  srcmd_enh_11;
+    srcmd_r    srcmd_r_11;
+    srcmd_rh   srcmd_rh_11;
+    srcmd_w    srcmd_w_11;
+    srcmd_wh   srcmd_wh_11;
+    srcmd_en   srcmd_en_12 @ 0x1180;
+    srcmd_enh  srcmd_enh_12;
+    srcmd_r    srcmd_r_12;
+    srcmd_rh   srcmd_rh_12;
+    srcmd_w    srcmd_w_12;
+    srcmd_wh   srcmd_wh_12;
+    srcmd_en   srcmd_en_13 @ 0x11a0;
+    srcmd_enh  srcmd_enh_13;
+    srcmd_r    srcmd_r_13;
+    srcmd_rh   srcmd_rh_13;
+    srcmd_w    srcmd_w_13;
+    srcmd_wh   srcmd_wh_13;
+    srcmd_en   srcmd_en_14 @ 0x11c0;
+    srcmd_enh  srcmd_enh_14;
+    srcmd_r    srcmd_r_14;
+    srcmd_rh   srcmd_rh_14;
+    srcmd_w    srcmd_w_14;
+    srcmd_wh   srcmd_wh_14;
+    srcmd_en   srcmd_en_15 @ 0x11e0;
+    srcmd_enh  srcmd_enh_15;
+    srcmd_r    srcmd_r_15;
+    srcmd_rh   srcmd_rh_15;
+    srcmd_w    srcmd_w_15;
+    srcmd_wh   srcmd_wh_15;
+    srcmd_en   srcmd_en_16 @ 0x1200;
+    srcmd_enh  srcmd_enh_16;
+    srcmd_r    srcmd_r_16;
+    srcmd_rh   srcmd_rh_16;
+    srcmd_w    srcmd_w_16;
+    srcmd_wh   srcmd_wh_16;
+    srcmd_en   srcmd_en_17 @ 0x1220;
+    srcmd_enh  srcmd_enh_17;
+    srcmd_r    srcmd_r_17;
+    srcmd_rh   srcmd_rh_17;
+    srcmd_w    srcmd_w_17;
+    srcmd_wh   srcmd_wh_17;
+    srcmd_en   srcmd_en_18 @ 0x1240;
+    srcmd_enh  srcmd_enh_18;
+    srcmd_r    srcmd_r_18;
+    srcmd_rh   srcmd_rh_18;
+    srcmd_w    srcmd_w_18;
+    srcmd_wh   srcmd_wh_18;
+    srcmd_en   srcmd_en_19 @ 0x1260;
+    srcmd_enh  srcmd_enh_19;
+    srcmd_r    srcmd_r_19;
+    srcmd_rh   srcmd_rh_19;
+    srcmd_w    srcmd_w_19;
+    srcmd_wh   srcmd_wh_19;
+    srcmd_en   srcmd_en_20 @ 0x1280;
+    srcmd_enh  srcmd_enh_20;
+    srcmd_r    srcmd_r_20;
+    srcmd_rh   srcmd_rh_20;
+    srcmd_w    srcmd_w_20;
+    srcmd_wh   srcmd_wh_20;
+    srcmd_en   srcmd_en_21 @ 0x12a0;
+    srcmd_enh  srcmd_enh_21;
+    srcmd_r    srcmd_r_21;
+    srcmd_rh   srcmd_rh_21;
+    srcmd_w    srcmd_w_21;
+    srcmd_wh   srcmd_wh_21;
+    srcmd_en   srcmd_en_22 @ 0x12c0;
+    srcmd_enh  srcmd_enh_22;
+    srcmd_r    srcmd_r_22;
+    srcmd_rh   srcmd_rh_22;
+    srcmd_w    srcmd_w_22;
+    srcmd_wh   srcmd_wh_22;
+    srcmd_en   srcmd_en_23 @ 0x12e0;
+    srcmd_enh  srcmd_enh_23;
+    srcmd_r    srcmd_r_23;
+    srcmd_rh   srcmd_rh_23;
+    srcmd_w    srcmd_w_23;
+    srcmd_wh   srcmd_wh_23;
+    srcmd_en   srcmd_en_24 @ 0x1300;
+    srcmd_enh  srcmd_enh_24;
+    srcmd_r    srcmd_r_24;
+    srcmd_rh   srcmd_rh_24;
+    srcmd_w    srcmd_w_24;
+    srcmd_wh   srcmd_wh_24;
+    srcmd_en   srcmd_en_25 @ 0x1320;
+    srcmd_enh  srcmd_enh_25;
+    srcmd_r    srcmd_r_25;
+    srcmd_rh   srcmd_rh_25;
+    srcmd_w    srcmd_w_25;
+    srcmd_wh   srcmd_wh_25;
+    srcmd_en   srcmd_en_26 @ 0x1340;
+    srcmd_enh  srcmd_enh_26;
+    srcmd_r    srcmd_r_26;
+    srcmd_rh   srcmd_rh_26;
+    srcmd_w    srcmd_w_26;
+    srcmd_wh   srcmd_wh_26;
+    srcmd_en   srcmd_en_27 @ 0x1360;
+    srcmd_enh  srcmd_enh_27;
+    srcmd_r    srcmd_r_27;
+    srcmd_rh   srcmd_rh_27;
+    srcmd_w    srcmd_w_27;
+    srcmd_wh   srcmd_wh_27;
+    srcmd_en   srcmd_en_28 @ 0x1380;
+    srcmd_enh  srcmd_enh_28;
+    srcmd_r    srcmd_r_28;
+    srcmd_rh   srcmd_rh_28;
+    srcmd_w    srcmd_w_28;
+    srcmd_wh   srcmd_wh_28;
+    srcmd_en   srcmd_en_29 @ 0x13a0;
+    srcmd_enh  srcmd_enh_29;
+    srcmd_r    srcmd_r_29;
+    srcmd_rh   srcmd_rh_29;
+    srcmd_w    srcmd_w_29;
+    srcmd_wh   srcmd_wh_29;
+    srcmd_en   srcmd_en_30 @ 0x13c0;
+    srcmd_enh  srcmd_enh_30;
+    srcmd_r    srcmd_r_30;
+    srcmd_rh   srcmd_rh_30;
+    srcmd_w    srcmd_w_30;
+    srcmd_wh   srcmd_wh_30;
+    srcmd_en   srcmd_en_31 @ 0x13e0;
+    srcmd_enh  srcmd_enh_31;
+    srcmd_r    srcmd_r_31;
+    srcmd_rh   srcmd_rh_31;
+    srcmd_w    srcmd_w_31;
+    srcmd_wh   srcmd_wh_31;
+    srcmd_en   srcmd_en_32 @ 0x1400;
+    srcmd_enh  srcmd_enh_32;
+    srcmd_r    srcmd_r_32;
+    srcmd_rh   srcmd_rh_32;
+    srcmd_w    srcmd_w_32;
+    srcmd_wh   srcmd_wh_32;
+    srcmd_en   srcmd_en_33 @ 0x1420;
+    srcmd_enh  srcmd_enh_33;
+    srcmd_r    srcmd_r_33;
+    srcmd_rh   srcmd_rh_33;
+    srcmd_w    srcmd_w_33;
+    srcmd_wh   srcmd_wh_33;
+    srcmd_en   srcmd_en_34 @ 0x1440;
+    srcmd_enh  srcmd_enh_34;
+    srcmd_r    srcmd_r_34;
+    srcmd_rh   srcmd_rh_34;
+    srcmd_w    srcmd_w_34;
+    srcmd_wh   srcmd_wh_34;
+    srcmd_en   srcmd_en_35 @ 0x1460;
+    srcmd_enh  srcmd_enh_35;
+    srcmd_r    srcmd_r_35;
+    srcmd_rh   srcmd_rh_35;
+    srcmd_w    srcmd_w_35;
+    srcmd_wh   srcmd_wh_35;
+    srcmd_en   srcmd_en_36 @ 0x1480;
+    srcmd_enh  srcmd_enh_36;
+    srcmd_r    srcmd_r_36;
+    srcmd_rh   srcmd_rh_36;
+    srcmd_w    srcmd_w_36;
+    srcmd_wh   srcmd_wh_36;
+    srcmd_en   srcmd_en_37 @ 0x14a0;
+    srcmd_enh  srcmd_enh_37;
+    srcmd_r    srcmd_r_37;
+    srcmd_rh   srcmd_rh_37;
+    srcmd_w    srcmd_w_37;
+    srcmd_wh   srcmd_wh_37;
+    srcmd_en   srcmd_en_38 @ 0x14c0;
+    srcmd_enh  srcmd_enh_38;
+    srcmd_r    srcmd_r_38;
+    srcmd_rh   srcmd_rh_38;
+    srcmd_w    srcmd_w_38;
+    srcmd_wh   srcmd_wh_38;
+    srcmd_en   srcmd_en_39 @ 0x14e0;
+    srcmd_enh  srcmd_enh_39;
+    srcmd_r    srcmd_r_39;
+    srcmd_rh   srcmd_rh_39;
+    srcmd_w    srcmd_w_39;
+    srcmd_wh   srcmd_wh_39;
+    srcmd_en   srcmd_en_40 @ 0x1500;
+    srcmd_enh  srcmd_enh_40;
+    srcmd_r    srcmd_r_40;
+    srcmd_rh   srcmd_rh_40;
+    srcmd_w    srcmd_w_40;
+    srcmd_wh   srcmd_wh_40;
+    srcmd_en   srcmd_en_41 @ 0x1520;
+    srcmd_enh  srcmd_enh_41;
+    srcmd_r    srcmd_r_41;
+    srcmd_rh   srcmd_rh_41;
+    srcmd_w    srcmd_w_41;
+    srcmd_wh   srcmd_wh_41;
+    srcmd_en   srcmd_en_42 @ 0x1540;
+    srcmd_enh  srcmd_enh_42;
+    srcmd_r    srcmd_r_42;
+    srcmd_rh   srcmd_rh_42;
+    srcmd_w    srcmd_w_42;
+    srcmd_wh   srcmd_wh_42;
+    srcmd_en   srcmd_en_43 @ 0x1560;
+    srcmd_enh  srcmd_enh_43;
+    srcmd_r    srcmd_r_43;
+    srcmd_rh   srcmd_rh_43;
+    srcmd_w    srcmd_w_43;
+    srcmd_wh   srcmd_wh_43;
+    srcmd_en   srcmd_en_44 @ 0x1580;
+    srcmd_enh  srcmd_enh_44;
+    srcmd_r    srcmd_r_44;
+    srcmd_rh   srcmd_rh_44;
+    srcmd_w    srcmd_w_44;
+    srcmd_wh   srcmd_wh_44;
+    srcmd_en   srcmd_en_45 @ 0x15a0;
+    srcmd_enh  srcmd_enh_45;
+    srcmd_r    srcmd_r_45;
+    srcmd_rh   srcmd_rh_45;
+    srcmd_w    srcmd_w_45;
+    srcmd_wh   srcmd_wh_45;
+    srcmd_en   srcmd_en_46 @ 0x15c0;
+    srcmd_enh  srcmd_enh_46;
+    srcmd_r    srcmd_r_46;
+    srcmd_rh   srcmd_rh_46;
+    srcmd_w    srcmd_w_46;
+    srcmd_wh   srcmd_wh_46;
+    srcmd_en   srcmd_en_47 @ 0x15e0;
+    srcmd_enh  srcmd_enh_47;
+    srcmd_r    srcmd_r_47;
+    srcmd_rh   srcmd_rh_47;
+    srcmd_w    srcmd_w_47;
+    srcmd_wh   srcmd_wh_47;
+    srcmd_en   srcmd_en_48 @ 0x1600;
+    srcmd_enh  srcmd_enh_48;
+    srcmd_r    srcmd_r_48;
+    srcmd_rh   srcmd_rh_48;
+    srcmd_w    srcmd_w_48;
+    srcmd_wh   srcmd_wh_48;
+    srcmd_en   srcmd_en_49 @ 0x1620;
+    srcmd_enh  srcmd_enh_49;
+    srcmd_r    srcmd_r_49;
+    srcmd_rh   srcmd_rh_49;
+    srcmd_w    srcmd_w_49;
+    srcmd_wh   srcmd_wh_49;
+    srcmd_en   srcmd_en_50 @ 0x1640;
+    srcmd_enh  srcmd_enh_50;
+    srcmd_r    srcmd_r_50;
+    srcmd_rh   srcmd_rh_50;
+    srcmd_w    srcmd_w_50;
+    srcmd_wh   srcmd_wh_50;
+    srcmd_en   srcmd_en_51 @ 0x1660;
+    srcmd_enh  srcmd_enh_51;
+    srcmd_r    srcmd_r_51;
+    srcmd_rh   srcmd_rh_51;
+    srcmd_w    srcmd_w_51;
+    srcmd_wh   srcmd_wh_51;
+    srcmd_en   srcmd_en_52 @ 0x1680;
+    srcmd_enh  srcmd_enh_52;
+    srcmd_r    srcmd_r_52;
+    srcmd_rh   srcmd_rh_52;
+    srcmd_w    srcmd_w_52;
+    srcmd_wh   srcmd_wh_52;
+    srcmd_en   srcmd_en_53 @ 0x16a0;
+    srcmd_enh  srcmd_enh_53;
+    srcmd_r    srcmd_r_53;
+    srcmd_rh   srcmd_rh_53;
+    srcmd_w    srcmd_w_53;
+    srcmd_wh   srcmd_wh_53;
+    srcmd_en   srcmd_en_54 @ 0x16c0;
+    srcmd_enh  srcmd_enh_54;
+    srcmd_r    srcmd_r_54;
+    srcmd_rh   srcmd_rh_54;
+    srcmd_w    srcmd_w_54;
+    srcmd_wh   srcmd_wh_54;
+    srcmd_en   srcmd_en_55 @ 0x16e0;
+    srcmd_enh  srcmd_enh_55;
+    srcmd_r    srcmd_r_55;
+    srcmd_rh   srcmd_rh_55;
+    srcmd_w    srcmd_w_55;
+    srcmd_wh   srcmd_wh_55;
+    srcmd_en   srcmd_en_56 @ 0x1700;
+    srcmd_enh  srcmd_enh_56;
+    srcmd_r    srcmd_r_56;
+    srcmd_rh   srcmd_rh_56;
+    srcmd_w    srcmd_w_56;
+    srcmd_wh   srcmd_wh_56;
+    srcmd_en   srcmd_en_57 @ 0x1720;
+    srcmd_enh  srcmd_enh_57;
+    srcmd_r    srcmd_r_57;
+    srcmd_rh   srcmd_rh_57;
+    srcmd_w    srcmd_w_57;
+    srcmd_wh   srcmd_wh_57;
+    srcmd_en   srcmd_en_58 @ 0x1740;
+    srcmd_enh  srcmd_enh_58;
+    srcmd_r    srcmd_r_58;
+    srcmd_rh   srcmd_rh_58;
+    srcmd_w    srcmd_w_58;
+    srcmd_wh   srcmd_wh_58;
+    srcmd_en   srcmd_en_59 @ 0x1760;
+    srcmd_enh  srcmd_enh_59;
+    srcmd_r    srcmd_r_59;
+    srcmd_rh   srcmd_rh_59;
+    srcmd_w    srcmd_w_59;
+    srcmd_wh   srcmd_wh_59;
+    srcmd_en   srcmd_en_60 @ 0x1780;
+    srcmd_enh  srcmd_enh_60;
+    srcmd_r    srcmd_r_60;
+    srcmd_rh   srcmd_rh_60;
+    srcmd_w    srcmd_w_60;
+    srcmd_wh   srcmd_wh_60;
+    srcmd_en   srcmd_en_61 @ 0x17a0;
+    srcmd_enh  srcmd_enh_61;
+    srcmd_r    srcmd_r_61;
+    srcmd_rh   srcmd_rh_61;
+    srcmd_w    srcmd_w_61;
+    srcmd_wh   srcmd_wh_61;
+    srcmd_en   srcmd_en_62 @ 0x17c0;
+    srcmd_enh  srcmd_enh_62;
+    srcmd_r    srcmd_r_62;
+    srcmd_rh   srcmd_rh_62;
+    srcmd_w    srcmd_w_62;
+    srcmd_wh   srcmd_wh_62;
+    srcmd_en   srcmd_en_63 @ 0x17e0;
+    srcmd_enh  srcmd_enh_63;
+    srcmd_r    srcmd_r_63;
+    srcmd_rh   srcmd_rh_63;
+    srcmd_w    srcmd_w_63;
+    srcmd_wh   srcmd_wh_63;
+
+    reg entry_addr{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = rw;
+        } addr[31:0] = 0x0;
+
+    };
+
+    reg entry_addrh{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = rw;
+            sw   = rw;
+        } addrh[17:0] = 0x0;
+
+    };
+
+    reg entry_cfg{
+        name = "Command Queue Base";
+        desc = "This 64-bit register (RW) holds the PPN of the root page of the command-queue and number of
+                entries in the queue.";
+        regwidth = 32;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } read[0:0] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } write[1:1] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } x[2:2] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } a[4:3] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } sire[5:5] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } siwe[6:6] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } sixe[7:7] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } sere[8:8] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } sewe[9:9] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = rw;
+        } sexe[10:10] = 0x0;
+
+        field {
+            name = "Lower 22 Bits of Physical Page Number";
+            desc = "PPN of Command Queue Base Address";
+            hw   = r;
+            sw   = r;
+        } rsv[31:11] = 0x0;
+    };
+
+    entry_addr entry_addr_0 @ 0x2000;
+    entry_addrh entry_addrh_0;
+    entry_cfg entry_cfg_0;
+    entry_addr entry_addr_1 @ 0x2010;
+    entry_addrh entry_addrh_1;
+    entry_cfg entry_cfg_1;
+    entry_addr entry_addr_2 @ 0x2020;
+    entry_addrh entry_addrh_2;
+    entry_cfg entry_cfg_2;
+    entry_addr entry_addr_3 @ 0x2030;
+    entry_addrh entry_addrh_3;
+    entry_cfg entry_cfg_3;
+    entry_addr entry_addr_4 @ 0x2040;
+    entry_addrh entry_addrh_4;
+    entry_cfg entry_cfg_4;
+    entry_addr entry_addr_5 @ 0x2050;
+    entry_addrh entry_addrh_5;
+    entry_cfg entry_cfg_5;
+    entry_addr entry_addr_6 @ 0x2060;
+    entry_addrh entry_addrh_6;
+    entry_cfg entry_cfg_6;
+    entry_addr entry_addr_7 @ 0x2070;
+    entry_addrh entry_addrh_7;
+    entry_cfg entry_cfg_7;
+    entry_addr entry_addr_8 @ 0x2080;
+    entry_addrh entry_addrh_8;
+    entry_cfg entry_cfg_8;
+    entry_addr entry_addr_9 @ 0x2090;
+    entry_addrh entry_addrh_9;
+    entry_cfg entry_cfg_9;
+    entry_addr entry_addr_10 @ 0x20a0;
+    entry_addrh entry_addrh_10;
+    entry_cfg entry_cfg_10;
+    entry_addr entry_addr_11 @ 0x20b0;
+    entry_addrh entry_addrh_11;
+    entry_cfg entry_cfg_11;
+    entry_addr entry_addr_12 @ 0x20c0;
+    entry_addrh entry_addrh_12;
+    entry_cfg entry_cfg_12;
+    entry_addr entry_addr_13 @ 0x20d0;
+    entry_addrh entry_addrh_13;
+    entry_cfg entry_cfg_13;
+    entry_addr entry_addr_14 @ 0x20e0;
+    entry_addrh entry_addrh_14;
+    entry_cfg entry_cfg_14;
+    entry_addr entry_addr_15 @ 0x20f0;
+    entry_addrh entry_addrh_15;
+    entry_cfg entry_cfg_15;
+    entry_addr entry_addr_16 @ 0x2100;
+    entry_addrh entry_addrh_16;
+    entry_cfg entry_cfg_16;
+    entry_addr entry_addr_17 @ 0x2110;
+    entry_addrh entry_addrh_17;
+    entry_cfg entry_cfg_17;
+    entry_addr entry_addr_18 @ 0x2120;
+    entry_addrh entry_addrh_18;
+    entry_cfg entry_cfg_18;
+    entry_addr entry_addr_19 @ 0x2130;
+    entry_addrh entry_addrh_19;
+    entry_cfg entry_cfg_19;
+    entry_addr entry_addr_20 @ 0x2140;
+    entry_addrh entry_addrh_20;
+    entry_cfg entry_cfg_20;
+    entry_addr entry_addr_21 @ 0x2150;
+    entry_addrh entry_addrh_21;
+    entry_cfg entry_cfg_21;
+    entry_addr entry_addr_22 @ 0x2160;
+    entry_addrh entry_addrh_22;
+    entry_cfg entry_cfg_22;
+    entry_addr entry_addr_23 @ 0x2170;
+    entry_addrh entry_addrh_23;
+    entry_cfg entry_cfg_23;
+    entry_addr entry_addr_24 @ 0x2180;
+    entry_addrh entry_addrh_24;
+    entry_cfg entry_cfg_24;
+    entry_addr entry_addr_25 @ 0x2190;
+    entry_addrh entry_addrh_25;
+    entry_cfg entry_cfg_25;
+    entry_addr entry_addr_26 @ 0x21a0;
+    entry_addrh entry_addrh_26;
+    entry_cfg entry_cfg_26;
+    entry_addr entry_addr_27 @ 0x21b0;
+    entry_addrh entry_addrh_27;
+    entry_cfg entry_cfg_27;
+    entry_addr entry_addr_28 @ 0x21c0;
+    entry_addrh entry_addrh_28;
+    entry_cfg entry_cfg_28;
+    entry_addr entry_addr_29 @ 0x21d0;
+    entry_addrh entry_addrh_29;
+    entry_cfg entry_cfg_29;
+    entry_addr entry_addr_30 @ 0x21e0;
+    entry_addrh entry_addrh_30;
+    entry_cfg entry_cfg_30;
+    entry_addr entry_addr_31 @ 0x21f0;
+    entry_addrh entry_addrh_31;
+    entry_cfg entry_cfg_31;
+    entry_addr entry_addr_32 @ 0x2200;
+    entry_addrh entry_addrh_32;
+    entry_cfg entry_cfg_32;
+    entry_addr entry_addr_33 @ 0x2210;
+    entry_addrh entry_addrh_33;
+    entry_cfg entry_cfg_33;
+    entry_addr entry_addr_34 @ 0x2220;
+    entry_addrh entry_addrh_34;
+    entry_cfg entry_cfg_34;
+    entry_addr entry_addr_35 @ 0x2230;
+    entry_addrh entry_addrh_35;
+    entry_cfg entry_cfg_35;
+    entry_addr entry_addr_36 @ 0x2240;
+    entry_addrh entry_addrh_36;
+    entry_cfg entry_cfg_36;
+    entry_addr entry_addr_37 @ 0x2250;
+    entry_addrh entry_addrh_37;
+    entry_cfg entry_cfg_37;
+    entry_addr entry_addr_38 @ 0x2260;
+    entry_addrh entry_addrh_38;
+    entry_cfg entry_cfg_38;
+    entry_addr entry_addr_39 @ 0x2270;
+    entry_addrh entry_addrh_39;
+    entry_cfg entry_cfg_39;
+    entry_addr entry_addr_40 @ 0x2280;
+    entry_addrh entry_addrh_40;
+    entry_cfg entry_cfg_40;
+    entry_addr entry_addr_41 @ 0x2290;
+    entry_addrh entry_addrh_41;
+    entry_cfg entry_cfg_41;
+    entry_addr entry_addr_42 @ 0x22a0;
+    entry_addrh entry_addrh_42;
+    entry_cfg entry_cfg_42;
+    entry_addr entry_addr_43 @ 0x22b0;
+    entry_addrh entry_addrh_43;
+    entry_cfg entry_cfg_43;
+    entry_addr entry_addr_44 @ 0x22c0;
+    entry_addrh entry_addrh_44;
+    entry_cfg entry_cfg_44;
+    entry_addr entry_addr_45 @ 0x22d0;
+    entry_addrh entry_addrh_45;
+    entry_cfg entry_cfg_45;
+    entry_addr entry_addr_46 @ 0x22e0;
+    entry_addrh entry_addrh_46;
+    entry_cfg entry_cfg_46;
+    entry_addr entry_addr_47 @ 0x22f0;
+    entry_addrh entry_addrh_47;
+    entry_cfg entry_cfg_47;
+    entry_addr entry_addr_48 @ 0x2300;
+    entry_addrh entry_addrh_48;
+    entry_cfg entry_cfg_48;
+    entry_addr entry_addr_49 @ 0x2310;
+    entry_addrh entry_addrh_49;
+    entry_cfg entry_cfg_49;
+    entry_addr entry_addr_50 @ 0x2320;
+    entry_addrh entry_addrh_50;
+    entry_cfg entry_cfg_50;
+    entry_addr entry_addr_51 @ 0x2330;
+    entry_addrh entry_addrh_51;
+    entry_cfg entry_cfg_51;
+    entry_addr entry_addr_52 @ 0x2340;
+    entry_addrh entry_addrh_52;
+    entry_cfg entry_cfg_52;
+    entry_addr entry_addr_53 @ 0x2350;
+    entry_addrh entry_addrh_53;
+    entry_cfg entry_cfg_53;
+    entry_addr entry_addr_54 @ 0x2360;
+    entry_addrh entry_addrh_54;
+    entry_cfg entry_cfg_54;
+    entry_addr entry_addr_55 @ 0x2370;
+    entry_addrh entry_addrh_55;
+    entry_cfg entry_cfg_55;
+    entry_addr entry_addr_56 @ 0x2380;
+    entry_addrh entry_addrh_56;
+    entry_cfg entry_cfg_56;
+    entry_addr entry_addr_57 @ 0x2390;
+    entry_addrh entry_addrh_57;
+    entry_cfg entry_cfg_57;
+    entry_addr entry_addr_58 @ 0x23a0;
+    entry_addrh entry_addrh_58;
+    entry_cfg entry_cfg_58;
+    entry_addr entry_addr_59 @ 0x23b0;
+    entry_addrh entry_addrh_59;
+    entry_cfg entry_cfg_59;
+    entry_addr entry_addr_60 @ 0x23c0;
+    entry_addrh entry_addrh_60;
+    entry_cfg entry_cfg_60;
+    entry_addr entry_addr_61 @ 0x23d0;
+    entry_addrh entry_addrh_61;
+    entry_cfg entry_cfg_61;
+    entry_addr entry_addr_62 @ 0x23e0;
+    entry_addrh entry_addrh_62;
+    entry_cfg entry_cfg_62;
+    entry_addr entry_addr_63 @ 0x23f0;
+    entry_addrh entry_addrh_63;
+    entry_cfg entry_cfg_63;
+    entry_addr entry_addr_64 @ 0x2400;
+    entry_addrh entry_addrh_64;
+    entry_cfg entry_cfg_64;
+    entry_addr entry_addr_65 @ 0x2410;
+    entry_addrh entry_addrh_65;
+    entry_cfg entry_cfg_65;
+    entry_addr entry_addr_66 @ 0x2420;
+    entry_addrh entry_addrh_66;
+    entry_cfg entry_cfg_66;
+    entry_addr entry_addr_67 @ 0x2430;
+    entry_addrh entry_addrh_67;
+    entry_cfg entry_cfg_67;
+    entry_addr entry_addr_68 @ 0x2440;
+    entry_addrh entry_addrh_68;
+    entry_cfg entry_cfg_68;
+    entry_addr entry_addr_69 @ 0x2450;
+    entry_addrh entry_addrh_69;
+    entry_cfg entry_cfg_69;
+    entry_addr entry_addr_70 @ 0x2460;
+    entry_addrh entry_addrh_70;
+    entry_cfg entry_cfg_70;
+    entry_addr entry_addr_71 @ 0x2470;
+    entry_addrh entry_addrh_71;
+    entry_cfg entry_cfg_71;
+    entry_addr entry_addr_72 @ 0x2480;
+    entry_addrh entry_addrh_72;
+    entry_cfg entry_cfg_72;
+    entry_addr entry_addr_73 @ 0x2490;
+    entry_addrh entry_addrh_73;
+    entry_cfg entry_cfg_73;
+    entry_addr entry_addr_74 @ 0x24a0;
+    entry_addrh entry_addrh_74;
+    entry_cfg entry_cfg_74;
+    entry_addr entry_addr_75 @ 0x24b0;
+    entry_addrh entry_addrh_75;
+    entry_cfg entry_cfg_75;
+    entry_addr entry_addr_76 @ 0x24c0;
+    entry_addrh entry_addrh_76;
+    entry_cfg entry_cfg_76;
+    entry_addr entry_addr_77 @ 0x24d0;
+    entry_addrh entry_addrh_77;
+    entry_cfg entry_cfg_77;
+    entry_addr entry_addr_78 @ 0x24e0;
+    entry_addrh entry_addrh_78;
+    entry_cfg entry_cfg_78;
+    entry_addr entry_addr_79 @ 0x24f0;
+    entry_addrh entry_addrh_79;
+    entry_cfg entry_cfg_79;
+    entry_addr entry_addr_80 @ 0x2500;
+    entry_addrh entry_addrh_80;
+    entry_cfg entry_cfg_80;
+    entry_addr entry_addr_81 @ 0x2510;
+    entry_addrh entry_addrh_81;
+    entry_cfg entry_cfg_81;
+    entry_addr entry_addr_82 @ 0x2520;
+    entry_addrh entry_addrh_82;
+    entry_cfg entry_cfg_82;
+    entry_addr entry_addr_83 @ 0x2530;
+    entry_addrh entry_addrh_83;
+    entry_cfg entry_cfg_83;
+    entry_addr entry_addr_84 @ 0x2540;
+    entry_addrh entry_addrh_84;
+    entry_cfg entry_cfg_84;
+    entry_addr entry_addr_85 @ 0x2550;
+    entry_addrh entry_addrh_85;
+    entry_cfg entry_cfg_85;
+    entry_addr entry_addr_86 @ 0x2560;
+    entry_addrh entry_addrh_86;
+    entry_cfg entry_cfg_86;
+    entry_addr entry_addr_87 @ 0x2570;
+    entry_addrh entry_addrh_87;
+    entry_cfg entry_cfg_87;
+    entry_addr entry_addr_88 @ 0x2580;
+    entry_addrh entry_addrh_88;
+    entry_cfg entry_cfg_88;
+    entry_addr entry_addr_89 @ 0x2590;
+    entry_addrh entry_addrh_89;
+    entry_cfg entry_cfg_89;
+    entry_addr entry_addr_90 @ 0x25a0;
+    entry_addrh entry_addrh_90;
+    entry_cfg entry_cfg_90;
+    entry_addr entry_addr_91 @ 0x25b0;
+    entry_addrh entry_addrh_91;
+    entry_cfg entry_cfg_91;
+    entry_addr entry_addr_92 @ 0x25c0;
+    entry_addrh entry_addrh_92;
+    entry_cfg entry_cfg_92;
+    entry_addr entry_addr_93 @ 0x25d0;
+    entry_addrh entry_addrh_93;
+    entry_cfg entry_cfg_93;
+    entry_addr entry_addr_94 @ 0x25e0;
+    entry_addrh entry_addrh_94;
+    entry_cfg entry_cfg_94;
+    entry_addr entry_addr_95 @ 0x25f0;
+    entry_addrh entry_addrh_95;
+    entry_cfg entry_cfg_95;
+    entry_addr entry_addr_96 @ 0x2600;
+    entry_addrh entry_addrh_96;
+    entry_cfg entry_cfg_96;
+    entry_addr entry_addr_97 @ 0x2610;
+    entry_addrh entry_addrh_97;
+    entry_cfg entry_cfg_97;
+    entry_addr entry_addr_98 @ 0x2620;
+    entry_addrh entry_addrh_98;
+    entry_cfg entry_cfg_98;
+    entry_addr entry_addr_99 @ 0x2630;
+    entry_addrh entry_addrh_99;
+    entry_cfg entry_cfg_99;
+    entry_addr entry_addr_100 @ 0x2640;
+    entry_addrh entry_addrh_100;
+    entry_cfg entry_cfg_100;
+    entry_addr entry_addr_101 @ 0x2650;
+    entry_addrh entry_addrh_101;
+    entry_cfg entry_cfg_101;
+    entry_addr entry_addr_102 @ 0x2660;
+    entry_addrh entry_addrh_102;
+    entry_cfg entry_cfg_102;
+    entry_addr entry_addr_103 @ 0x2670;
+    entry_addrh entry_addrh_103;
+    entry_cfg entry_cfg_103;
+    entry_addr entry_addr_104 @ 0x2680;
+    entry_addrh entry_addrh_104;
+    entry_cfg entry_cfg_104;
+    entry_addr entry_addr_105 @ 0x2690;
+    entry_addrh entry_addrh_105;
+    entry_cfg entry_cfg_105;
+    entry_addr entry_addr_106 @ 0x26a0;
+    entry_addrh entry_addrh_106;
+    entry_cfg entry_cfg_106;
+    entry_addr entry_addr_107 @ 0x26b0;
+    entry_addrh entry_addrh_107;
+    entry_cfg entry_cfg_107;
+    entry_addr entry_addr_108 @ 0x26c0;
+    entry_addrh entry_addrh_108;
+    entry_cfg entry_cfg_108;
+    entry_addr entry_addr_109 @ 0x26d0;
+    entry_addrh entry_addrh_109;
+    entry_cfg entry_cfg_109;
+    entry_addr entry_addr_110 @ 0x26e0;
+    entry_addrh entry_addrh_110;
+    entry_cfg entry_cfg_110;
+    entry_addr entry_addr_111 @ 0x26f0;
+    entry_addrh entry_addrh_111;
+    entry_cfg entry_cfg_111;
+    entry_addr entry_addr_112 @ 0x2700;
+    entry_addrh entry_addrh_112;
+    entry_cfg entry_cfg_112;
+    entry_addr entry_addr_113 @ 0x2710;
+    entry_addrh entry_addrh_113;
+    entry_cfg entry_cfg_113;
+    entry_addr entry_addr_114 @ 0x2720;
+    entry_addrh entry_addrh_114;
+    entry_cfg entry_cfg_114;
+    entry_addr entry_addr_115 @ 0x2730;
+    entry_addrh entry_addrh_115;
+    entry_cfg entry_cfg_115;
+    entry_addr entry_addr_116 @ 0x2740;
+    entry_addrh entry_addrh_116;
+    entry_cfg entry_cfg_116;
+    entry_addr entry_addr_117 @ 0x2750;
+    entry_addrh entry_addrh_117;
+    entry_cfg entry_cfg_117;
+    entry_addr entry_addr_118 @ 0x2760;
+    entry_addrh entry_addrh_118;
+    entry_cfg entry_cfg_118;
+    entry_addr entry_addr_119 @ 0x2770;
+    entry_addrh entry_addrh_119;
+    entry_cfg entry_cfg_119;
+    entry_addr entry_addr_120 @ 0x2780;
+    entry_addrh entry_addrh_120;
+    entry_cfg entry_cfg_120;
+    entry_addr entry_addr_121 @ 0x2790;
+    entry_addrh entry_addrh_121;
+    entry_cfg entry_cfg_121;
+    entry_addr entry_addr_122 @ 0x27a0;
+    entry_addrh entry_addrh_122;
+    entry_cfg entry_cfg_122;
+    entry_addr entry_addr_123 @ 0x27b0;
+    entry_addrh entry_addrh_123;
+    entry_cfg entry_cfg_123;
+    entry_addr entry_addr_124 @ 0x27c0;
+    entry_addrh entry_addrh_124;
+    entry_cfg entry_cfg_124;
+    entry_addr entry_addr_125 @ 0x27d0;
+    entry_addrh entry_addrh_125;
+    entry_cfg entry_cfg_125;
+    entry_addr entry_addr_126 @ 0x27e0;
+    entry_addrh entry_addrh_126;
+    entry_cfg entry_cfg_126;
+    entry_addr entry_addr_127 @ 0x27f0;
+    entry_addrh entry_addrh_127;
+    entry_cfg entry_cfg_127;
+};

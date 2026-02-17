@@ -1,0 +1,1472 @@
+
+#
+# Mnemonic Maps
+#
+mmap new  -reuse -name {Boolean as Logic} -radix %b -contents {{%c=FALSE -edgepriority 1 -shape low}
+{%c=TRUE -edgepriority 1 -shape high}}
+mmap new  -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor orange -label REG:%x -linecolor yellow -shape bus}
+{%x=1F -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=2C -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=* -label %x -linecolor gray -shape bus}}
+
+array unset createdGroup
+array set createdGroup {}
+#
+# Groups
+#
+if {[catch {group get -using [list {MSTR_REQ_MGR}]}]} {
+set createdGroup([list {MSTR_REQ_MGR}]) 1
+catch {group new -name MSTR_REQ_MGR -overlay 0}
+}
+if {[catch {group get -using [list {RFM}]}]} {
+set createdGroup([list {RFM}]) 1
+catch {group new -name RFM -overlay 0}
+}
+if {[catch {group get -using [list {SLV_REQ_MGR}]}]} {
+set createdGroup([list {SLV_REQ_MGR}]) 1
+catch {group new -name SLV_REQ_MGR -overlay 0}
+}
+if {[catch {group get -using [list {TTU}]}]} {
+set createdGroup([list {TTU}]) 1
+catch {group new -name TTU -overlay 0}
+}
+if {[catch {group get -using [list {RAP}]}]} {
+set createdGroup([list {RAP}]) 1
+catch {group new -name RAP -overlay 0}
+}
+if {[catch {group get -using [list {MSTR_RESP_MGR}]}]} {
+set createdGroup([list {MSTR_RESP_MGR}]) 1
+catch {group new -name MSTR_RESP_MGR -overlay 0}
+}
+if {[catch {group get -using [list {Read_Req}]}]} {
+set createdGroup([list {Read_Req}]) 1
+catch {group new -name Read_Req -overlay 0}
+}
+if {[catch {group get -using [list {RD_Buffer}]}]} {
+set createdGroup([list {RD_Buffer}]) 1
+catch {group new -name RD_Buffer -overlay 0}
+}
+if {[catch {group get -using [list {RR_Arb_1}]}]} {
+set createdGroup([list {RR_Arb_1}]) 1
+catch {group new -name RR_Arb_1 -overlay 0}
+}
+if {[catch {group get -using [list {WR_Buffer}]}]} {
+set createdGroup([list {WR_Buffer}]) 1
+catch {group new -name WR_Buffer -overlay 0}
+}
+if {[catch {group get -using [list {Write_Req}]}]} {
+set createdGroup([list {Write_Req}]) 1
+catch {group new -name Write_Req -overlay 0}
+}
+if {[catch {group get -using [list {Stall Logic}]}]} {
+set createdGroup([list {Stall Logic}]) 1
+catch {group new -name {Stall Logic} -overlay 0}
+}
+if {[catch {group get -using [list {Stall_Buffer}]}]} {
+set createdGroup([list {Stall_Buffer}]) 1
+catch {group new -name Stall_Buffer -overlay 0}
+}
+if {[catch {group get -using [list {PRIO_Arb_2}]}]} {
+set createdGroup([list {PRIO_Arb_2}]) 1
+catch {group new -name PRIO_Arb_2 -overlay 0}
+}
+if {[catch {group get -using [list {TTU Signals}]}]} {
+set createdGroup([list {TTU Signals}]) 1
+catch {group new -name {TTU Signals} -overlay 0}
+}
+if {[catch {group get -using [list {rap_operation decision}]}]} {
+set createdGroup([list {rap_operation decision}]) 1
+catch {group new -name {rap_operation decision} -overlay 0}
+}
+if {[catch {group get -using [list {axi_ttu_trans decision}]}]} {
+set createdGroup([list {axi_ttu_trans decision}]) 1
+catch {group new -name {axi_ttu_trans decision} -overlay 0}
+}
+if {[catch {group get -using [list {Wr data}]}]} {
+set createdGroup([list {Wr data}]) 1
+catch {group new -name {Wr data} -overlay 0}
+}
+if {[catch {group get -using [list {TTU_Checks}]}]} {
+set createdGroup([list {TTU_Checks}]) 1
+catch {group new -name TTU_Checks -overlay 0}
+}
+if {[catch {group get -using [list {SRCMD Lookup}]}]} {
+set createdGroup([list {SRCMD Lookup}]) 1
+catch {group new -name {SRCMD Lookup} -overlay 0}
+}
+if {[catch {group get -using [list {_4KB Check}]}]} {
+set createdGroup([list {_4KB Check}]) 1
+catch {group new -name {_4KB Check} -overlay 0}
+}
+if {[catch {group get -using [list {Output Signals}]}]} {
+set createdGroup([list {Output Signals}]) 1
+catch {group new -name {Output Signals} -overlay 0}
+}
+if {[catch {group get -using [list {MSI_Wr_Req}]}]} {
+set createdGroup([list {MSI_Wr_Req}]) 1
+catch {group new -name MSI_Wr_Req -overlay 0}
+}
+if {[catch {group get -using [list {Wr_Req}]}]} {
+set createdGroup([list {Wr_Req}]) 1
+catch {group new -name Wr_Req -overlay 0}
+}
+if {[catch {group get -using [list {Rd_Req}]}]} {
+set createdGroup([list {Rd_Req}]) 1
+catch {group new -name Rd_Req -overlay 0}
+}
+if {[catch {group get -using [list {Prio_Arb_3}]}]} {
+set createdGroup([list {Prio_Arb_3}]) 1
+catch {group new -name Prio_Arb_3 -overlay 0}
+}
+if {[catch {group get -using [list {vld generation}]}]} {
+set createdGroup([list {vld generation}]) 1
+catch {group new -name {vld generation} -overlay 0}
+}
+if {[catch {group get -using [list {eWrChannel}]}]} {
+set createdGroup([list {eWrChannel}]) 1
+catch {group new -name eWrChannel -overlay 0}
+}
+if {[catch {group get -using [list {eWrValid}]}]} {
+set createdGroup([list {eWrValid}]) 1
+catch {group new -name eWrValid -overlay 0}
+}
+if {[catch {group get -using [list {WrChannel}]}]} {
+set createdGroup([list {WrChannel}]) 1
+catch {group new -name WrChannel -overlay 0}
+}
+if {[catch {group get -using [list {Read Err Resp Buf}]}]} {
+set createdGroup([list {Read Err Resp Buf}]) 1
+catch {group new -name {Read Err Resp Buf} -overlay 0}
+}
+if {[catch {group get -using [list {Slave Read Resp Buf}]}]} {
+set createdGroup([list {Slave Read Resp Buf}]) 1
+catch {group new -name {Slave Read Resp Buf} -overlay 0}
+}
+if {[catch {group get -using [list {Prio Arb 5}]}]} {
+set createdGroup([list {Prio Arb 5}]) 1
+catch {group new -name {Prio Arb 5} -overlay 0}
+}
+if {[catch {group get -using [list {rerr_resp_buf_rd_en decision}]}]} {
+set createdGroup([list {rerr_resp_buf_rd_en decision}]) 1
+catch {group new -name {rerr_resp_buf_rd_en decision} -overlay 0}
+}
+if {[catch {group get -using [list {priority decision}]}]} {
+set createdGroup([list {priority decision}]) 1
+catch {group new -name {priority decision} -overlay 0}
+}
+if {[catch {group get -using [list {Read Response Path}]}]} {
+set createdGroup([list {Read Response Path}]) 1
+catch {group new -name {Read Response Path} -overlay 0}
+}
+if {[catch {group get -using [list {Write Err Resp Buf}]}]} {
+set createdGroup([list {Write Err Resp Buf}]) 1
+catch {group new -name {Write Err Resp Buf} -overlay 0}
+}
+if {[catch {group get -using [list {MSI Resp}]}]} {
+set createdGroup([list {MSI Resp}]) 1
+catch {group new -name {MSI Resp} -overlay 0}
+}
+if {[catch {group get -using [list {Slave Wr Resp}]}]} {
+set createdGroup([list {Slave Wr Resp}]) 1
+catch {group new -name {Slave Wr Resp} -overlay 0}
+}
+if {[catch {group get -using [list {Prio Arb 4}]}]} {
+set createdGroup([list {Prio Arb 4}]) 1
+catch {group new -name {Prio Arb 4} -overlay 0}
+}
+if {[catch {group get -using [list {FSM}]}]} {
+set createdGroup([list {FSM}]) 1
+catch {group new -name FSM -overlay 0}
+}
+if {[catch {group get -using [list {Address Check}]}]} {
+set createdGroup([list {Address Check}]) 1
+catch {group new -name {Address Check} -overlay 0}
+}
+if {[catch {group get -using [list {l1 mux sel generation}]}]} {
+set createdGroup([list {l1 mux sel generation}]) 1
+catch {group new -name {l1 mux sel generation} -overlay 0}
+}
+if {[catch {group get -using [list {Read Path}]}]} {
+set createdGroup([list {Read Path}]) 1
+catch {group new -name {Read Path} -overlay 0}
+}
+if {[catch {group get -using [list {Write valid decision and 1st write flop}]}]} {
+set createdGroup([list {Write valid decision and 1st write flop}]) 1
+catch {group new -name {Write valid decision and 1st write flop} -overlay 0}
+}
+if {[catch {group get -using [list {Write Path}]}]} {
+set createdGroup([list {Write Path}]) 1
+catch {group new -name {Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {Config Prot Regs Write Path}]}]} {
+set createdGroup([list {Config Prot Regs Write Path}]) 1
+catch {group new -name {Config Prot Regs Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {Info Regs Write Path}]}]} {
+set createdGroup([list {Info Regs Write Path}]) 1
+catch {group new -name {Info Regs Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {Prog Prot Regs Write Path}]}]} {
+set createdGroup([list {Prog Prot Regs Write Path}]) 1
+catch {group new -name {Prog Prot Regs Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {Err Rpt Regs Write Path}]}]} {
+set createdGroup([list {Err Rpt Regs Write Path}]) 1
+catch {group new -name {Err Rpt Regs Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {MDCFG Regs Write Path}]}]} {
+set createdGroup([list {MDCFG Regs Write Path}]) 1
+catch {group new -name {MDCFG Regs Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {SRCMD Regs Write Path}]}]} {
+set createdGroup([list {SRCMD Regs Write Path}]) 1
+catch {group new -name {SRCMD Regs Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {Base Regs Write Path}]}]} {
+set createdGroup([list {Base Regs Write Path}]) 1
+catch {group new -name {Base Regs Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {Entry Array Write Path}]}]} {
+set createdGroup([list {Entry Array Write Path}]) 1
+catch {group new -name {Entry Array Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {EIC Err Rpt Regs write}]}]} {
+set createdGroup([list {EIC Err Rpt Regs write}]) 1
+catch {group new -name {EIC Err Rpt Regs write} -overlay 0}
+}
+if {[catch {group get -using [list {MFR Windows}]}]} {
+set createdGroup([list {MFR Windows}]) 1
+catch {group new -name {MFR Windows} -overlay 0}
+}
+if {[catch {group get -using [list {Response Generator}]}]} {
+set createdGroup([list {Response Generator}]) 1
+catch {group new -name {Response Generator} -overlay 0}
+}
+if {[catch {group get -using [list {Write Response Path}]}]} {
+set createdGroup([list {Write Response Path}]) 1
+catch {group new -name {Write Response Path} -overlay 0}
+}
+if {[catch {group get -using [list {Slave Write Path}]}]} {
+set createdGroup([list {Slave Write Path}]) 1
+catch {group new -name {Slave Write Path} -overlay 0}
+}
+if {[catch {group get -using [list {EIC}]}]} {
+set createdGroup([list {EIC}]) 1
+catch {group new -name EIC -overlay 0}
+}
+if {[info exists createdGroup([list {MSTR_REQ_MGR}])]} {
+group using MSTR_REQ_MGR
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    Read_Req \
+    Write_Req \
+    RR_Arb_1 \
+    {Stall Logic} \
+    PRIO_Arb_2 \
+    {Wr data} \
+    {TTU Signals}
+}
+
+if {[info exists createdGroup([list {RFM}])]} {
+group using RFM
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    FSM \
+    {Address Check} \
+    {Read Path} \
+    {Write Path}
+}
+
+if {[info exists createdGroup([list {SLV_REQ_MGR}])]} {
+group using SLV_REQ_MGR
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    Rd_Req \
+    {Slave Write Path} \
+    WrChannel
+}
+
+if {[info exists createdGroup([list {TTU}])]} {
+group using TTU
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.ttu.rap_operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.rfm_ttu}]} ] \
+    TTU_Checks \
+    {SRCMD Lookup} \
+    {_4KB Check} \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_rapo[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_rap_err_info[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.transaction_o}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.trans_end_addr[51:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.mdrwperm_repl[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.entrypresent_or[127:0]}]} ]
+}
+
+if {[info exists createdGroup([list {RAP}])]} {
+group using RAP
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.ttu_rapo[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.ttu_rap_err_info[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.transaction_i}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.mdrwperm_repl[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.entrypresent_or[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.trans_end_addr[51:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rfm_rap}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.rap_stage[16:0]}]} ] \
+    {Response Generator}
+}
+
+if {[info exists createdGroup([list {MSTR_RESP_MGR}])]} {
+group using MSTR_RESP_MGR
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    {Read Response Path} \
+    {Write Response Path} \
+    {MSI Resp}
+}
+
+if {[info exists createdGroup([list {Read_Req}])]} {
+group using Read_Req
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.eArReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iArValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iArChannel}]} ] \
+    RD_Buffer
+}
+
+if {[info exists createdGroup([list {RD_Buffer}])]} {
+group using RD_Buffer
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.ar_chnl_hs_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rd_trans_buf_wr_data_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rd_trans_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rd_trans_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rd_trans_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rd_trans_buf_rd_en}]} ]
+}
+
+if {[info exists createdGroup([list {RR_Arb_1}])]} {
+group using RR_Arb_1
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rr_arb1_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rr_arb1_vld[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rr_arb1_req[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rr_arb1.out_req_gnt}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.arb1_arb2_vld}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.arb1_arb2_trans}]} ]
+}
+
+if {[info exists createdGroup([list {WR_Buffer}])]} {
+group using WR_Buffer
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.aw_chnl_hs_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.w_chnl_hs_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.wr_trans_buf_wr_data_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.wr_trans_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.wr_trans_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.wr_trans_buf_rd_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.wr_trans_buf_rd_data}]} ]
+}
+
+if {[info exists createdGroup([list {Write_Req}])]} {
+group using Write_Req
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iAwChannel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.eAwReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iAwValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iWrValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.eWrReady}]} ] \
+    WR_Buffer
+}
+
+if {[info exists createdGroup([list {Stall Logic}])]} {
+group using {Stall Logic}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.change_state[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iopmp_state_n[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rrid_stall[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rrid_is_stalled}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iopmp_state_q[1:0]}]} ] \
+    Stall_Buffer
+}
+
+if {[info exists createdGroup([list {Stall_Buffer}])]} {
+group using Stall_Buffer
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.arb1_arb2_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.stall_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.stall_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.stall_buf_wr_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.stall_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.stall_buf_rd_en}]} ]
+}
+
+if {[info exists createdGroup([list {PRIO_Arb_2}])]} {
+group using PRIO_Arb_2
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.pr_arb2_vld[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.pr_arb2_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.pr_arb2_req[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.pr_arb2_req_o}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.pr_arb2_data_o}]} ]
+}
+
+if {[info exists createdGroup([list {TTU Signals}])]} {
+group using {TTU Signals}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    {axi_ttu_trans decision} \
+    {rap_operation decision}
+}
+
+if {[info exists createdGroup([list {rap_operation decision}])]} {
+group using {rap_operation decision}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.arb1_arb2_vld}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.pr_arb2_req_o}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rap_operation[1:0]}]} ]
+}
+
+if {[info exists createdGroup([list {axi_ttu_trans decision}])]} {
+group using {axi_ttu_trans decision}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.axi_ttu_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.arb1_arb2_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.pr_arb2_data_o}]} ]
+}
+
+if {[info exists createdGroup([list {Wr data}])]} {
+group using {Wr data}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iWrChannel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rdata_vld[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.mst_wd_buf_vld}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.rdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.mst_wd_buf_data}]} ]
+}
+
+if {[info exists createdGroup([list {TTU_Checks}])]} {
+group using TTU_Checks
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.rap_operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.transaction_rrid[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.is_x_access}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.is_w_access}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.hwcfg0_enable}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.hwcfg0_no_x}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.hwcfg0_chk_x}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.hwcfg0_no_w}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.hwcfg1_rrid_num[6:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.ttu_operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_checks.ttu_err_info[3:0]}]} ]
+}
+
+if {[info exists createdGroup([list {SRCMD Lookup}])]} {
+group using {SRCMD Lookup}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.ttu.mdpresent[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.mdrperm[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.mdwperm[62:0]}]} ]
+}
+
+if {[info exists createdGroup([list {_4KB Check}])]} {
+group using {_4KB Check}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.ttu.gen_mdcfg_fmt_1.mdcfg_fmt_1.transaction_l[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.gen_mdcfg_fmt_1.mdcfg_fmt_1.final_ttu_rap_operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.gen_mdcfg_fmt_1.mdcfg_fmt_1.final_ttu_rap_err_info[3:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Output Signals}])]} {
+group using {Output Signals}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.ttu.trans_end_addr[51:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.mdrwperm_repl[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.entrypresent_or[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_rap_err_info[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.ttu_rapo[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.ttu.transaction_o}]} ]
+}
+
+if {[info exists createdGroup([list {MSI_Wr_Req}])]} {
+group using MSI_Wr_Req
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.eic_msi_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.eic_msi_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.msi_req_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.msi_req_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.msi_req_buf_rd_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.msi_req_buf_rd_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.msi_data[10:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Wr_Req}])]} {
+group using Wr_Req
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.rap_wr_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.rap_wr_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.mst_wrreq_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.mst_wrreq_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.mst_wrreq_buf_rd_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.mst_wrreq_buf_rd_data}]} ]
+}
+
+if {[info exists createdGroup([list {Rd_Req}])]} {
+group using Rd_Req
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.mst_rreq_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.mst_rreq_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.rap_rd_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.rap_rd_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.iArReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.eArValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.eArChannel}]} ]
+}
+
+if {[info exists createdGroup([list {Prio_Arb_3}])]} {
+group using Prio_Arb_3
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    {vld generation} \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.pr_arb3_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.pr_arb3_req[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.iAwReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.eAwValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.eAwChannel}]} ]
+}
+
+if {[info exists createdGroup([list {vld generation}])]} {
+group using {vld generation}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.aw_chnl_hs_done_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.msi_req_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.is_wd_buf_data_pndg_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.pr_arb3_vld[1:0]}]} ]
+}
+
+if {[info exists createdGroup([list {eWrChannel}])]} {
+group using eWrChannel
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.axi_wr_state[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.awaddr2}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.msi_data[10:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.awaddr2to2_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.mst_wd_buf_data}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.eWrChannel}]} ]
+}
+
+if {[info exists createdGroup([list {eWrValid}])]} {
+group using eWrValid
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.axi_wr_state[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.msi_vld}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.mst_wd_buf_vld}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.is_wd_buf_data_pndg_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.msi_req_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.eWrValid}]} ]
+}
+
+if {[info exists createdGroup([list {WrChannel}])]} {
+group using WrChannel
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.slave_req_mgr.axi_write_chnl_controller.iWrReady}]} ] \
+    eWrValid \
+    eWrChannel
+}
+
+if {[info exists createdGroup([list {Read Err Resp Buf}])]} {
+group using {Read Err Resp Buf}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rerr_resp_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rerr_resp_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rap_rd_err_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.ar_len[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rap_rd_err_req}]} ] \
+    {rerr_resp_buf_rd_en decision} \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rerr_resp_buf_rd_data[81:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Slave Read Resp Buf}])]} {
+group using {Slave Read Resp Buf}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iRValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.eRReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.r_chnl_hs_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iRChannel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.r_chnl_resp_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.slave_resp_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.slave_resp_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb5_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.slave_resp_buf_rd_data}]} ]
+}
+
+if {[info exists createdGroup([list {Prio Arb 5}])]} {
+group using {Prio Arb 5}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb5_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb5_vld[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb5_req[1:0]}]} ] \
+    {priority decision} \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iRReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.eRValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.eRChannel}]} ]
+}
+
+if {[info exists createdGroup([list {rerr_resp_buf_rd_en decision}])]} {
+group using {rerr_resp_buf_rd_en decision}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.resp_state_q[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb5_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.burst_trnsfr}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rd_trnsfr_done}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rerr_resp_buf_rd_en}]} ]
+}
+
+if {[info exists createdGroup([list {priority decision}])]} {
+group using {priority decision}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.resp_state_q[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.prio}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb5.pri[1:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Read Response Path}])]} {
+group using {Read Response Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    {Read Err Resp Buf} \
+    {Slave Read Resp Buf} \
+    {Prio Arb 5}
+}
+
+if {[info exists createdGroup([list {Write Err Resp Buf}])]} {
+group using {Write Err Resp Buf}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.werr_resp_buf_full}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.werr_resp_buf_empty}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rap_wr_err_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.rap_wr_err_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb4_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.werr_resp_buf_rd_data}]} ]
+}
+
+if {[info exists createdGroup([list {MSI Resp}])]} {
+group using {MSI Resp}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iBValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.eBReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.b_chnl_hs_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.mrspm_eic_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iBChannel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.b_chnl_resp_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.mrspm_eic_trans}]} ]
+}
+
+if {[info exists createdGroup([list {Slave Wr Resp}])]} {
+group using {Slave Wr Resp}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iBValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.eBReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.b_chnl_hs_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iBChannel}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.b_chnl_resp_q}]} ]
+}
+
+if {[info exists createdGroup([list {Prio Arb 4}])]} {
+group using {Prio Arb 4}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb4_rdy[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb4.pri[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb4_vld[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.pr_arb4_req[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.eBValid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.iBReady}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.mst_resp_mgr.eBChannel}]} ]
+}
+
+if {[info exists createdGroup([list {FSM}])]} {
+group using FSM
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.ahb_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.ahb_req_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.response_state_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.valid_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.is_addr_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.req_access_type}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.hreadyout_internal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.ahb_hrdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.ahb_resp_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.ahb_resp_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.ahb_resp}]} ]
+}
+
+if {[info exists createdGroup([list {Address Check}])]} {
+group using {Address Check}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.valid_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.req_addr_n[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.is_addr_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.base_reg_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.config_prot_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.err_rpt_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.info_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.prog_prot_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.mdcfg_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.srcmd_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.entry_array_legal}]} ]
+}
+
+if {[info exists createdGroup([list {l1 mux sel generation}])]} {
+group using {l1 mux sel generation}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.is_addr_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.base_reg_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mdcfg_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.entry_array_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.srcmd_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.l1_mux_sel[2:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Read Path}])]} {
+group using {Read Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.req_addr_n[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.req_access_type}]} ] \
+    {l1 mux sel generation} \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_s2_out[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_s2_sel[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_ea2_out[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_ea2_sel[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_m2_out[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_m2_sel[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_b23_out[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_b22_out[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_b21_out[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_b20_out[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.err_mfr_rdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.mux_b2_sel[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.read_register.ahb_hrdata[31:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Write valid decision and 1st write flop}])]} {
+group using {Write valid decision and 1st write flop}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.is_addr_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.req_access_type}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_reg_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_reg_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_reg_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfg_reg_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.mdcfg_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_reg_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.srcmd_legal}]} ]
+}
+
+if {[info exists createdGroup([list {Write Path}])]} {
+group using {Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.req_addr_n[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.req_wdata[31:0]}]} ] \
+    {Write valid decision and 1st write flop} \
+    {Base Regs Write Path} \
+    {MDCFG Regs Write Path} \
+    {SRCMD Regs Write Path} \
+    {Entry Array Write Path}
+}
+
+if {[info exists createdGroup([list {Config Prot Regs Write Path}])]} {
+group using {Config Prot Regs Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdlck_l_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdlck_md_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdlckh_mdh_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdcfglck_l_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdcfglck_f_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.entrylck_l_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.entrylck_f_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.config_prot_reg_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdlck_l_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.MD_NUM_MASK[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdlck_md_swdata[30:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdlckh_mdh_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdcfglck_l_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.hwcfg0_md_num[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.mdcfglck_f_swdata[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.entrylck_l_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.hwcfg1_entry_num[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.entrylck_f_swdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.config_prot_regs.config_prot_reg}]} ]
+}
+
+if {[info exists createdGroup([list {Info Regs Write Path}])]} {
+group using {Info Regs Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.info_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg0_prient_prog_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg0_md_entry_num_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg0_enable_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg2_prio_entry_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg0_enable_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.MAX_MD_ENTRY_NUM_VALUE[6:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg0_md_entry_num_swdata[6:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg0_prient_prog_swdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.MAX_SUPPORTED_PRIO_ENTRY[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.hwcfg2_prio_entry_swdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.info_regs.info_reg}]} ]
+}
+
+if {[info exists createdGroup([list {Prog Prot Regs Write Path}])]} {
+group using {Prog Prot Regs Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.MD_NUM_MASK[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.hwcfg1_rrid_num[6:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.prog_prot_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.start_counter}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.stall_cntr_q[4:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iopmp_state_n[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.master_req_mgr.iopmp_state_q[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_normal_state_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_normal_state_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_mdstall_swdata_zero}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_mdstall_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.mdstall_exempt_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.mdstall_md_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_mdstallh_swdata_zero}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_mdstallh_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.mdstallh_mdh_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.mdstall_is_busy_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.mdstall_is_busy_hwdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.tune_rrid_stall}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_stall_state_n}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.is_stall_state_q}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.rridscp_op_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.rridscp_rrid_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.rridscp_stat_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.rridscp_stat_hwdata[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.stall_by_md[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.rrid_stall_n[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.rrid_stall[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.change_state[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.prog_prot_regs.prog_prot_reg}]} ]
+}
+
+if {[info exists createdGroup([list {Err Rpt Regs Write Path}])]} {
+group using {Err Rpt Regs Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.MAX_SVI_VALUE[11:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_rpt_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_cfg_l_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_cfg_ie_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_cfg_msi_en_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_cfg_msidata_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_info_v_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_info_msi_werr_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_mfr_svi_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_msiaddr_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_msiaddrh_swen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_rpt_reg}]} ]
+}
+
+if {[info exists createdGroup([list {MDCFG Regs Write Path}])]} {
+group using {MDCFG Regs Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_reg_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfglck_f[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.is_mdcfg_reg_locked}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.is_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_selected_demux[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_reg_demux_sel[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_demux_enable[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_reg_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.hwcfg1_entry_num[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.is_write_data_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_t_swdata[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_mdcfg_fmt_0_write_path.mdcfg_regs.mdcfg_table[62:0]}]} ]
+}
+
+if {[info exists createdGroup([list {SRCMD Regs Write Path}])]} {
+group using {SRCMD Regs Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_reg_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_selected_demux[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_reg_demux_sel[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_demux_enable[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_en_l_swen[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_en_md_swen[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_enh_swen[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_r_swen[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_rh_swen[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_w_swen[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_wh_swen[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_reg_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.mdlck_md[30:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.mdlckh_mdh[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.MD_NUM_MASK[62:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_en_l_swdata[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_en_md_swdata[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_enh_swdata[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_r_swdata[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_rh_swdata[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_w_swdata[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_wh_swdata[63:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.gen_srcmd_fmt_0_write_path.srcmd_fmt_0_regs.srcmd_table_0[63:0]}]} ]
+}
+
+if {[info exists createdGroup([list {Base Regs Write Path}])]} {
+group using {Base Regs Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.base_reg_demux_sel_q[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.base_reg_swdata_q[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.base_reg_write_valid_q}]} ] \
+    {Info Regs Write Path} \
+    {Config Prot Regs Write Path} \
+    {Prog Prot Regs Write Path} \
+    {Err Rpt Regs Write Path} \
+    {EIC Err Rpt Regs write} \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.err_mfr_read_legal}]} ] \
+    {MFR Windows}
+}
+
+if {[info exists createdGroup([list {Entry Array Write Path}])]} {
+group using {Entry Array Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_array_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entrylck_f[7:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_array_reg_write_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_array_selected_demux[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_array_reg_demux_sel[2:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_addrh_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_addr_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_a_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_r_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_sire_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_siwe_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_sixe_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_w_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_x_swen[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_array_reg_swdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_addr_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_addrh_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_a_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_r_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_sire_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_siwe_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_sixe_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_w_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_cfg_x_swdata[127:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.entry_array_regs.entry_array[127:0]}]} ]
+}
+
+if {[info exists createdGroup([list {EIC Err Rpt Regs write}])]} {
+group using {EIC Err Rpt Regs write}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.eic_rfm}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.err_rpt_regs.err_rpt_reg}]} ]
+}
+
+if {[info exists createdGroup([list {MFR Windows}])]} {
+group using {MFR Windows}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.SVW_ARRAY_SIZE}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.eic_rfm_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.eic_rfm_err_rrid[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.svw_array_n[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.svw_array_q[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_read_legal}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svi[11:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svs}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.idx[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.window_has_error[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.higher_priority_mask[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svi_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svi_hwdata[11:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svs_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svs_hwdata}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svw_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_svw_hwdata[15:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_mfr_rdata[31:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_info_svc_hwen}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rfm.regmap.base_regs.gen_err_record_windows.error_record_windows.err_info_svc_hwdata}]} ]
+}
+
+if {[info exists createdGroup([list {Response Generator}])]} {
+group using {Response Generator}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.operation[1:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.transaction}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.err_info[4:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.err_entry_index[6:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.is_resp_error}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.is_resp_success}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_eic_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_eic_error_info}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_eic_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_rd_err_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_rd_err_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.ar_len[3:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_rd_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_rd_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_wr_err_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_wr_err_req}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_wr_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.rap.response_generator_inst.rap_wr_trans}]} ]
+}
+
+if {[info exists createdGroup([list {Write Response Path}])]} {
+group using {Write Response Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    {Slave Wr Resp} \
+    {Write Err Resp Buf} \
+    {Prio Arb 4}
+}
+
+if {[info exists createdGroup([list {Slave Write Path}])]} {
+group using {Slave Write Path}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    Wr_Req \
+    MSI_Wr_Req \
+    Prio_Arb_3
+}
+
+if {[info exists createdGroup([list {EIC}])]} {
+group using EIC
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.rap_eic_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.rap_eic_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.rap_eic_error_info}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.rfm_eic}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.err_rec_en}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.generate_intrpt}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.eic_rfm_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.eic_rfm_err_rrid[5:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.eic_msi_valid}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.msi_address[51:0]}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.eic_msi_trans}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.wsi}]} ] \
+    [subst  {[format {tb_top.iopmp_dut.gen_eic_block.eic_block.eic_rfm}]} ]
+}
+
+set id [waveform add -signals [subst  {
+	{[format {tb_top.iopmp_dut.CFG}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {tb_top.iopmp_dut.clk}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {tb_top.iopmp_dut.rst_n}]}
+	} ]]
+
+set groupId0 [waveform add -groups RFM]
+
+set groupId1 [waveform find -name FSM]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {Address Check}]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {Read Path}]
+
+set groupId2 [waveform find -name {l1 mux sel generation}]
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {Write Path}]
+
+set groupId2 [waveform find -name {Write valid decision and 1st write flop}]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {Base Regs Write Path}]
+
+set groupId3 [waveform find -name {Info Regs Write Path}]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name {Config Prot Regs Write Path}]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name {Prog Prot Regs Write Path}]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name {Err Rpt Regs Write Path}]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name {EIC Err Rpt Regs write}]
+waveform hierarchy collapse $groupId3
+
+
+set groupId3 [waveform find -name {MFR Windows}]
+waveform hierarchy collapse $groupId3
+
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {MDCFG Regs Write Path}]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {SRCMD Regs Write Path}]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {Entry Array Write Path}]
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups MSTR_REQ_MGR]
+
+set groupId1 [waveform find -name Read_Req]
+
+set groupId2 [waveform find -name RD_Buffer]
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name Write_Req]
+
+set groupId2 [waveform find -name WR_Buffer]
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name RR_Arb_1]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {Stall Logic}]
+
+set groupId2 [waveform find -name Stall_Buffer]
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name PRIO_Arb_2]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {Wr data}]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {TTU Signals}]
+
+set groupId2 [waveform find -name {axi_ttu_trans decision}]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {rap_operation decision}]
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups TTU]
+
+set groupId1 [waveform find -name TTU_Checks]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {SRCMD Lookup}]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {_4KB Check}]
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups RAP]
+
+set groupId1 [waveform find -name {Response Generator}]
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups EIC]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups SLV_REQ_MGR]
+
+set groupId1 [waveform find -name Rd_Req]
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {Slave Write Path}]
+
+set groupId2 [waveform find -name Wr_Req]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name MSI_Wr_Req]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name Prio_Arb_3]
+
+set groupId3 [waveform find -name {vld generation}]
+waveform hierarchy collapse $groupId3
+
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name WrChannel]
+
+set groupId2 [waveform find -name eWrValid]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name eWrChannel]
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups MSTR_RESP_MGR]
+
+set groupId1 [waveform find -name {Read Response Path}]
+
+set groupId2 [waveform find -name {Read Err Resp Buf}]
+
+set groupId3 [waveform find -name {rerr_resp_buf_rd_en decision}]
+waveform hierarchy collapse $groupId3
+
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {Slave Read Resp Buf}]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {Prio Arb 5}]
+
+set groupId3 [waveform find -name {priority decision}]
+waveform hierarchy collapse $groupId3
+
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {Write Response Path}]
+
+set groupId2 [waveform find -name {Slave Wr Resp}]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {Write Err Resp Buf}]
+waveform hierarchy collapse $groupId2
+
+
+set groupId2 [waveform find -name {Prio Arb 4}]
+waveform hierarchy collapse $groupId2
+
+waveform hierarchy collapse $groupId1
+
+
+set groupId1 [waveform find -name {MSI Resp}]
+waveform hierarchy collapse $groupId1
+
+waveform hierarchy collapse $groupId0
+
+
+waveform xview limits 0 2000ps

@@ -1,0 +1,264 @@
+sanity_tests:
+	# make xrun_sim test=read_perm_read_transac_test
+	make xrun_sim test=test_ad2_r1_w0_x1_md0_t0
+	# make xrun_sim test=full_model_basic_test
+	# make xrun_sim test=full_model_NA4_rw_perm_write
+	# make xrun_sim test=full_model_r_perm_read_test
+	# make xrun_sim test=full_model_rfm_read_registers_cov
+	# make xrun_sim test=full_model_no_perm_read_test
+	# make xrun_sim test=full_model_no_perm_write_test
+	# make xrun_sim test=full_model_cfg_x_enable
+	# make xrun_sim test=full_model_cfg_x_disable
+	# make xrun_sim test=full_model_NA4_w_perm_write
+	# make xrun_sim test=fm_NA4_PP_mdstall
+	# make xrun_sim test=full_model_NA4_illegal_read_mfr_en_svw_1_rrid_test
+	# make xrun_sim test=test_ad2_srcmd_en_lock
+	# make xrun_sim test=iopmp_wr_rd_reg_test
+	# make xrun_sim test=test_ad2_interpt_sup
+	# make xrun_sim test=full_model_NA4_dis_chk_x_sps_dis_r_perm_read_test
+	# make xrun_sim test=full_model_NA4_dis_chk_x_sps_dis_x_perm_instr_fetch
+	# make xrun_sim test=full_model_NA4_rw_perm_write_no_w_enable
+	# make xrun_sim test=full_model_x_perm_read_no_x_chk_x
+	# make xrun_sim test=full_model_x0_perm_read_chk_x_disable
+	# make xrun_sim test=full_model_x1_perm_read_chk_x_disable
+	# make xrun_sim test=full_model_NA4_illegal_unknown_rrid_interrupt_enable
+	# make xrun_sim test=full_model_NA4_illegal_unknown_rrid_interrupt_enable_msi
+	# make xrun_sim test=full_model_NA4_illegal_unknown_rrid_interrupt_enable_io_dis
+	# make xrun_sim test=full_model_NA4_illegal_read_mfr_en_unknown_rrid_interrupt_enable_msi
+	# make xrun_sim test=full_model_NA4_sps_dis_r_perm_read_test
+	# make xrun_sim test=full_model_NA4_sps_dis_w_perm_write
+	# make xrun_sim test=full_model_NA4_sps_dis_rw_perm_write
+	# make xrun_sim test=full_model_NA4_sps_dis_x_perm_instruction_fetch_test
+
+format0_se:
+	make xrun_sim test=fm_NA4_PP_mdstall #Set Source Enforcement for this test
+
+format0_err_cap_dis:
+	make xrun_sim test=fm_NA4_PP_mdstall #Disable Error Capture
+
+format0_default:
+	make xrun_sim test=iopmp_wr_rd_reg_test
+	make xrun_sim test=full_model_r_perm_read_test
+	make xrun_sim test=full_model_r_perm_write_test
+	make xrun_sim test=full_model_no_perm_write_test
+	make xrun_sim test=full_model_NA4_src_rw_no_perm_write
+	make xrun_sim test=full_model_no_perm_read_test
+	make xrun_sim test=full_model_src_no_r_no_perm_read_test
+	make xrun_sim test=full_model_NA4_rw_perm_write
+	make xrun_sim test=full_model_NA4_rw_perm_read
+	make xrun_sim test=full_model_NA4_w_perm_read
+	make xrun_sim test=full_model_NA4_w_perm_write
+	make xrun_sim test=full_model_cfg_x_enable
+	make xrun_sim test=full_model_cfg_x_disable
+	make xrun_sim test=full_model_src_no_r_cfg_x_disable
+	make xrun_sim test=full_model_NA4_wx_perm_write
+	make xrun_sim test=full_model_NA4_wx_perm_read
+
+
+	make xrun_sim test=full_model_NA4_illegal_read_interrupt_disable
+	make xrun_sim test=full_model_NA4_illegal_write_interrupt_disable
+	make xrun_sim test=full_model_NA4_illegal_instruction_fetch_interrupt_disable
+
+
+
+	make xrun_sim test=full_model_NA4_illegal_read_interrupt_enable
+	make xrun_sim test=full_model_NA4_illegal_write_interrupt_enable
+	make xrun_sim test=full_model_NA4_illegal_instruction_fetch_interrupt_enable
+	make xrun_sim test=fm_NA4_rd_pri_partial_hit_int_en
+	make xrun_sim test=fm_NA4_rd_non_pri_partial_hit_int_en
+	make xrun_sim test=fm_NA4_wr_pri_partial_hit_int_en
+	make xrun_sim test=fm_NA4_inst_pri_partial_hit_int_en
+	make xrun_sim test=fm_NA4_wr_non_pri_partial_hit_int_en
+	make xrun_sim test=fm_NA4_inst_non_pri_partial_hit_int_en
+
+	make xrun_sim test=full_model_NA4_illegal_read_interrupt_enable_io_dis
+	make xrun_sim test=full_model_NA4_illegal_write_interrupt_enable_io_dis
+	make xrun_sim test=full_model_NA4_illegal_instruction_fetch_interrupt_enable_io_dis
+	make xrun_sim test=fm_NA4_rd_pri_partial_hit_int_en_io_dis
+	make xrun_sim test=fm_NA4_rd_non_pri_partial_hit_int_en_io_dis
+
+	make xrun_sim test=full_model_NA4_illegal_read_interrupt_enable_sup
+	make xrun_sim test=full_model_NA4_illegal_read_msi_interrupt_enable_sup
+	make xrun_sim test=full_model_NA4_illegal_write_interrupt_enable_sup
+	make xrun_sim test=full_model_NA4_illegal_write_msi_interrupt_enable_sup
+	make xrun_sim test=full_model_NA4_illegal_instruction_fetch_interrupt_enable_sup
+	make xrun_sim test=full_model_NA4_illegal_inst_msi_interrupt_enable_sup
+	make xrun_sim test=full_model_NA4_illegal_read_msi_interrupt_enable_int_dis
+
+	make xrun_sim test=full_model_NA4_illegal_read_interrupt_enable_msi
+	make xrun_sim test=full_model_NA4_illegal_write_interrupt_enable_msi
+	make xrun_sim test=full_model_NA4_illegal_instruction_fetch_interrupt_enable_msi
+	make xrun_sim test=fm_NA4_rd_pri_partial_hit_int_en_msi
+	make xrun_sim test=fm_NA4_rd_non_pri_partial_hit_int_en_msi
+
+	make xrun_sim test=full_model_NA4_illegal_read_interrupt_enable_err_sup
+
+	make xrun_sim test=fm_NA4_mdlck_read
+	make xrun_sim test=fm_NA4_mdlck_inst_fetch
+	make xrun_sim test=fm_NA4_mdlck_write
+	make xrun_sim test=fm_NA4_mdlckh_read
+	make xrun_sim test=fm_NA4_mdlckh_inst_fetch
+	make xrun_sim test=fm_NA4_mdlckh_write
+	make xrun_sim test=fm_NA4_mdcfglck_read
+	make xrun_sim test=fm_NA4_mdcfglck_inst_fetch
+	make xrun_sim test=fm_NA4_mdcfglck_write
+	make xrun_sim test=fm_NA4_entrylck_read
+	make xrun_sim test=test_ad2_err_cfg_lock
+	make xrun_sim test=test_ad2_srcmd_en_lock
+	make xrun_sim test=test_ad2_unsuppt_md
+	make xrun_sim test=test_ad2_unsuppt_mdh
+	make xrun_sim test=test_ad2_unsuppt_md_1
+
+	make xrun_sim test=fm_NA4_source_en
+
+	make xrun_sim test=test_mdstall_tid1
+	make xrun_sim test=test_ad2_r0_w0_x0_mdstall
+	make xrun_sim test=test_ad2_r0_w0_x0_mdstall_1
+	make xrun_sim test=test_mdstall_tid8
+	make xrun_sim test=test_ad2_r0_w0_x0_mdstall_exempt
+	make xrun_sim test=test_ad2_r0_w0_x0_mdstall_exempt_5
+	make xrun_sim test=test_ad2_r0_w0_x0_mdstall_rrid_reg_5
+	make xrun_sim test=test_ad2_r0_w0_x0_mdstall_rrid_reg_op
+	make xrun_sim test=fm_NA4_PP_mdstallh
+	make xrun_sim test=fm_NA4_PP_mdstallh_ex
+	make xrun_sim test=fm_NA4_PP_rrid
+
+	make xrun_sim test=fm_NA4_prog_prio
+
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_svi_write_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_svw_rrid_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_svw_1_rrid_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_svw_2_rrid_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_svw_3_rrid_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_multiple_rrid_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_multiple_rrid_read_err_info_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_rrid_read_err_info_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_rrid_read_write_err_info_test
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_interrupt_enable_msi_werr
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_interrupt_enable_msi_werr_wr_err_info
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_en_interrupt_enable_msi_werr_wr_err_info_msi_werr
+	make xrun_sim test=full_model_NA4_illegal_read_mfr_dis_multi_err_test
+
+	make xrun_sim test=full_model_r_perm_read_illegal_ahb_address_cases
+	make xrun_sim test=full_model_rfm_entry_array_registers_cov
+	make xrun_sim test=full_model_rfm_read_registers_cov
+	make xrun_sim test=full_model_ttu_cov
+
+	make xrun_sim test=test_ad2_program_prio_err
+	make xrun_sim test=test_ad2_program_prio_err_1
+	make xrun_sim test=test_ad2_program_prio_success
+	make xrun_sim test=test_ad2_program_prio_success_1
+	make xrun_sim test=test_ad2_program_prio_success_2
+	make xrun_sim test=test_ad2_program_prio_pr_no_hit
+	make xrun_sim test=test_ad2_program_prio_pr_no_hit_1
+
+	make xrun_sim test=test_ad0_r0_w0_x0_md0_t0
+	make xrun_sim test=test_ad0_r0_w0_x0_md0_t1
+	make xrun_sim test=test_ad0_r0_w0_x0_md0_t2
+	make xrun_sim test=test_ad0_r0_w0_x1_md0_t0
+	make xrun_sim test=test_ad0_r0_w0_x1_md0_t1
+	make xrun_sim test=test_ad0_r0_w0_x1_md0_t2
+	make xrun_sim test=test_ad0_r0_w1_x0_md0_t0
+	make xrun_sim test=test_ad0_r0_w1_x0_md0_t1
+	make xrun_sim test=test_ad0_r0_w1_x0_md0_t2
+	make xrun_sim test=test_ad0_r0_w1_x1_md0_t0
+	make xrun_sim test=test_ad0_r0_w1_x1_md0_t1
+	make xrun_sim test=test_ad0_r0_w1_x1_md0_t2
+	make xrun_sim test=test_ad0_r1_w0_x0_md0_t0
+	make xrun_sim test=test_ad0_r1_w0_x0_md0_t1
+	make xrun_sim test=test_ad0_r1_w0_x0_md0_t2
+	make xrun_sim test=test_ad0_r1_w0_x1_md0_t0
+	make xrun_sim test=test_ad0_r1_w0_x1_md0_t1
+	make xrun_sim test=test_ad0_r1_w0_x1_md0_t2
+	make xrun_sim test=test_ad0_r1_w1_x0_md0_t0
+	make xrun_sim test=test_ad0_r1_w1_x0_md0_t1
+	make xrun_sim test=test_ad0_r1_w1_x0_md0_t2
+	make xrun_sim test=test_ad0_r1_w1_x1_md0_t0
+	make xrun_sim test=test_ad0_r1_w1_x1_md0_t1
+	make xrun_sim test=test_ad0_r1_w1_x1_md0_t2
+	make xrun_sim test=test_ad1_r0_w0_x0_md0_t0
+	make xrun_sim test=test_ad1_r0_w0_x0_md0_t1
+	make xrun_sim test=test_ad1_r0_w0_x0_md0_t2
+	make xrun_sim test=test_ad1_r0_w0_x1_md0_t0
+	make xrun_sim test=test_ad1_r0_w0_x1_md0_t1
+	make xrun_sim test=test_ad1_r0_w0_x1_md0_t2
+	make xrun_sim test=test_ad1_r0_w1_x0_md0_t0
+	make xrun_sim test=test_ad1_r0_w1_x0_md0_t1
+	make xrun_sim test=test_ad1_r0_w1_x0_md0_t2
+	make xrun_sim test=test_ad1_r0_w1_x1_md0_t0
+	make xrun_sim test=test_ad1_r0_w1_x1_md0_t1
+	make xrun_sim test=test_ad1_r0_w1_x1_md0_t2
+	make xrun_sim test=test_ad1_r1_w0_x0_md0_t0
+	make xrun_sim test=test_ad1_r1_w0_x0_md0_t1
+	make xrun_sim test=test_ad1_r1_w0_x0_md0_t2
+	make xrun_sim test=test_ad1_r1_w0_x1_md0_t0
+	make xrun_sim test=test_ad1_r1_w0_x1_md0_t1
+	make xrun_sim test=test_ad1_r1_w0_x1_md0_t2
+	make xrun_sim test=test_ad1_r1_w1_x0_md0_t0
+	make xrun_sim test=test_ad1_r1_w1_x0_md0_t1
+	make xrun_sim test=test_ad1_r1_w1_x0_md0_t2
+	make xrun_sim test=test_ad1_r1_w1_x1_md0_t0
+	make xrun_sim test=test_ad1_r1_w1_x1_md0_t1
+	make xrun_sim test=test_ad1_r1_w1_x1_md0_t2
+	make xrun_sim test=test_ad2_r0_w0_x0_md0_t0
+	make xrun_sim test=test_ad2_r0_w0_x0_md0_t1
+	make xrun_sim test=test_ad2_r0_w0_x0_md0_t2
+	make xrun_sim test=test_ad2_r0_w0_x1_md0_t0
+	make xrun_sim test=test_ad2_r0_w0_x1_md0_t1
+	make xrun_sim test=test_ad2_r0_w0_x1_md0_t2
+	make xrun_sim test=test_ad2_r0_w1_x0_md0_t0
+	make xrun_sim test=test_ad2_r0_w1_x0_md0_t1
+	make xrun_sim test=test_ad2_r0_w1_x0_md0_t2
+	make xrun_sim test=test_ad2_r0_w1_x1_md0_t0
+	make xrun_sim test=test_ad2_r0_w1_x1_md0_t1
+	make xrun_sim test=test_ad2_r0_w1_x1_md0_t2
+	make xrun_sim test=test_ad2_r1_w0_x0_md0_t0
+	make xrun_sim test=test_ad2_r1_w0_x0_md0_t1
+	make xrun_sim test=test_ad2_r1_w0_x0_md0_t2
+	make xrun_sim test=test_ad2_r1_w0_x1_md0_t0
+	make xrun_sim test=test_ad2_r1_w0_x1_md0_t1
+	make xrun_sim test=test_ad2_r1_w0_x1_md0_t2
+	make xrun_sim test=test_ad2_r1_w1_x0_md0_t0
+	make xrun_sim test=test_ad2_r1_w1_x0_md0_t1
+	make xrun_sim test=test_ad2_r1_w1_x0_md0_t2
+	make xrun_sim test=test_ad2_r1_w1_x1_md0_t0
+	make xrun_sim test=test_ad2_r1_w1_x1_md0_t1
+	make xrun_sim test=test_ad2_r1_w1_x1_md0_t2
+	make xrun_sim test=test_ad3_r0_w0_x0_md0_t0
+	make xrun_sim test=test_ad3_r0_w0_x0_md0_t1
+	make xrun_sim test=test_ad3_r0_w0_x0_md0_t2
+	make xrun_sim test=test_ad3_r0_w0_x1_md0_t0
+	make xrun_sim test=test_ad3_r0_w0_x1_md0_t1
+	make xrun_sim test=test_ad3_r0_w0_x1_md0_t2
+	make xrun_sim test=test_ad3_r0_w1_x0_md0_t0
+	make xrun_sim test=test_ad3_r0_w1_x0_md0_t1
+	make xrun_sim test=test_ad3_r0_w1_x0_md0_t2
+	make xrun_sim test=test_ad3_r0_w1_x1_md0_t0
+	make xrun_sim test=test_ad3_r0_w1_x1_md0_t1
+	make xrun_sim test=test_ad3_r0_w1_x1_md0_t2
+	make xrun_sim test=test_ad3_r1_w0_x0_md0_t0
+	make xrun_sim test=test_ad3_r1_w0_x0_md0_t1
+	make xrun_sim test=test_ad3_r1_w0_x0_md0_t2
+	make xrun_sim test=test_ad3_r1_w0_x1_md0_t0
+	make xrun_sim test=test_ad3_r1_w0_x1_md0_t1
+	make xrun_sim test=test_ad3_r1_w0_x1_md0_t2
+	make xrun_sim test=test_ad3_r1_w1_x0_md0_t0
+	make xrun_sim test=test_ad3_r1_w1_x0_md0_t1
+	make xrun_sim test=test_ad3_r1_w1_x0_md0_t2
+	make xrun_sim test=test_ad3_r1_w1_x1_md0_t0
+	make xrun_sim test=test_ad3_r1_w1_x1_md0_t1
+	make xrun_sim test=test_ad3_r1_w1_x1_md0_t2
+
+	make xrun_sim test=test_ad0_4KB_cross
+	make xrun_sim test=test_ad1_4KB_cross
+	make xrun_sim test=test_ad1_cross_region
+	make xrun_sim test=test_ad2_4KB_cross
+	make xrun_sim test=test_ad2_cross_region
+	make xrun_sim test=test_ad3_4KB_cross
+	make xrun_sim test=test_ad3_cross_region
+	make xrun_sim test=test_ad2_interpt_sup
+
+	make xrun_sim test=test_ad2_read_trans_buff_emp_stall_buff_empty
+	make xrun_sim test=test_ad2_read_trans_buff_non_emp_stall_buff_empty
+	make xrun_sim test=test_ad2_read_trans_buff_emp_stall_buff_non_empty
+	make xrun_sim test=test_ad2_read_trans_buff_non_emp_stall_buff_non_empty
