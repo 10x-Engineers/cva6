@@ -422,7 +422,12 @@ module cva6_ptw
 
           // check if the global mapping bit is set
           if (pte.g && (ptw_stage_q == S_STAGE || !CVA6Cfg.RVH)) global_mapping_n = 1'b1;
-
+          
+          if ((!pte.r && !pte.w && !pte.x) && (pte.u || pte.a || pte.d)) begin
+            // If the PTE is a pointer to the next level of page table, we need to check if the access flag and dirty bit are set.
+            // If they are not set, we need to raise a page fault exception.
+            state_d = PROPAGATE_ERROR;
+          end
           // -------------
           // Invalid PTE
           // -------------
