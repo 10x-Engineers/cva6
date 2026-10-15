@@ -783,6 +783,7 @@ module trigger_module
       tselect_d = (tselect_i < CVA6Cfg.SdtrigNrTriggers) ?
           tselect_i[$clog2(CVA6Cfg.SdtrigNrTriggers)-1:0] : tselect_q;
     end
+    // action 1 (enter Debug Mode) is legal only when dmode is 1
     if (tdata1_we && (!trigger_32_tdata1_q[tselect_q].tdata1_type[27] || debug_mode_i)) begin
       if (CVA6Cfg.IS_XLEN32) begin
         if (CVA6Cfg.Sdtrig && CVA6Cfg.SdtrigNrTriggers > 0) begin
@@ -805,7 +806,8 @@ module trigger_module
             trigger_32_tdata1_d[tselect_q].icount_type.pending = tdata1_i[8];
             trigger_32_tdata1_d[tselect_q].icount_type.s = tdata1_i[7];
             trigger_32_tdata1_d[tselect_q].icount_type.u = tdata1_i[6];
-            trigger_32_tdata1_d[tselect_q].icount_type.action = tdata1_i[5:0];
+            trigger_32_tdata1_d[tselect_q].icount_type.action =
+                (tdata1_i[5:0] == 6'd1 && !trigger_32_tdata1_d[tselect_q].icount_type.dmode) ? 6'd0 : tdata1_i[5:0];
             flush_o = 1'b1;
           end else if (CVA6Cfg.SdtrigMcontrol6 && trigger_type_d[tselect_q] == 4'd6) begin
             trigger_32_tdata1_d[tselect_q].mc6_type.t_type = trigger_type_d[tselect_q];
@@ -818,7 +820,8 @@ module trigger_module
             trigger_32_tdata1_d[tselect_q].mc6_type.select = tdata1_i[21];
             trigger_32_tdata1_d[tselect_q].mc6_type.zeroes = '0;
             trigger_32_tdata1_d[tselect_q].mc6_type.size = tdata1_i[18:16];
-            trigger_32_tdata1_d[tselect_q].mc6_type.action = tdata1_i[15:12];
+            trigger_32_tdata1_d[tselect_q].mc6_type.action =
+                (tdata1_i[15:12] == 4'd1 && !trigger_32_tdata1_d[tselect_q].mc6_type.dmode) ? 4'd0 : tdata1_i[15:12];
             trigger_32_tdata1_d[tselect_q].mc6_type.chain = tdata1_i[11];
             trigger_32_tdata1_d[tselect_q].mc6_type.match = tdata1_i[10:7];
             trigger_32_tdata1_d[tselect_q].mc6_type.m = tdata1_i[6];
@@ -841,7 +844,8 @@ module trigger_module
             trigger_32_tdata1_d[tselect_q].etrigger_type.zero = 0;
             trigger_32_tdata1_d[tselect_q].etrigger_type.s = tdata1_i[7];
             trigger_32_tdata1_d[tselect_q].etrigger_type.u = tdata1_i[6];
-            trigger_32_tdata1_d[tselect_q].etrigger_type.action = tdata1_i[5:0];
+            trigger_32_tdata1_d[tselect_q].etrigger_type.action =
+                (tdata1_i[5:0] == 6'd1 && !trigger_32_tdata1_d[tselect_q].etrigger_type.dmode) ? 6'd0 : tdata1_i[5:0];
           end else if (CVA6Cfg.SdtrigItrigger && trigger_type_d[tselect_q] == 4'd4) begin
             trigger_32_tdata1_d[tselect_q].itrigger_type.t_type = trigger_type_d[tselect_q];
             trigger_32_tdata1_d[tselect_q].itrigger_type.dmode = debug_mode_i && tdata1_i[27];
@@ -854,7 +858,8 @@ module trigger_module
             trigger_32_tdata1_d[tselect_q].itrigger_type.zero = 0;
             trigger_32_tdata1_d[tselect_q].itrigger_type.s = tdata1_i[7];
             trigger_32_tdata1_d[tselect_q].itrigger_type.u = tdata1_i[6];
-            trigger_32_tdata1_d[tselect_q].itrigger_type.action = tdata1_i[5:0];
+            trigger_32_tdata1_d[tselect_q].itrigger_type.action =
+                (tdata1_i[5:0] == 6'd1 && !trigger_32_tdata1_d[tselect_q].itrigger_type.dmode) ? 6'd0 : tdata1_i[5:0];
           end else if (tdata1_i[31:28] == 4'd15 || tdata1_i[31:28] == 4'd0) begin
             trigger_32_tdata1_d[tselect_q].tdata1_type = {
               4'd15, debug_mode_i && tdata1_i[27], 27'd0
@@ -875,7 +880,8 @@ module trigger_module
           trigger_32_tdata1_d[tselect_q].icount_type.pending = tdata1_i[8];
           trigger_32_tdata1_d[tselect_q].icount_type.s = tdata1_i[7];
           trigger_32_tdata1_d[tselect_q].icount_type.u = tdata1_i[6];
-          trigger_32_tdata1_d[tselect_q].icount_type.action = tdata1_i[5:0];
+          trigger_32_tdata1_d[tselect_q].icount_type.action =
+              (tdata1_i[5:0] == 6'd1 && !trigger_32_tdata1_d[tselect_q].icount_type.dmode) ? 6'd0 : tdata1_i[5:0];
           flush_o = 1'b1;
         end else if (CVA6Cfg.SdtrigMcontrol6 && tdata1_i[63:60] == 4'd6) begin
           trigger_type_d[tselect_q] = tdata1_i[63:60];
@@ -889,7 +895,8 @@ module trigger_module
           trigger_32_tdata1_d[tselect_q].mc6_type.select = tdata1_i[21];
           trigger_32_tdata1_d[tselect_q].mc6_type.zeroes = '0;
           trigger_32_tdata1_d[tselect_q].mc6_type.size = tdata1_i[18:16];
-          trigger_32_tdata1_d[tselect_q].mc6_type.action = tdata1_i[15:12];
+          trigger_32_tdata1_d[tselect_q].mc6_type.action =
+              (tdata1_i[15:12] == 4'd1 && !trigger_32_tdata1_d[tselect_q].mc6_type.dmode) ? 4'd0 : tdata1_i[15:12];
           trigger_32_tdata1_d[tselect_q].mc6_type.chain = tdata1_i[11];
           trigger_32_tdata1_d[tselect_q].mc6_type.match = tdata1_i[10:7];
           trigger_32_tdata1_d[tselect_q].mc6_type.m = tdata1_i[6];
@@ -913,7 +920,8 @@ module trigger_module
           trigger_32_tdata1_d[tselect_q].etrigger_type.zero = 0;
           trigger_32_tdata1_d[tselect_q].etrigger_type.s = tdata1_i[7];
           trigger_32_tdata1_d[tselect_q].etrigger_type.u = tdata1_i[6];
-          trigger_32_tdata1_d[tselect_q].etrigger_type.action = tdata1_i[5:0];
+          trigger_32_tdata1_d[tselect_q].etrigger_type.action =
+              (tdata1_i[5:0] == 6'd1 && !trigger_32_tdata1_d[tselect_q].etrigger_type.dmode) ? 6'd0 : tdata1_i[5:0];
         end else if (CVA6Cfg.SdtrigItrigger && tdata1_i[63:60] == 4'd4) begin
           trigger_type_d[tselect_q] = tdata1_i[63:60];
           trigger_32_tdata1_d[tselect_q].itrigger_type.t_type  = (tdata1_i[63:60] == 4'd4 || tdata1_i[63:60] == 4'd15) ? tdata1_i[63:60] : trigger_type_q[tselect_q];
@@ -927,7 +935,8 @@ module trigger_module
           trigger_32_tdata1_d[tselect_q].itrigger_type.zero = 0;
           trigger_32_tdata1_d[tselect_q].itrigger_type.s = tdata1_i[7];
           trigger_32_tdata1_d[tselect_q].itrigger_type.u = tdata1_i[6];
-          trigger_32_tdata1_d[tselect_q].itrigger_type.action = tdata1_i[5:0];
+          trigger_32_tdata1_d[tselect_q].itrigger_type.action =
+              (tdata1_i[5:0] == 6'd1 && !trigger_32_tdata1_d[tselect_q].itrigger_type.dmode) ? 6'd0 : tdata1_i[5:0];
         end else if (tdata1_i[63:60] == 4'd15 || tdata1_i[63:60] == 4'd0) begin
           // type 0 disables the trigger, it reads back as type 15
           trigger_type_d[tselect_q] = 4'd15;
