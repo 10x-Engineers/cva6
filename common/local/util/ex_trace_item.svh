@@ -51,6 +51,7 @@ class ex_trace_item #(
             INTERRUPTS.S_EXT:             this.cause_s = "Supervisor External Interrupt";
             INTERRUPTS.M_EXT:             this.cause_s = "Machine External Interrupt";
             riscv::DEBUG_REQUEST:         this.cause_s = "Request Debug Mode";
+            riscv::DEBUG_TRIGGER:         this.cause_s = "Trigger Debug Mode";
             default: this.cause_s = "Interrupt";
         endcase
 

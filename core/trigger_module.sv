@@ -345,7 +345,7 @@ module trigger_module
                 if (CVA6Cfg.SdtrigSupportedActions[0]) fire_req_Icount.action = riscv::BREAKPOINT;
                 6'd1:
                 if (CVA6Cfg.SdtrigSupportedActions[1])
-                  fire_req_Icount.action = riscv::DEBUG_REQUEST;
+                  fire_req_Icount.action = riscv::DEBUG_TRIGGER;
                 default: ;
               endcase
             end
@@ -433,7 +433,7 @@ module trigger_module
                       end
                       else if (CVA6Cfg.SdtrigSupportedActions[1] && trigger_32_tdata1_d[i].mc6_type.action == 4'd1) begin
                         if (CVA6Cfg.DebugEn && !debug_mode_i) begin
-                          fire_req_EA[n].action = riscv::DEBUG_REQUEST;
+                          fire_req_EA[n].action = riscv::DEBUG_TRIGGER;
                         end
                       end
                     end
@@ -444,7 +444,7 @@ module trigger_module
                     end
                     else if (CVA6Cfg.SdtrigSupportedActions[1] && trigger_32_tdata1_d[i].mc6_type.action == 4'd1) begin
                       if (CVA6Cfg.DebugEn && !debug_mode_i) begin
-                        fire_req_EA[n].action = riscv::DEBUG_REQUEST;
+                        fire_req_EA[n].action = riscv::DEBUG_TRIGGER;
                       end
                     end
                   end
@@ -466,7 +466,7 @@ module trigger_module
                     end
                     else if (CVA6Cfg.SdtrigSupportedActions[1] && trigger_32_tdata1_d[i].mc6_type.action == 4'd1) begin
                       if (CVA6Cfg.DebugEn && !debug_mode_i) begin
-                        fire_req_ED[n].action = riscv::DEBUG_REQUEST;
+                        fire_req_ED[n].action = riscv::DEBUG_TRIGGER;
                       end
                     end
                   end
@@ -477,7 +477,7 @@ module trigger_module
                   end
                   else if (CVA6Cfg.SdtrigSupportedActions[1] && trigger_32_tdata1_d[i].mc6_type.action == 4'd1) begin
                     if (CVA6Cfg.DebugEn && !debug_mode_i) begin
-                      fire_req_ED[n].action = riscv::DEBUG_REQUEST;
+                      fire_req_ED[n].action = riscv::DEBUG_TRIGGER;
                     end
                   end
                 end
@@ -521,7 +521,7 @@ module trigger_module
                     if (CVA6Cfg.SdtrigSupportedActions[1] == 1'b1)
                       if (CVA6Cfg.DebugEn && !debug_mode_i) begin
                         if (matchSX && CVA6Cfg.SdtrigMcontrol6Store)
-                          fire_req_SX.action = riscv::DEBUG_REQUEST;
+                          fire_req_SX.action = riscv::DEBUG_TRIGGER;
                       end
                     default: ;
                   endcase
@@ -538,7 +538,7 @@ module trigger_module
                   if (CVA6Cfg.SdtrigSupportedActions[1] == 1'b1)
                     if (CVA6Cfg.DebugEn && !debug_mode_i) begin
                       if (matchSX && CVA6Cfg.SdtrigMcontrol6Store)
-                        fire_req_SX.action = riscv::DEBUG_REQUEST;
+                        fire_req_SX.action = riscv::DEBUG_TRIGGER;
                     end
                   default: ;
                 endcase
@@ -569,7 +569,7 @@ module trigger_module
                           fire_req_LD.action = riscv::BREAKPOINT;
                         4'd1:
                         if (CVA6Cfg.SdtrigSupportedActions[1] == 1'b1 && CVA6Cfg.DebugEn && !debug_mode_i)
-                          fire_req_LD.action = riscv::DEBUG_REQUEST;
+                          fire_req_LD.action = riscv::DEBUG_TRIGGER;
                         default: ;
                       endcase
                     end
@@ -581,7 +581,7 @@ module trigger_module
                         fire_req_LD.action = riscv::BREAKPOINT;
                       4'd1:
                       if (CVA6Cfg.SdtrigSupportedActions[1] == 1'b1 && CVA6Cfg.DebugEn && !debug_mode_i)
-                        fire_req_LD.action = riscv::DEBUG_REQUEST;
+                        fire_req_LD.action = riscv::DEBUG_TRIGGER;
                       default: ;
                     endcase
                   end
@@ -610,7 +610,7 @@ module trigger_module
                           fire_req_LA.action = riscv::BREAKPOINT;
                         4'd1:
                         if (CVA6Cfg.SdtrigSupportedActions[1] == 1'b1 && CVA6Cfg.DebugEn && !debug_mode_i)
-                          fire_req_LA.action = riscv::DEBUG_REQUEST;
+                          fire_req_LA.action = riscv::DEBUG_TRIGGER;
                         default: ;
                       endcase
                     end
@@ -622,7 +622,7 @@ module trigger_module
                         fire_req_LA.action = riscv::BREAKPOINT;
                       4'd1:
                       if (CVA6Cfg.SdtrigSupportedActions[1] == 1'b1 && CVA6Cfg.DebugEn && !debug_mode_i)
-                        fire_req_LA.action = riscv::DEBUG_REQUEST;
+                        fire_req_LA.action = riscv::DEBUG_TRIGGER;
                       default: ;
                     endcase
                   end
@@ -672,7 +672,7 @@ module trigger_module
               if (CVA6Cfg.SdtrigSupportedActions[0]) fire_req_Etrigger.action = riscv::BREAKPOINT;
               6'd1:
               if (CVA6Cfg.SdtrigSupportedActions[1])
-                fire_req_Etrigger.action = riscv::DEBUG_REQUEST;
+                fire_req_Etrigger.action = riscv::DEBUG_TRIGGER;
               default: ;
             endcase
           end
@@ -731,7 +731,7 @@ module trigger_module
               if (CVA6Cfg.SdtrigSupportedActions[0]) fire_req_Itrigger.action = riscv::BREAKPOINT;
               6'd1:
               if (CVA6Cfg.SdtrigSupportedActions[1])
-                fire_req_Itrigger.action = riscv::DEBUG_REQUEST;
+                fire_req_Itrigger.action = riscv::DEBUG_TRIGGER;
               default: ;
             endcase
           end
