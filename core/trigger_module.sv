@@ -660,7 +660,9 @@ module trigger_module
             end
             priv_match[i] &= scontext_match[i];
           end
-          if (tdata2_d[i][ex_i.cause] && priv_match[i] && !etrigger_context_saved_valid_q) begin
+          // match only a trap caused by an exception, not by an interrupt
+          if (ex_i.valid && !ex_i.cause[CVA6Cfg.XLEN-1] && tdata2_d[i][ex_i.cause]
+              && priv_match[i] && !etrigger_context_saved_valid_q) begin
             e_matched_d = 1'd1;
           end
           if (e_matched_q && !trigger_32_tdata1_q[i].etrigger_type.hit) begin
