@@ -791,7 +791,8 @@ module trigger_module
              || CVA6Cfg.SdtrigEtrigger && tdata1_i[31:28] == 4'd5
              || CVA6Cfg.SdtrigItrigger && tdata1_i[31:28] == 4'd4
              || tdata1_i[31:28] == 4'd15 || tdata1_i[31:28] == 4'd0) begin
-            trigger_type_d[tselect_q] = tdata1_i[31:28];
+            // type 0 disables the trigger, it reads back as type 15
+            trigger_type_d[tselect_q] = (tdata1_i[31:28] == 4'd0) ? 4'd15 : tdata1_i[31:28];
           end
           if (CVA6Cfg.SdtrigIcount && trigger_type_d[tselect_q] == 4'd3) begin
             trigger_32_tdata1_d[tselect_q].icount_type.t_type = trigger_type_d[tselect_q];
@@ -854,6 +855,11 @@ module trigger_module
             trigger_32_tdata1_d[tselect_q].itrigger_type.s = tdata1_i[7];
             trigger_32_tdata1_d[tselect_q].itrigger_type.u = tdata1_i[6];
             trigger_32_tdata1_d[tselect_q].itrigger_type.action = tdata1_i[5:0];
+          end else if (tdata1_i[31:28] == 4'd15 || tdata1_i[31:28] == 4'd0) begin
+            trigger_32_tdata1_d[tselect_q].tdata1_type = {
+              4'd15, debug_mode_i && tdata1_i[27], 27'd0
+            };
+            flush_o = 1'b1;
           end
         end
       end else if (CVA6Cfg.IS_XLEN64) begin
@@ -922,8 +928,11 @@ module trigger_module
           trigger_32_tdata1_d[tselect_q].itrigger_type.s = tdata1_i[7];
           trigger_32_tdata1_d[tselect_q].itrigger_type.u = tdata1_i[6];
           trigger_32_tdata1_d[tselect_q].itrigger_type.action = tdata1_i[5:0];
-        end else if (tdata1_i[63:60] == 4'd15) begin
-          trigger_type_d[tselect_q] = tdata1_i[63:60];
+        end else if (tdata1_i[63:60] == 4'd15 || tdata1_i[63:60] == 4'd0) begin
+          // type 0 disables the trigger, it reads back as type 15
+          trigger_type_d[tselect_q] = 4'd15;
+          trigger_32_tdata1_d[tselect_q].tdata1_type = {4'd15, debug_mode_i && tdata1_i[59], 27'd0};
+          flush_o = 1'b1;
         end
       end
     end
@@ -966,6 +975,8 @@ module trigger_module
       tdata1_o = (CVA6Cfg.IS_XLEN32) ? trigger_32_tdata1_q[tselect_q] : { trigger_32_tdata1_q[tselect_q].etrigger_type.t_type, trigger_32_tdata1_q[tselect_q].etrigger_type.dmode, trigger_32_tdata1_q[tselect_q].etrigger_type.hit, 45'd0, trigger_32_tdata1_q[tselect_q][12:0] };
       4'd4:
       tdata1_o = (CVA6Cfg.IS_XLEN32) ? trigger_32_tdata1_q[tselect_q] : { trigger_32_tdata1_q[tselect_q].itrigger_type.t_type, trigger_32_tdata1_q[tselect_q].itrigger_type.dmode, trigger_32_tdata1_q[tselect_q].itrigger_type.hit, 45'd0, trigger_32_tdata1_q[tselect_q][12:0] };
+      4'd15:
+      tdata1_o = (CVA6Cfg.IS_XLEN32) ? trigger_32_tdata1_q[tselect_q] : { trigger_32_tdata1_q[tselect_q].tdata1_type[31:27], 59'd0 };
       default: tdata1_o = '0;
     endcase
 
