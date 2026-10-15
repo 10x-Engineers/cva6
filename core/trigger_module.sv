@@ -168,7 +168,7 @@ module trigger_module
   logic [CVA6Cfg.XLEN-1:0] etrigger_context_mepc_q, etrigger_context_mepc_d;
   logic [CVA6Cfg.XLEN-1:0] etrigger_context_mcause_q, etrigger_context_mcause_d;
   logic [CVA6Cfg.XLEN-1:0] etrigger_context_mtval_q, etrigger_context_mtval_d;
-  logic in_trap_handler_d, in_trap_handler_q;
+  logic icount_trap;
   logic mret_reg_q, mret_reg_d;
 
   logic [$clog2(CVA6Cfg.SdtrigNrTriggers)-1:0] tselect_q, tselect_d;
@@ -202,15 +202,11 @@ module trigger_module
     assign fire_req_ED_action[i] = fire_req_ED[i].action;
   end
 
-  assign instr_count_offset = (CVA6Cfg.SdtrigIcount) ? instr_count_d - instr_count_q : '0;
-
-  always_comb begin : in_trap
-    if (CVA6Cfg.SdtrigIcount) begin
-      in_trap_handler_d = in_trap_handler_q;
-      if (ex_i.valid || etrigger_context_saved_valid_q) in_trap_handler_d = 1'b1;
-      else if (mret_i) in_trap_handler_d = 1'b0;
-    end
-  end
+  // icount counts each retired instruction and each trap, a Debug Mode entry is not a trap
+  assign icount_trap = ex_i.valid && !debug_mode_i && ex_i.cause != riscv::DEBUG_REQUEST
+                       && ex_i.cause != riscv::DEBUG_TRIGGER;
+  assign instr_count_offset = (CVA6Cfg.SdtrigIcount) ?
+      instr_count_d - instr_count_q + 15'(icount_trap) : '0;
 
   // Trigger CSRs write/update logic
   always_comb begin : write_path
@@ -320,8 +316,8 @@ module trigger_module
             end
             priv_match[i] &= scontext_match[i];
           end
-          // count only the instructions that retire in an enabled privilege mode
-          if (!in_trap_handler_q && priv_match[i]) begin
+          // count only the events in an enabled privilege mode
+          if (priv_match[i]) begin
             if (!trigger_32_tdata1_d[i].icount_type.pending) begin
               icount_diff = trigger_32_tdata1_q[i].icount_type.count - instr_count_offset[13:0];
             end
@@ -333,7 +329,8 @@ module trigger_module
               end
             end
           end
-          if (priv_match[i] && !trigger_32_tdata1_q[i].icount_type.pending && !trigger_32_tdata1_q[i].icount_type.hit) begin
+          // a pending trigger fires before the next instruction in an enabled privilege mode
+          if (priv_match[i] && !trigger_32_tdata1_q[i].icount_type.hit) begin
             if (trigger_32_tdata1_d[i].icount_type.count < CVA6Cfg.NrCommitPorts) begin
               if (trigger_32_tdata1_d[i].icount_type.count == 0) begin
                 trigger_32_tdata1_d[i].icount_type.pending = 1'b1;
@@ -350,7 +347,7 @@ module trigger_module
               endcase
             end
           end
-          if (trigger_32_tdata1_q[i].icount_type.pending && ex_i.valid) begin
+          if (trigger_32_tdata1_q[i].icount_type.pending && ex_i.valid && priv_match[i]) begin
             trigger_32_tdata1_d[i].icount_type.hit = 1'b1;
             trigger_32_tdata1_d[i].icount_type.pending = 1'b0;
             fire_req_Icount.valid = 1'b0;
@@ -1018,7 +1015,6 @@ module trigger_module
         etrigger_context_mepc_q <= '0;
         etrigger_context_mcause_q <= '0;
         etrigger_context_mtval_q <= '0;
-        if (CVA6Cfg.SdtrigIcount) in_trap_handler_q <= '0;
         for (int i = 0; i < CVA6Cfg.SdtrigNrTriggers; ++i) begin
           trigger_type_q[i] <= '0;
           trigger_32_tdata1_q[i] <= '0;
@@ -1035,20 +1031,17 @@ module trigger_module
         if (CVA6Cfg.SdtrigSupportTextra && CVA6Cfg.IS_XLEN64)
           textra64_tdata3_q <= textra64_tdata3_d;
 
-        trigger_type_q                  <= trigger_type_d;
-        trigger_32_tdata1_q             <= trigger_32_tdata1_d;
-        tselect_q                       <= tselect_d;
-        tdata2_q                        <= tdata2_d;
-        sdtrig_commit_icount_valid_o    <= sdtrig_commit_icount_valid_d;
-        sdtrig_commit_icount_nr_instr_o <= sdtrig_commit_icount_nr_instr_d;
-        sdtrig_commit_action_o          <= sdtrig_commit_action_d;
-        etrigger_context_saved_valid_q  <= etrigger_context_saved_valid_d;
-        etrigger_context_mepc_q         <= etrigger_context_mepc_d;
-        etrigger_context_mcause_q       <= etrigger_context_mcause_d;
-        etrigger_context_mtval_q        <= etrigger_context_mtval_d;
-        if (CVA6Cfg.SdtrigIcount) begin
-          in_trap_handler_q <= in_trap_handler_d;
-        end
+        trigger_type_q                      <= trigger_type_d;
+        trigger_32_tdata1_q                 <= trigger_32_tdata1_d;
+        tselect_q                           <= tselect_d;
+        tdata2_q                            <= tdata2_d;
+        sdtrig_commit_icount_valid_o        <= sdtrig_commit_icount_valid_d;
+        sdtrig_commit_icount_nr_instr_o     <= sdtrig_commit_icount_nr_instr_d;
+        sdtrig_commit_action_o              <= sdtrig_commit_action_d;
+        etrigger_context_saved_valid_q      <= etrigger_context_saved_valid_d;
+        etrigger_context_mepc_q             <= etrigger_context_mepc_d;
+        etrigger_context_mcause_q           <= etrigger_context_mcause_d;
+        etrigger_context_mtval_q            <= etrigger_context_mtval_d;
         sdtrig_commit_std_exception_valid_q <= sdtrig_commit_std_exception_valid_d;
         e_matched_q                         <= e_matched_d;
         mret_reg_q                          <= mret_reg_d;
@@ -1071,9 +1064,5 @@ module trigger_module
     assign etrigger_context_mtval_o = '0;
   end
   assign sdtrig_load_cancel_o = sdtrig_load_cancel_q;
-  if (!CVA6Cfg.SdtrigIcount) begin
-    assign in_trap_handler_q = '0;
-    assign in_trap_handler_d = '0;
-  end
 
 endmodule
