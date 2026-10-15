@@ -320,7 +320,8 @@ module trigger_module
             end
             priv_match[i] &= scontext_match[i];
           end
-          if (!in_trap_handler_q) begin
+          // count only the instructions that retire in an enabled privilege mode
+          if (!in_trap_handler_q && priv_match[i]) begin
             if (!trigger_32_tdata1_d[i].icount_type.pending) begin
               icount_diff = trigger_32_tdata1_q[i].icount_type.count - instr_count_offset[13:0];
             end
