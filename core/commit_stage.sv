@@ -434,7 +434,8 @@ module commit_stage
       exception_o.valid = 1'b0;
     end
 
-    if ((CVA6Cfg.SdtrigIcount && sdtrig_commit_icount_valid_i && sdtrig_commit_icount_nr_instr_i == 'd0)
+    if ((CVA6Cfg.SdtrigIcount && sdtrig_commit_icount_valid_i && sdtrig_commit_icount_nr_instr_i == 'd0
+         && commit_instr_i[0].valid)
     || ((CVA6Cfg.SdtrigEtrigger || CVA6Cfg.SdtrigItrigger) && sdtrig_commit_std_exception_valid_i && commit_instr_i[0].valid)) begin
       exception_o.valid = 1'b1;
       exception_o.cause = sdtrig_commit_action_i;
